@@ -1,0 +1,30 @@
+{
+    "name": "viviniko/catalog",
+    "description": "VIVINIKO Catalog Service Provider",
+	"keywords": ["viviniko", "catalog", "laravel"],
+	"homepage": "http://viviniko.com",
+	"license": "MIT",
+	"authors": [
+        {
+            "name": "viviniko",
+            "email": "viviniko.shop@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "viviniko/scoutelasticsearch": "dev-master",
+        "viviniko/favorite": "dev-master",
+        "viviniko/media": "dev-master",
+        "viviniko/review": "dev-master",
+        "viviniko/repository": "dev-master",
+        "viviniko/support": "dev-master",
+        "viviniko/urlrewrite": "dev-master"
+    },
+	"autoload": {
+        "psr-0": {
+            "Viviniko\\Catalog": "src"
+        }
+    },
+    "minimum-stability": "dev",
+	"prefer-stable": true
+}

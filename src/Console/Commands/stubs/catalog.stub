@@ -1,0 +1,298 @@
+<?php
+
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateCatalogTable extends Migration
+{
+    /**
+     * @var string
+     */
+    protected $categoriesTable;
+
+    /**
+     * @var string
+     */
+    protected $manufacturersTable;
+
+    /**
+     * @var string
+     */
+    protected $attributeGroupsTable;
+
+    /**
+     * @var string
+     */
+    protected $attributesTable;
+
+    /**
+     * @var string
+     */
+    protected $specificationGroupsTable;
+
+    /**
+     * @var string
+     */
+    protected $specificationsTable;
+
+    /**
+     * @var string
+     */
+    protected $productsTable;
+
+    /**
+     * @var string
+     */
+    protected $productItemsTable;
+
+    /**
+     * @var string
+     */
+    protected $productSpecificationTable;
+
+    /**
+     * @var string
+     */
+    protected $productAttributeGroupTable;
+
+    /**
+     * @var string
+     */
+    protected $productItemAttributeTable;
+
+    /**
+     * @var string
+     */
+    protected $productAttributeTable;
+
+    /**
+     * @var string
+     */
+    protected $productPictureTable;
+
+    /**
+     * @var string
+     */
+    protected $productManufacturerTable;
+
+    /**
+     * CreateCatalogTable constructor.
+     */
+    public function __construct()
+    {
+        $this->categoriesTable = Config::get('catalog.categories_table');
+        $this->manufacturersTable = Config::get('catalog.manufacturers_table');
+        $this->attributeGroupsTable = Config::get('catalog.attribute_groups_table');
+        $this->attributesTable = Config::get('catalog.attributes_table');
+        $this->specificationsTable = Config::get('catalog.specifications_table');
+        $this->specificationGroupsTable = Config::get('catalog.specification_groups_table');
+        $this->productsTable = Config::get('catalog.products_table');
+        $this->productItemsTable = Config::get('catalog.product_items_table');
+        $this->productAttributeGroupTable = Config::get('catalog.product_attribute_group_table');
+        $this->productSpecificationTable = Config::get('catalog.product_specification_table');
+        $this->productItemAttributeTable = Config::get('catalog.product_item_attribute_table');
+        $this->productAttributeTable = Config::get('catalog.product_attribute_table');
+        $this->productPictureTable = Config::get('catalog.product_picture_table');
+        $this->productManufacturerTable = Config::get('catalog.product_manufacturer_table');
+    }
+
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        // Create table for storing categories
+        Schema::create($this->categoriesTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('parent_id')->default(0);
+            $table->string('name', 32);
+            $table->string('path')->default('');
+            $table->text('description')->nullable();
+            $table->unsignedInteger('picture_id')->nullable();
+            $table->integer('sort')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->string('url_rewrite')->nullable();
+            $table->string('meta_title')->nullable();
+            $table->string('meta_keywords')->nullable();
+            $table->string('meta_description')->nullable();
+            $table->timestamps();
+        });
+
+        // Create table for storing specification attributes
+        Schema::create($this->specificationGroupsTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('category_id');
+            $table->string('name', 32);
+            $table->unsignedTinyInteger('type')->default(0);
+            $table->boolean('is_filterable')->default(false);
+            $table->boolean('is_searchable')->default(false);
+            $table->boolean('is_viewable')->default(false);
+            $table->integer('sort')->default(0);
+            $table->timestamps();
+        });
+
+        // Create table for storing specification attribute values
+        Schema::create($this->specificationsTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('group_id');
+            $table->string('name', 32);
+            $table->integer('sort')->default(0);
+            $table->timestamps();
+        });
+
+        // Create table for storing attribute groups
+        Schema::create($this->attributeGroupsTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name', 32);
+            $table->integer('sort')->default(0);
+            $table->timestamps();
+        });
+
+        // Create table for storing attributes
+        Schema::create($this->attributesTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('group_id');
+            $table->string('name', 32);
+            $table->integer('sort')->default(0);
+            $table->timestamps();
+        });
+
+        // Create table for storing manufacturers
+        Schema::create($this->manufacturersTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name', 32);
+            $table->string('description');
+            $table->string('homepage');
+            $table->string('im');
+            $table->string('phone')->nullable();
+            $table->integer('sort')->default(0);
+            $table->decimal('purchasing_discount', 16, 4)->default(0);
+            $table->unsignedInteger('product_count')->default(0);
+            $table->string('product_type')->default('');
+            $table->string('product_update_period')->default('');
+            $table->timestamp('product_update_time')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->string('admin');
+            $table->timestamps();
+        });
+
+        // Create table for storing products
+        Schema::create($this->productsTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('category_id');
+            $table->string('name', 100);
+            $table->string('description');
+            $table->longText('content')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_new')->default(false);
+            $table->boolean('is_hot')->default(false);
+            $table->boolean('is_promote')->default(false);
+            $table->integer('sort')->default(0);
+            $table->string('url_rewrite')->nullable();
+            $table->string('meta_title')->nullable();
+            $table->string('meta_keywords')->nullable();
+            $table->string('meta_description')->nullable();
+            $table->string('created_by', 32)->nullable();
+            $table->string('updated_by', 32)->nullable();
+            $table->timestamps();
+        });
+
+        // Create table for storing product items
+        Schema::create($this->productItemsTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('product_id');
+            $table->string('sku', 32);
+            $table->string('upc', 48)->default('');
+            $table->decimal('market_price', 16, 4)->default(0);
+            $table->decimal('price', 16, 4);
+            $table->decimal('weight', 16, 4)->default(0);
+            $table->unsignedInteger('stock_quantity');
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_master')->default(false);
+        });
+
+        // Create table for storing product specification
+        Schema::create($this->productSpecificationTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('specification_id');
+        });
+
+        // Create table for storing product attribute group attribute
+        Schema::create($this->productAttributeGroupTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('attribute_group_id');
+            $table->unsignedTinyInteger('control_type')->default(0);
+            $table->string('text_prompt')->nullable();
+            $table->boolean('is_required')->default(false);
+            $table->string('when')->nullable();
+            $table->integer('sort')->default(0);
+        });
+
+        // Create table for storing product attribute
+        Schema::create($this->productAttributeTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('attribute_id');
+            $table->string('customer_value')->nullable();
+            $table->boolean('is_selected')->default(false);
+            $table->unsignedInteger('picture_id')->nullable();
+            $table->integer('sort')->default(0);
+        });
+
+        // Create table for storing product attribute attribute
+        Schema::create($this->productItemAttributeTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('product_item_id');
+            $table->unsignedInteger('attribute_id');
+        });
+
+        // Create table for storing product picture
+        Schema::create($this->productPictureTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('picture_id');
+            $table->integer('sort')->default(0);
+        });
+
+        // Create table for storing product manufacturer
+        Schema::create($this->productManufacturerTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('manufacturer_id');
+            $table->string('product_origin_sku', 32)->nullable();
+            $table->string('product_origin_name')->nullable();
+            $table->string('purchasing_url')->nullable();
+            $table->decimal('purchasing_price', 16, 4)->default(0);
+            $table->decimal('purchasing_discount', 16, 4)->default(0);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists($this->categoriesTable);
+        Schema::dropIfExists($this->attributesTable);
+        Schema::dropIfExists($this->attributeGroupsTable);
+        Schema::dropIfExists($this->specificationGroupsTable);
+        Schema::dropIfExists($this->specificationsTable);
+        Schema::dropIfExists($this->manufacturersTable);
+        Schema::dropIfExists($this->productsTable);
+        Schema::dropIfExists($this->productItemsTable);
+        Schema::dropIfExists($this->productSpecificationTable);
+        Schema::dropIfExists($this->productAttributeGroupTable);
+        Schema::dropIfExists($this->productAttributeTable);
+        Schema::dropIfExists($this->productItemAttributeTable);
+        Schema::dropIfExists($this->productPictureTable);
+        Schema::dropIfExists($this->productManufacturerTable);
+    }
+}
