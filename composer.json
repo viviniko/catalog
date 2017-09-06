@@ -20,11 +20,18 @@
         "viviniko/support": "dev-master",
         "viviniko/urlrewrite": "dev-master"
     },
-	"autoload": {
+    "autoload": {
         "psr-0": {
             "Viviniko\\Catalog": "src"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Viviniko\\Catalog\\CatalogServiceProvider"
+            ]
+        }
+    },
     "minimum-stability": "dev",
-	"prefer-stable": true
+    "prefer-stable": true
 }

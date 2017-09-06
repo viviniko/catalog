@@ -172,6 +172,11 @@ class Product extends Model
             }
         });
 
+        $searchArray['price'] = (float)$searchArray['price'];
+        $searchArray['market_price'] = (float)$searchArray['market_price'];
+        $searchArray['weight'] = (float)$searchArray['weight'];
+        $searchArray['sort'] = (int)$searchArray['sort'];
+
         $searchArray['specifications'] = $specIds;
         $searchArray['specification_names'] = $specNames;
         $searchArray['created_at'] = strtotime($this->created_at);
