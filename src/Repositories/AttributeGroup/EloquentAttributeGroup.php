@@ -12,11 +12,17 @@ class EloquentAttributeGroup extends SimpleRepository implements AttributeGroupR
         'name'
     ];
 
+    /**
+     * {@inheritdoc}
+     */
     public function all()
     {
         return $this->search([])->get();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function lists()
     {
         return $this->pluck('name', 'id');

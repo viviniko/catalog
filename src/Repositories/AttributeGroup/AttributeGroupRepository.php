@@ -5,6 +5,16 @@ namespace Viviniko\Catalog\Repositories\AttributeGroup;
 interface AttributeGroupRepository
 {
     /**
+     * Paginate attribute groups.
+     *
+     * @param $pageSize
+     * @param string $searchName
+     * @param null $search
+     * @return mixed
+     */
+    public function paginate($pageSize, $searchName = 'search', $search = null);
+
+    /**
      * Find data by id
      *
      * @param       $id
