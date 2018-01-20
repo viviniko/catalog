@@ -9,7 +9,7 @@ interface ManufacturerService
      *
      * @param mixed $query
      *
-     * @return \Common\Repository\Builder
+     * @return \Viviniko\Repository\Builder
      */
     public function search($query);
 
@@ -54,4 +54,6 @@ interface ManufacturerService
      * @return mixed
      */
     public function pluck($column, $key = null);
+
+    public function findByName($name);
 }

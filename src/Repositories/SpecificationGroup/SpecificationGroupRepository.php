@@ -1,24 +1,27 @@
 <?php
 
-namespace Viviniko\Catalog\Contracts;
+namespace Viviniko\Catalog\Repositories\SpecificationGroup;
 
-interface AttributeGroupService
+interface SpecificationGroupRepository
 {
     /**
-     * Paginate attribute groups.
+     * Get attributes by category id.
      *
-     * @param mixed $query
-     *
-     * @return \Viviniko\Repository\Builder
-     */
-    public function search($query);
-
-    /**
-     * Get attribute group pairs.
+     * @param $categoryId
+     * @param $columns
      *
      * @return mixed
      */
-    public function lists();
+    public function findByCategoryId($categoryId, $columns = ['*']);
+
+    /**
+     * Find data by id
+     *
+     * @param       $id
+     *
+     * @return mixed
+     */
+    public function find($id);
 
     /**
      * Save a new entity in repository

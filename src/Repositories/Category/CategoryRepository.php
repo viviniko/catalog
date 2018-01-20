@@ -1,24 +1,34 @@
 <?php
 
-namespace Viviniko\Catalog\Contracts;
+namespace Viviniko\Catalog\Repositories\Category;
 
-interface AttributeGroupService
+interface CategoryRepository
 {
     /**
-     * Paginate attribute groups.
+     * Paginate categories.
      *
      * @param mixed $query
      *
-     * @return \Viviniko\Repository\Builder
+     * @return \Common\Repository\Builder
      */
     public function search($query);
 
     /**
-     * Get attribute group pairs.
+     * Get all categories.
      *
      * @return mixed
      */
-    public function lists();
+    public function all();
+
+    /**
+     * Find data by id
+     *
+     * @param       $id
+     * @param       $columns
+     *
+     * @return mixed
+     */
+    public function find($id, $columns = ['*']);
 
     /**
      * Save a new entity in repository
@@ -47,4 +57,15 @@ interface AttributeGroupService
      * @return int
      */
     public function delete($id);
+
+    /**
+     * Get all children.
+     *
+     * @param int $categoryId
+     * @param mixed $columns
+     * @param bool $recursive
+     *
+     * @return mixed
+     */
+    public function getChildren($categoryId, $columns = ['*'], $recursive = false);
 }

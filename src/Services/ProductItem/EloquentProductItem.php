@@ -8,4 +8,6 @@ use Viviniko\Repository\SimpleRepository;
 class EloquentProductItem extends SimpleRepository implements ProductItemServiceInterface
 {
     protected $modelConfigKey = 'catalog.product_item';
+
+    protected $fieldSearchable = ['sku', 'is_master'];
 }

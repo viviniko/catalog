@@ -1,24 +1,26 @@
 <?php
 
-namespace Viviniko\Catalog\Contracts;
+namespace Viviniko\Catalog\Repositories\Manufacturer;
 
-interface AttributeGroupService
+interface ManufacturerRepository
 {
     /**
-     * Paginate attribute groups.
+     * Paginate categories.
      *
      * @param mixed $query
      *
-     * @return \Viviniko\Repository\Builder
+     * @return \Common\Repository\Builder
      */
     public function search($query);
 
     /**
-     * Get attribute group pairs.
+     * Find data by id
+     *
+     * @param       $id
      *
      * @return mixed
      */
-    public function lists();
+    public function find($id);
 
     /**
      * Save a new entity in repository
@@ -47,4 +49,22 @@ interface AttributeGroupService
      * @return int
      */
     public function delete($id);
+
+    /**
+     * Pluck manufacturer.
+     *
+     * @param string $column
+     * @param string $key
+     * @return mixed
+     */
+    public function pluck($column, $key = null);
+
+    /**
+     * Get manufacturer by given name.
+     *
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function findByName($name);
 }

@@ -5,38 +5,10 @@ namespace Viviniko\Catalog\Contracts;
 interface SpecificationService
 {
     /**
-     * Get specifications by all id given.
+     * Get specification attributes by category id.
      *
-     * @param $ids
+     * @param $categoryId
      * @return mixed
      */
-    public function findIn($ids);
-
-    /**
-     * Save a new entity in repository
-     *
-     * @param array $data
-     *
-     * @return mixed
-     */
-    public function create(array $data);
-
-    /**
-     * Update a entity in repository by id
-     *
-     * @param       $id
-     * @param array $data
-     *
-     * @return mixed
-     */
-    public function update($id, array $data);
-
-    /**
-     * Delete a entity in repository by id
-     *
-     * @param $id
-     *
-     * @return int
-     */
-    public function delete($id);
+    public function getFilterableSpecificationsByCategoryId($categoryId);
 }

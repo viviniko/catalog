@@ -47,4 +47,13 @@ interface AttributeService
      * @return int
      */
     public function delete($id);
+
+    /**
+     * Get attribute by name like the given name
+     *
+     * @param $name
+     * @param null $groupId
+     * @return mixed
+     */
+    public function guessByName($name, $groupId = null);
 }

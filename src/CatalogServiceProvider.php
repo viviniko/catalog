@@ -2,7 +2,6 @@
 
 namespace Viviniko\Catalog;
 
-use Viviniko\Catalog\Console\Commands\CatalogTableCommand;
 use Viviniko\Catalog\Models\Category;
 use Viviniko\Catalog\Models\Product;
 use Viviniko\Catalog\Models\ProductItem;
@@ -13,7 +12,7 @@ use Viviniko\Catalog\Observers\ProductObserver;
 use Viviniko\Media\Models\Media;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-
+use Viviniko\Catalog\Console\Commands\CatalogTableCommand;
 
 class CatalogServiceProvider extends BaseServiceProvider
 {
@@ -61,6 +60,8 @@ class CatalogServiceProvider extends BaseServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/catalog.php', 'catalog');
 
+        $this->registerRepositories();
+
         $this->registerCategoryService();
 
         $this->registerAttributeService();
@@ -92,6 +93,57 @@ class CatalogServiceProvider extends BaseServiceProvider
         });
     }
 
+    public function registerRepositories()
+    {
+        // Category Repository
+        $this->app->singleton(
+            \Viviniko\Catalog\Repositories\Category\CategoryRepository::class,
+            \Viviniko\Catalog\Repositories\Category\EloquentCategory::class
+        );
+
+        // Specification Group Repository
+        $this->app->singleton(
+            \Viviniko\Catalog\Repositories\SpecificationGroup\SpecificationGroupRepository::class,
+            \Viviniko\Catalog\Repositories\SpecificationGroup\EloquentSpecificationGroup::class
+        );
+
+        // Specification Repository
+        $this->app->singleton(
+            \Viviniko\Catalog\Repositories\Specification\SpecificationRepository::class,
+            \Viviniko\Catalog\Repositories\Specification\EloquentSpecification::class
+        );
+
+        // Attribute Group Repository
+        $this->app->singleton(
+            \Viviniko\Catalog\Repositories\AttributeGroup\AttributeGroupRepository::class,
+            \Viviniko\Catalog\Repositories\AttributeGroup\EloquentAttributeGroup::class
+        );
+
+        // Attribute Repository
+        $this->app->singleton(
+            \Viviniko\Catalog\Repositories\Attribute\AttributeRepository::class,
+            \Viviniko\Catalog\Repositories\Attribute\EloquentAttribute::class
+        );
+
+        // Manufacturer Repository
+        $this->app->singleton(
+            \Viviniko\Catalog\Repositories\Manufacturer\ManufacturerRepository::class,
+            \Viviniko\Catalog\Repositories\Manufacturer\EloquentManufacturer::class
+        );
+
+        // Product Repository
+        $this->app->singleton(
+            \Viviniko\Catalog\Repositories\Product\ProductRepository::class,
+            \Viviniko\Catalog\Repositories\Product\EloquentProduct::class
+        );
+
+        // Product Item Repository
+        $this->app->singleton(
+            \Viviniko\Catalog\Repositories\ProductItem\ProductItemRepository::class,
+            \Viviniko\Catalog\Repositories\ProductItem\EloquentProductItem::class
+        );
+    }
+
     /**
      * Register the category service provider.
      *
@@ -101,7 +153,7 @@ class CatalogServiceProvider extends BaseServiceProvider
     {
         $this->app->singleton(
             \Viviniko\Catalog\Contracts\CategoryService::class,
-            \Viviniko\Catalog\Services\Category\EloquentCategory::class
+            \Viviniko\Catalog\Services\Category\CategoryServiceImpl::class
         );
     }
 
@@ -140,7 +192,7 @@ class CatalogServiceProvider extends BaseServiceProvider
     {
         $this->app->singleton(
             \Viviniko\Catalog\Contracts\SpecificationService::class,
-            \Viviniko\Catalog\Services\Specification\EloquentSpecification::class
+            \Viviniko\Catalog\Services\Specification\SpecificationServiceImpl::class
         );
     }
 

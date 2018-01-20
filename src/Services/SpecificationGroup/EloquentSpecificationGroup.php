@@ -17,6 +17,6 @@ class EloquentSpecificationGroup extends SimpleRepository implements Specificati
      */
     public function findByCategoryId($categoryId)
     {
-        return $this->createModel()->newQuery()->whereIn('category_id', (array) $categoryId)->get();
+        return $this->createModel()->newQuery()->with('specifications')->whereIn('category_id', (array) $categoryId)->get();
     }
 }

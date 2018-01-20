@@ -1,13 +1,13 @@
 <?php
 
-namespace Viviniko\Catalog\Services\AttributeGroup;
+namespace Viviniko\Catalog\Repositories\AttributeGroup;
 
-use Viviniko\Catalog\Contracts\AttributeGroupService as AttributeGroupServiceInterface;
 use Viviniko\Repository\SimpleRepository;
 
-class EloquentAttributeGroup extends SimpleRepository implements AttributeGroupServiceInterface
+class EloquentAttributeGroup extends SimpleRepository implements AttributeGroupRepository
 {
     protected $modelConfigKey = 'catalog.attribute_group';
+
     protected $fieldSearchable = [
         'name'
     ];

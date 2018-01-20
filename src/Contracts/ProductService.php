@@ -7,45 +7,22 @@ use Carbon\Carbon;
 interface ProductService
 {
     /**
-     * Paginate the given query into a simple paginator.
-     *
-     * @param null $perPage
-     * @param null $keyword
-     * @param null $categoryId
-     * @param null $attributes
-     * @param null $order
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    public function paginate($perPage = null, $keyword = null, $categoryId = null, $attributes = null, $order = null);
-
-    /**
-     * Paginate the given query into a simple paginator.
-     *
-     * @param null $take
-     * @param null $keyword
-     * @param null $categoryId
-     * @param null $attributes
-     * @param null $order
-     * @return \Illuminate\Support\Collection
-     */
-    public function getProducts($take, $keyword, $categoryId, $attributes, $order);
-
-    /**
-     * Get products by all id given.
-     *
-     * @param $ids
-     * @return mixed
-     */
-    public function findIn($ids);
-
-    /**
      * Paginate products.
      *
      * @param mixed $query
      *
-     * @return \Common\Repository\Builder
+     * @return \Laravel\Scout\Builder
      */
     public function search($query);
+
+    /**
+     * Paginate the given query into a simple paginator.
+     *
+     * @param null $perPage
+     * @param null $search
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginate($perPage = null, $search = null);
 
     /**
      * Find data by id
@@ -76,6 +53,15 @@ interface ProductService
     public function update($id, array $data);
 
     /**
+     * Set product status.
+     *
+     * @param $productId
+     * @param $status
+     * @return mixed
+     */
+    public function changeProductStatus($productId, $status);
+
+    /**
      * Delete a entity in repository by id
      *
      * @param $id
@@ -101,7 +87,7 @@ interface ProductService
      *
      * @return mixed
      */
-    public function createProductItem($productId, array $specifications);
+    public function createProductItem($productId, array $specifications, $index=1);
 
     /**
      * Update product item.
@@ -293,4 +279,6 @@ interface ProductService
      * @return array
      */
     public function sortProductAttributes($productId, $attributes);
+
+    public function generateSKU($categoryId);
 }

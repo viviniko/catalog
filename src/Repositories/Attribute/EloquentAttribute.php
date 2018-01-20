@@ -1,13 +1,10 @@
 <?php
 
-namespace Viviniko\Catalog\Services\Attribute;
+namespace Viviniko\Catalog\Repositories\Attribute;
 
-use Viviniko\Catalog\Contracts\AttributeService as AttributeServiceInterface;
 use Viviniko\Repository\SimpleRepository;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 
-class EloquentAttribute extends SimpleRepository implements AttributeServiceInterface
+class EloquentAttribute extends SimpleRepository implements AttributeRepository
 {
     protected $modelConfigKey = 'catalog.attribute';
 
@@ -36,12 +33,10 @@ class EloquentAttribute extends SimpleRepository implements AttributeServiceInte
      */
     public function guessByName($name, $groupId = null)
     {
-        return Cache::remember("catalog.attribute.guess-name?:{$name}", Config::get('cache.ttl', 10), function () use ($name, $groupId) {
-            $query =  $this->createModel()->newQuery();
-            if ($groupId) {
-                $query->where('group_id', $groupId);
-            }
-            return $query->where('name', 'like', "%{$name}%")->first();
-        });
+        $query =  $this->createModel()->newQuery();
+        if ($groupId) {
+            $query->where('group_id', $groupId);
+        }
+        return $query->where('name', 'like', "%{$name}%")->first();
     }
 }

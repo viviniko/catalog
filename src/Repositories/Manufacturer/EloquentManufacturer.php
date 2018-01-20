@@ -1,11 +1,10 @@
 <?php
 
-namespace Viviniko\Catalog\Services\Manufacturer;
+namespace Viviniko\Catalog\Repositories\Manufacturer;
 
-use Viviniko\Catalog\Contracts\ManufacturerService as ManufacturerServiceInterface;
 use Viviniko\Repository\SimpleRepository;
 
-class EloquentManufacturer extends SimpleRepository implements ManufacturerServiceInterface
+class EloquentManufacturer extends SimpleRepository implements ManufacturerRepository
 {
     protected $modelConfigKey = 'catalog.manufacturer';
 
@@ -19,6 +18,9 @@ class EloquentManufacturer extends SimpleRepository implements ManufacturerServi
         'admin' => 'like'
     ];
 
+    /**
+     * {@inheritdoc}
+     */
     public function findByName($name)
     {
         return $this->createModel()->where('name', $name)->first();
