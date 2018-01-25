@@ -2,16 +2,16 @@
 
 namespace Viviniko\Catalog\Observers;
 
-use Viviniko\Catalog\Contracts\CategoryService;
 use Viviniko\Catalog\Models\Category;
+use Viviniko\Catalog\Repositories\Category\CategoryRepository;
 
 class CategoryObserver
 {
-    protected $categoryService;
+    protected $categories;
 
-    public function __construct(CategoryService $categoryService)
+    public function __construct(CategoryRepository $categories)
     {
-        $this->categoryService = $categoryService;
+        $this->categories = $categories;
     }
 
     public function saved(Category $category)
@@ -19,7 +19,7 @@ class CategoryObserver
         $path = $category->parent ? $category->parent->path : '';
         $path = trim($path . '/' . $category->id, '/');
         if ($category->path != $path) {
-            $this->categoryService->update($category->id, ['path' => $path]);
+            $this->categories->update($category->id, ['path' => $path]);
         }
     }
 }
