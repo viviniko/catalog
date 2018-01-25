@@ -25,4 +25,12 @@ class EloquentManufacturer extends SimpleRepository implements ManufacturerRepos
     {
         return $this->createModel()->where('name', $name)->first();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function lists($column = 'name', $key = null)
+    {
+        return $this->pluck($column, $key);
+    }
 }

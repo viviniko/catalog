@@ -51,13 +51,13 @@ interface ManufacturerRepository
     public function delete($id);
 
     /**
-     * Pluck manufacturer.
+     * Manufacturer lists.
      *
      * @param string $column
      * @param string $key
      * @return mixed
      */
-    public function pluck($column, $key = null);
+    public function lists($column = 'name', $key = null);
 
     /**
      * Get manufacturer by given name.

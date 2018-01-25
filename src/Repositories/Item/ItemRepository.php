@@ -23,6 +23,14 @@ interface ItemRepository
     public function create(array $data);
 
     /**
+     * @param $productId
+     * @param array $attributes
+     * @param array $data
+     * @return mixed
+     */
+    public function createByAttributes($productId, array $attributes, array $data = []);
+
+    /**
      * Update a entity in repository by id
      *
      * @param       $id
