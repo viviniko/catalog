@@ -2,7 +2,7 @@
 
 namespace Viviniko\Catalog\Models;
 
-use Viviniko\Media\Models\Media;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ProductAttribute extends Pivot
@@ -19,6 +19,6 @@ class ProductAttribute extends Pivot
 
     public function picture()
     {
-        return $this->belongsTo(Media::class, 'picture_id');
+        return $this->belongsTo(Config::get('media.media'), 'picture_id');
     }
 }

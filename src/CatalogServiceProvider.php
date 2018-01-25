@@ -2,17 +2,17 @@
 
 namespace Viviniko\Catalog;
 
+use Viviniko\Catalog\Console\Commands\CatalogTableCommand;
 use Viviniko\Catalog\Models\Category;
 use Viviniko\Catalog\Models\Product;
-use Viviniko\Catalog\Models\ProductItem;
+use Viviniko\Catalog\Models\Item;
 use Viviniko\Catalog\Observers\CategoryObserver;
 use Viviniko\Catalog\Observers\MediaObserver;
-use Viviniko\Catalog\Observers\ProductItemObserver;
+use Viviniko\Catalog\Observers\ItemObserver;
 use Viviniko\Catalog\Observers\ProductObserver;
 use Viviniko\Media\Models\Media;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Viviniko\Catalog\Console\Commands\CatalogTableCommand;
 
 class CatalogServiceProvider extends BaseServiceProvider
 {
@@ -40,7 +40,7 @@ class CatalogServiceProvider extends BaseServiceProvider
 
         Media::observe(MediaObserver::class);
         Category::observe(CategoryObserver::class);
-        ProductItem::observe(ProductItemObserver::class);
+        Item::observe(ItemObserver::class);
         Product::observe(ProductObserver::class);
 
         $config = $this->app['config'];
@@ -66,17 +66,11 @@ class CatalogServiceProvider extends BaseServiceProvider
 
         $this->registerAttributeService();
 
-        $this->registerAttributeGroupService();
-
         $this->registerSpecificationService();
-
-        $this->registerSpecificationGroupService();
-
-        $this->registerManufacturerService();
 
         $this->registerProductService();
 
-        $this->registerProductItemService();
+        $this->registerItemService();
 
         $this->registerCommands();
     }
@@ -137,10 +131,10 @@ class CatalogServiceProvider extends BaseServiceProvider
             \Viviniko\Catalog\Repositories\Product\EloquentProduct::class
         );
 
-        // Product Item Repository
+        // Item Repository
         $this->app->singleton(
-            \Viviniko\Catalog\Repositories\ProductItem\ProductItemRepository::class,
-            \Viviniko\Catalog\Repositories\ProductItem\EloquentProductItem::class
+            \Viviniko\Catalog\Repositories\Item\ItemRepository::class,
+            \Viviniko\Catalog\Repositories\Item\EloquentItem::class
         );
     }
 
@@ -166,20 +160,7 @@ class CatalogServiceProvider extends BaseServiceProvider
     {
         $this->app->singleton(
             \Viviniko\Catalog\Contracts\AttributeService::class,
-            \Viviniko\Catalog\Services\Attribute\EloquentAttribute::class
-        );
-    }
-
-    /**
-     * Register the attribute service provider.
-     *
-     * @return void
-     */
-    protected function registerAttributeGroupService()
-    {
-        $this->app->singleton(
-            \Viviniko\Catalog\Contracts\AttributeGroupService::class,
-            \Viviniko\Catalog\Services\AttributeGroup\EloquentAttributeGroup::class
+            \Viviniko\Catalog\Services\Attribute\AttributeServiceImpl::class
         );
     }
 
@@ -193,19 +174,6 @@ class CatalogServiceProvider extends BaseServiceProvider
         $this->app->singleton(
             \Viviniko\Catalog\Contracts\SpecificationService::class,
             \Viviniko\Catalog\Services\Specification\SpecificationServiceImpl::class
-        );
-    }
-
-    /**
-     * Register the specification value service provider.
-     *
-     * @return void
-     */
-    protected function registerSpecificationGroupService()
-    {
-        $this->app->singleton(
-            \Viviniko\Catalog\Contracts\SpecificationGroupService::class,
-            \Viviniko\Catalog\Services\SpecificationGroup\EloquentSpecificationGroup::class
         );
     }
 
@@ -227,24 +195,11 @@ class CatalogServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    protected function registerProductItemService()
+    protected function registerItemService()
     {
         $this->app->singleton(
-            \Viviniko\Catalog\Contracts\ProductItemService::class,
-            \Viviniko\Catalog\Services\ProductItem\EloquentProductItem::class
-        );
-    }
-
-    /**
-     * Register the manufacturer service provider.
-     *
-     * @return void
-     */
-    protected function registerManufacturerService()
-    {
-        $this->app->singleton(
-            \Viviniko\Catalog\Contracts\ManufacturerService::class,
-            \Viviniko\Catalog\Services\Manufacturer\EloquentManufacturer::class
+            \Viviniko\Catalog\Contracts\ItemService::class,
+            \Viviniko\Catalog\Services\Item\ItemServiceImpl::class
         );
     }
 
@@ -258,12 +213,9 @@ class CatalogServiceProvider extends BaseServiceProvider
         return [
             \Viviniko\Catalog\Contracts\CategoryService::class,
             \Viviniko\Catalog\Contracts\AttributeService::class,
-            \Viviniko\Catalog\Contracts\AttributeGroupService::class,
             \Viviniko\Catalog\Contracts\SpecificationService::class,
-            \Viviniko\Catalog\Contracts\SpecificationGroupService::class,
             \Viviniko\Catalog\Contracts\ProductService::class,
-            \Viviniko\Catalog\Contracts\ProductItemService::class,
-            \Viviniko\Catalog\Contracts\ManufacturerService::class,
+            \Viviniko\Catalog\Contracts\ItemService::class,
         ];
     }
 }

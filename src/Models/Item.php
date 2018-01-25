@@ -5,14 +5,14 @@ namespace Viviniko\Catalog\Models;
 use Viviniko\Support\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 
-class ProductItem extends Model
+class Item extends Model
 {
     public $timestamps = false;
 
-    protected $tableConfigKey = 'catalog.product_items_table';
+    protected $tableConfigKey = 'catalog.items_table';
 
     protected $fillable = [
-        'product_id', 'sku', 'upc', 'market_price', 'price', 'weight', 'stock_quantity', 'is_active', 'is_master'
+        'product_id', 'sku', 'market_price', 'price', 'weight', 'quantity', 'is_active', 'is_master'
     ];
 
     protected $casts = [
@@ -22,11 +22,11 @@ class ProductItem extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Config::get('catalog.product'), 'product_id');
     }
 
     public function attributes()
     {
-        return $this->belongsToMany(Attribute::class, Config::get('catalog.product_item_attribute_table'));
+        return $this->belongsToMany(Config::get('catalog.attribute'), Config::get('catalog.item_attribute_table'));
     }
 }

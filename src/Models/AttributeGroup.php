@@ -2,6 +2,7 @@
 
 namespace Viviniko\Catalog\Models;
 
+use Illuminate\Support\Facades\Config;
 use Viviniko\Support\Database\Eloquent\Model;
 
 class AttributeGroup extends Model
@@ -14,7 +15,7 @@ class AttributeGroup extends Model
 
     public function attributes()
     {
-        return $this->hasMany(Attribute::class, 'group_id');
+        return $this->hasMany(Config::get('attribute'), 'group_id');
     }
 
     public function getTextPromptAttribute()

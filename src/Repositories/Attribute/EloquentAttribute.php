@@ -14,10 +14,7 @@ class EloquentAttribute extends SimpleRepository implements AttributeRepository
     }
 
     /**
-     * Get attributes by all id given.
-     *
-     * @param $ids
-     * @return mixed
+     * {@inheritdoc}
      */
     public function findIn($ids)
     {
@@ -25,15 +22,11 @@ class EloquentAttribute extends SimpleRepository implements AttributeRepository
     }
 
     /**
-     * Get attribute by name like the given name
-     *
-     * @param $name
-     * @param null $groupId
-     * @return mixed
+     * {@inheritdoc}
      */
     public function guessByName($name, $groupId = null)
     {
-        $query =  $this->createModel()->newQuery();
+        $query = $this->createModel()->newQuery();
         if ($groupId) {
             $query->where('group_id', $groupId);
         }

@@ -2,6 +2,7 @@
 
 namespace Viviniko\Catalog\Models;
 
+use Illuminate\Support\Facades\Config;
 use Viviniko\Support\Database\Eloquent\Model;
 
 class Attribute extends Model
@@ -12,7 +13,7 @@ class Attribute extends Model
 
     public function group()
     {
-        return $this->belongsTo(AttributeGroup::class, 'group_id');
+        return $this->belongsTo(Config::get('catalog.attribute_group'), 'group_id');
     }
 
     public function getValueAttribute()

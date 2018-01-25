@@ -1,24 +1,17 @@
 <?php
 
-namespace Viviniko\Catalog\Contracts;
+namespace Viviniko\Catalog\Repositories\Item;
 
-interface AttributeGroupService
+interface ItemRepository
 {
     /**
-     * Paginate attribute groups.
+     * Find data by id
      *
-     * @param mixed $query
-     *
-     * @return \Viviniko\Repository\Builder
-     */
-    public function search($query);
-
-    /**
-     * Get attribute group pairs.
+     * @param       $id
      *
      * @return mixed
      */
-    public function lists();
+    public function find($id);
 
     /**
      * Save a new entity in repository

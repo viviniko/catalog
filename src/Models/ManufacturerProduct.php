@@ -2,21 +2,22 @@
 
 namespace Viviniko\Catalog\Models;
 
+use Illuminate\Support\Facades\Config;
 use Viviniko\Support\Database\Eloquent\Model;
 
-class ProductManufacturer extends Model
+class ManufacturerProduct extends Model
 {
-    protected $tableConfigKey = 'catalog.product_manufacturer_table';
+    protected $tableConfigKey = 'catalog.manufacturer_products_table';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'product_id', 'manufacturer_id', 'purchasing_url', 'purchasing_price', 'product_origin_sku', 'product_origin_name',
+        'product_id', 'manufacturer_id', 'url', 'price', 'sku', 'name',
     ];
 
     public function manufacturer()
     {
-        return $this->belongsTo(Manufacturer::class, 'manufacturer_id');
+        return $this->belongsTo(Config::get('catalog.manufacturer'), 'manufacturer_id');
     }
 
     public function getManufacturerNameAttribute()

@@ -3,30 +3,25 @@
 namespace Viviniko\Catalog\Models;
 
 use Viviniko\Favorite\Favoritable;
-use Viviniko\Media\Models\Media;
 use Viviniko\Review\Reviewable;
 use Viviniko\Support\Database\Eloquent\Model;
-use Viviniko\Urlrewrite\UrlrewriteTrait;
 use Illuminate\Support\Facades\Config;
 use Laravel\Scout\Searchable;
 
 class Product extends Model
 {
-    use Reviewable, UrlrewriteTrait, Favoritable, Searchable;
+    use Reviewable, Favoritable, Searchable;
 
     protected $tableConfigKey = 'catalog.products_table';
 
     protected $fillable = [
-        'category_id',
-        'name', 'description', 'content', 'url_rewrite', 'meta_title', 'meta_keywords', 'meta_description',
-        'is_active', 'is_new', 'is_hot', 'is_promote', 'sort', 'created_by', 'updated_by'
+        'category_id', 'name', 'description', 'content', 'is_active', 'sort',
+        'meta_title', 'meta_keywords', 'meta_description',
+        'created_by', 'updated_by'
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
-        'is_hot' => 'boolean',
-        'is_new' => 'boolean',
-        'is_promote' => 'boolean',
         'content' => 'array',
     ];
 
@@ -35,57 +30,52 @@ class Product extends Model
     ];
 
     protected $hidden = [
-        'created_by', 'updated_by', 'pictures', 'master', 'url_rewrite'
+        'created_by', 'updated_by', 'pictures', 'master',
     ];
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsTo(Config::get('catalog.category'), 'category_id');
     }
 
-    public function manufacturer()
+    public function manufacturerProduct()
     {
-        return $this->hasOne(ProductManufacturer::class, 'product_id');
+        return $this->hasOne(Config::get('catalog.manufacturer_product'), 'product_id');
     }
 
     public function specifications()
     {
-        return $this->belongsToMany(Specification::class, Config::get('catalog.product_specification_table'));
+        return $this->belongsToMany(Config::get('catalog.specification'), Config::get('catalog.product_specification_table'));
     }
 
     public function attributeGroups()
     {
-        return $this->belongsToMany(AttributeGroup::class, Config::get('catalog.product_attribute_group_table'))
+        return $this->belongsToMany(Config::get('catalog.attribute_group'), Config::get('catalog.product_attribute_group_table'))
             ->using(ProductAttributeGroup::class)
-            ->withPivot(['control_type', 'text_prompt', 'is_required', 'when', 'sort'])->orderBy('sort');
+            ->withPivot(['control_type', 'text_prompt', 'is_required', 'when', 'sort']);
     }
 
     public function attributes()
     {
-        return $this->belongsToMany(Attribute::class, Config::get('catalog.product_attribute_table'))
+        return $this->belongsToMany(Config::get('catalog.attribute'), Config::get('catalog.product_attribute_table'))
             ->using(ProductAttribute::class)
             ->withPivot(['customer_value', 'is_selected', 'picture_id', 'sort']);
     }
 
     public function master()
     {
-        return $this->hasOne(ProductItem::class, 'product_id')->where('is_master', true);
+        return $this->hasOne(Config::get('catalog.item'), 'product_id')->where('is_master', true);
     }
 
     public function items()
     {
-        return $this->hasMany(ProductItem::class, 'product_id');
+        return $this->hasMany(Config::get('catalog.item'), 'product_id');
     }
 
     public function pictures()
     {
-        return $this->belongsToMany(Media::class, Config::get('catalog.product_picture_table'), 'product_id', 'picture_id')
-            ->withPivot(['sort'])->orderBy('sort');
-    }
-
-    public function getUrlAttribute()
-    {
-        return url($this->url_rewrite);
+        return $this->belongsToMany(Config::get('media.media'), Config::get('catalog.product_picture_table'), 'product_id', 'picture_id')
+            ->withPivot(['sort']);
     }
 
     public function getCoverAttribute()

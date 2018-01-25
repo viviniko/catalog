@@ -2,6 +2,7 @@
 
 namespace Viviniko\Catalog\Models;
 
+use Illuminate\Support\Facades\Config;
 use Viviniko\Support\Database\Eloquent\Model;
 
 class Specification extends Model
@@ -12,7 +13,7 @@ class Specification extends Model
 
     public function group()
     {
-        return $this->belongsTo(SpecificationGroup::class, 'group_id');
+        return $this->belongsTo(Config::get('catalog.specification_group'), 'group_id');
     }
 
     public function getTitleAttribute()

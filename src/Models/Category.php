@@ -2,18 +2,16 @@
 
 namespace Viviniko\Catalog\Models;
 
+use Illuminate\Support\Facades\Config;
 use Viviniko\Support\Database\Eloquent\Model;
-use Viviniko\Urlrewrite\UrlrewriteTrait;
 
 class Category extends Model
 {
-    use UrlrewriteTrait;
-
     protected $tableConfigKey = 'catalog.categories_table';
 
     protected $fillable = [
         'name', 'description', 'is_active', 'parent_id', 'path', 'picture_id', 'sort',
-        'meta_title', 'meta_keywords', 'meta_description', 'url_rewrite',
+        'meta_title', 'meta_keywords', 'meta_description',
     ];
 
     protected $casts = [
@@ -22,16 +20,16 @@ class Category extends Model
 
     public function specificationGroups()
     {
-        return $this->hasMany(SpecificationGroup::class, 'category_id');
+        return $this->hasMany(Config::get('catalog.specification_group'), 'category_id');
     }
 
     public function parent()
     {
-        return $this->belongsTo(Category::class, 'parent_id');
+        return $this->belongsTo(static::class, 'parent_id');
     }
 
     public function children()
     {
-        return $this->hasMany(Category::class, 'parent_id');
+        return $this->hasMany(static::class, 'parent_id');
     }
 }

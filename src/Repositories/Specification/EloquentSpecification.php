@@ -25,6 +25,9 @@ class EloquentSpecification extends SimpleRepository implements SpecificationRep
             ->get(["{$specificationTablesName}.*"]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findInWithGroup($ids)
     {
         return $this->createModel()->newQuery()->whereIn('id', $ids)->with('group')->get();

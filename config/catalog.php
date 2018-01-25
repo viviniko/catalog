@@ -69,7 +69,7 @@ return [
     | This is the Product Item model.
     |
     */
-    'product_item' => 'Viviniko\Catalog\Models\ProductItem',
+    'item' => 'Viviniko\Catalog\Models\Item',
 
     /*
     |--------------------------------------------------------------------------
@@ -89,7 +89,7 @@ return [
     | This is the product manufacturer model.
     |
     */
-    'product_manufacturer' => 'Viviniko\Catalog\Models\ProductManufacturer',
+    'manufacturer_product' => 'Viviniko\Catalog\Models\ManufacturerProduct',
 
     /*
     |--------------------------------------------------------------------------
@@ -169,7 +169,7 @@ return [
     | This is the product items table.
     |
     */
-    'product_items_table' => 'catalog_product_items',
+    'items_table' => 'catalog_product_items',
 
     /*
     |--------------------------------------------------------------------------
@@ -209,7 +209,7 @@ return [
     | This is the product_item_attribute_value table.
     |
     */
-    'product_item_attribute_table' => 'catalog_product_item_attribute',
+    'item_attribute_table' => 'catalog_product_item_attribute',
 
     /*
     |--------------------------------------------------------------------------
@@ -229,6 +229,6 @@ return [
     | This is the product_manufacturer table.
     |
     */
-    'product_manufacturer_table' => 'catalog_product_manufacturer',
+    'manufacturer_products_table' => 'catalog_manufacturer_products',
 
 ];
