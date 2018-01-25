@@ -14,7 +14,7 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
     /**
      * {@inheritdoc}
      */
-    public function paginate($perPage = null, $search = null)
+    public function paginate($perPage = null, $searchName = 'search', $search = null)
     {
         $productTable = Config::get('catalog.products_table');
         $productManufacturerTable = Config::get('catalog.product_manufacturer_table');
@@ -66,7 +66,7 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
         if (!empty($search)) {
             $query = [];
             foreach($search as $key => $value) {
-                $query['search'][$key] = $value;
+                $query[$searchName][$key] = $value;
             }
 
             $result->appends($query);
