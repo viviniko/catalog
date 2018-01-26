@@ -26,7 +26,7 @@ class Product extends Model
     ];
 
     protected $appends = [
-        'sku_id', 'url', 'cover', 'sku', 'market_price', 'price', 'stock_quantity', 'upc', 'weight'
+        'cover', 'sku', 'market_price', 'price', 'quantity', 'weight'
     ];
 
     protected $hidden = [
@@ -81,11 +81,6 @@ class Product extends Model
     public function getCoverAttribute()
     {
         return data_get($this->pictures->sortBy('sort')->first(), 'url');
-    }
-
-    public function getSkuIdAttribute()
-    {
-        return data_get($this->master, 'id');
     }
 
     public function getSkuAttribute()
