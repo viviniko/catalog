@@ -100,4 +100,22 @@ interface ProductService
      * @return mixed
      */
     public function detachAttribute($productId, $specificationId);
+
+    /**
+     * @param array $attributes
+     * @param null $x
+     * @param null $y
+     * @return mixed
+     */
+    public function addProductAttributeSwatchPicture(array &$attributes, $x = null, $y = null);
+
+    /**
+     * @param $productId
+     * @param $attributeId
+     * @param $pictureId
+     * @param $x
+     * @param $y
+     * @return mixed
+     */
+    public function updateProductAttributeSwatchPicture($productId, $attributeId, $pictureId, $x, $y);
 }

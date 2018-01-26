@@ -185,6 +185,22 @@ class ProductServiceImpl implements ProductService
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function updateProductAttributeSwatchPicture($productId, $attributeId, $pictureId, $x, $y)
+    {
+        $product = $this->productRepository->find($productId);
+        if ($product) {
+            $attributes = ['picture_id' => $pictureId];
+            $this->addProductAttributeSwatchPicture($attributes, $x, $y);
+
+            return $product->attributes()->updateExistingPivot($attributeId, $attributes);
+        }
+
+        return false;
+    }
+
     protected function syncProductData(Product $product, array $data)
     {
         if (!empty($data['specifications'])) {
