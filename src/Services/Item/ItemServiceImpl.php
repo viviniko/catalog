@@ -4,6 +4,7 @@ namespace Viviniko\Catalog\Services\Item;
 
 use Illuminate\Support\Facades\DB;
 use Viviniko\Catalog\Contracts\ItemService;
+use Viviniko\Catalog\Contracts\ProductSkuGenerater;
 use Viviniko\Catalog\Repositories\Item\ItemRepository;
 
 class ItemServiceImpl implements ItemService
@@ -13,9 +14,15 @@ class ItemServiceImpl implements ItemService
      */
     protected $itemRepository;
 
-    public function __construct(ItemRepository $itemRepository)
+    /**
+     * @var \Viviniko\Catalog\Contracts\ProductSkuGenerater
+     */
+    protected $productSkuGenerater;
+
+    public function __construct(ItemRepository $itemRepository, ProductSkuGenerater $productSkuGenerater)
     {
         $this->itemRepository = $itemRepository;
+        $this->productSkuGenerater = $productSkuGenerater;
     }
 
     /**
@@ -33,8 +40,9 @@ class ItemServiceImpl implements ItemService
     {
         $item = null;
         DB::transaction(function () use ($productId, $attributes, $data, &$item) {
-            $item = $this->create(array_merge([
+            $item = $this->itemRepository->create(array_merge([
                 'product_id' => $productId,
+                'sku' => '',
                 'price' => 0,
                 'weight' => 0,
                 'quantity' => 0,

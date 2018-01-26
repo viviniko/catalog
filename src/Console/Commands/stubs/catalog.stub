@@ -200,7 +200,7 @@ class CreateCatalogTable extends Migration
         Schema::create($this->itemsTable, function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('product_id');
-            $table->string('sku', 32)->unique();
+            $table->string('sku', 32)->default('')->index();
             $table->decimal('market_price', 16, 4)->default(0);
             $table->decimal('price', 16, 4);
             $table->decimal('weight', 16, 4)->default(0);

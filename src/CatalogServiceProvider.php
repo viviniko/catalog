@@ -62,6 +62,8 @@ class CatalogServiceProvider extends BaseServiceProvider
 
         $this->registerRepositories();
 
+        $this->registerSKUGenerater();
+
         $this->registerCategoryService();
 
         $this->registerAttributeService();
@@ -200,6 +202,14 @@ class CatalogServiceProvider extends BaseServiceProvider
         $this->app->singleton(
             \Viviniko\Catalog\Contracts\ItemService::class,
             \Viviniko\Catalog\Services\Item\ItemServiceImpl::class
+        );
+    }
+
+    protected function registerSKUGenerater()
+    {
+        $this->app->singleton(
+            \Viviniko\Catalog\Contracts\ProductSkuGenerater::class,
+            \Viviniko\Catalog\Services\DefaultProductSkuGenerater::class
         );
     }
 
