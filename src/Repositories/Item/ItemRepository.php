@@ -14,6 +14,12 @@ interface ItemRepository
     public function find($id);
 
     /**
+     * @param $productId
+     * @return mixed
+     */
+    public function findByProductId($productId);
+
+    /**
      * Save a new entity in repository
      *
      * @param array $data
@@ -21,14 +27,6 @@ interface ItemRepository
      * @return mixed
      */
     public function create(array $data);
-
-    /**
-     * @param $productId
-     * @param array $attributes
-     * @param array $data
-     * @return mixed
-     */
-    public function createByAttributes($productId, array $attributes, array $data = []);
 
     /**
      * Update a entity in repository by id

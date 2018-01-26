@@ -14,35 +14,8 @@ class EloquentItem extends SimpleRepository implements ItemRepository
     /**
      * {@inheritdoc}
      */
-    public function createByAttributes($productId, array $attributes, array $data = [])
+    public function findByProductId($productId)
     {
-        $item = null;
-        DB::transaction(function () use ($productId, $attributes, $data, &$item) {
-            $item = $this->create(array_merge([
-                'product_id' => $productId,
-                'price' => 0,
-                'weight' => 0,
-                'quantity' => 0,
-                'is_active' => true,
-                'is_master' => false,
-            ], $data));
-
-            $item->attributes()->attach($attributes);
-        });
-
-        return $item;
+        return $this->findBy('product_id', $productId);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function delete($id)
-    {
-        DB::transaction(function () use ($id) {
-            $item = $this->find($id);
-            $item->attributes()->sync([]);
-            parent::delete($id);
-        });
-    }
-
 }

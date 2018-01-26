@@ -12,4 +12,24 @@ interface ItemService
      * @return mixed
      */
     public function find($id);
+
+    /**
+     * @param $productId
+     * @param array $attributes
+     * @param array $data
+     * @return mixed
+     */
+    public function createByAttributes($productId, array $attributes, array $data = []);
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function delete($id);
+
+    /**
+     * @param $productId
+     * @return mixed
+     */
+    public function deleteByProductId($productId);
 }
