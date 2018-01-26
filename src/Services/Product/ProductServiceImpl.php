@@ -128,7 +128,7 @@ class ProductServiceImpl implements ProductService
      */
     public function attachAttribute($productId, array $data)
     {
-        $product = $this->find($productId);
+        $product = $this->productRepository->find($productId);
         foreach ($data as $attributeId => $attributes) {
             DB::transaction(function () use ($product, $attributes, $productId, $attributeId) {
                 if (isset($attributes['is_selected']) && $attributes['is_selected']) {
@@ -147,7 +147,7 @@ class ProductServiceImpl implements ProductService
      */
     public function updateAttribute($productId, array $data)
     {
-        $product = $this->find($productId);
+        $product = $this->productRepository->find($productId);
         foreach ($data as $attributeId => $attributes) {
             DB::transaction(function () use ($product, $attributes, $productId, $attributeId) {
                 if (isset($attributes['is_selected']) && $attributes['is_selected']) {
@@ -166,7 +166,7 @@ class ProductServiceImpl implements ProductService
      */
     public function detachAttribute($productId, $attributeId)
     {
-        $product = $this->find($productId);
+        $product = $this->productRepository->find($productId);
         $product->attributes()->detach($attributeId);
 
         return $product;
