@@ -10,6 +10,7 @@ use Viviniko\Catalog\Contracts\ItemService;
 use Viviniko\Catalog\Contracts\ProductService;
 use Viviniko\Catalog\Models\Product;
 use Viviniko\Catalog\Repositories\Product\ProductRepository;
+use Viviniko\Media\Contracts\ImageService;
 
 class ProductServiceImpl implements ProductService
 {
@@ -17,10 +18,17 @@ class ProductServiceImpl implements ProductService
 
     protected $itemService;
 
-    public function __construct(ProductRepository $productRepository, ItemService $itemService)
+    protected $imageService;
+
+    public function __construct(
+        ProductRepository $productRepository,
+        ItemService $itemService,
+        ImageService $imageService
+    )
     {
         $this->productRepository = $productRepository;
         $this->itemService = $itemService;
+        $this->imageService = $imageService;
     }
 
     /**
@@ -85,6 +93,96 @@ class ProductServiceImpl implements ProductService
                 return $this->productRepository->delete($id);
             }
         });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attachAttributeGroups($productId, array $data)
+    {
+        foreach ($data as $groupId => $attributes) {
+            $this->productRepository->attachProductAttributeGroup($productId, $groupId, $attributes);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateAttributeGroups($productId, array $data)
+    {
+        foreach ($data as $groupId => $attributes) {
+            $this->productRepository->updateProductAttributeGroup($productId, $groupId, $attributes);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function detachAttributeGroup($productId, $groupId)
+    {
+        $this->productRepository->detachProductAttributeGroup($productId, $groupId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attachAttribute($productId, array $data)
+    {
+        $product = $this->find($productId);
+        foreach ($data as $attributeId => $attributes) {
+            DB::transaction(function () use ($product, $attributes, $productId, $attributeId) {
+                if (isset($attributes['is_selected']) && $attributes['is_selected']) {
+                    $this->productRepository->resetProductSelectedAttribute($productId, $attributeId);
+                }
+                $this->addProductAttributeSwatchPicture($attributes);
+                $product->attributes()->attach($attributeId, $attributes);
+            });
+        }
+
+        return $product;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateAttribute($productId, array $data)
+    {
+        $product = $this->find($productId);
+        foreach ($data as $attributeId => $attributes) {
+            DB::transaction(function () use ($product, $attributes, $productId, $attributeId) {
+                if (isset($attributes['is_selected']) && $attributes['is_selected']) {
+                    $this->productRepository->resetProductSelectedAttribute($productId, $attributeId);
+                }
+                $this->addProductAttributeSwatchPicture($attributes);
+                $product->attributes()->updateExistingPivot($attributeId, $attributes);
+            });
+        }
+
+        return $product;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function detachAttribute($productId, $attributeId)
+    {
+        $product = $this->find($productId);
+        $product->attributes()->detach($attributeId);
+
+        return $product;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addProductAttributeSwatchPicture(array &$attributes, $x = null, $y = null)
+    {
+        $size = config('catalog.settings.swatch_picture_size', 60);
+        if (isset($attributes['picture_id']) && $attributes['picture_id'] != 0 && !isset($attributes['swatch_picture_id'])) {
+            $picture = $this->imageService->crop($attributes['picture_id'], $size, $size, $x, $y);
+
+            $attributes['swatch_picture_id'] = $picture->id;
+        }
     }
 
     protected function syncProductData(Product $product, array $data)

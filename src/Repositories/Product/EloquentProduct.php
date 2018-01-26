@@ -86,11 +86,10 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
     /**
      * {@inheritdoc}
      */
-    public function attachAttributeGroups($productId, array $data)
+    public function attachProductAttributeGroup($productId, $attributeGroupId, array $attributes = [])
     {
-        $product = $this->find($productId);
-        foreach ($data as $groupId => $attributes) {
-            $product->attributeGroups()->attach($groupId, $attributes);
+        if ($product = $this->find($productId)) {
+            $product->attributeGroups()->attach($attributeGroupId, $attributes);
         }
 
         return $product;
@@ -99,25 +98,35 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
     /**
      * {@inheritdoc}
      */
-    public function updateAttributeGroups($productId, array $data)
+    public function updateProductAttributeGroup($productId, $attributeGroupId, array $attributes = [])
     {
-        $product = $this->find($productId);
-
-        foreach ($data as $groupId => $attributes) {
-            $product->attributeGroups()->updateExistingPivot($groupId, $attributes);
+        if ($product = $this->find($productId)) {
+            $product->attributeGroups()->updateExistingPivot($attributeGroupId, $attributes);
         }
-
-        return $product;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function detachAttributeGroup($productId, $groupId)
+    public function detachProductAttributeGroup($productId, $groupId)
     {
-        $product = $this->find($productId);
-        $product->attributeGroups()->detach($groupId);
+        if ($product = $this->find($productId)) {
+            $product->attributeGroups()->detach($groupId);
+        }
+    }
 
-        return $product;
+    /**
+     * {@inheritdoc}
+     */
+    public function resetProductSelectedAttribute($productId, $attributeId)
+    {
+        DB::table(Config::get('catalog.product_attribute_table'))
+            ->where('product_id', $productId)
+            ->where('is_selected', 1)
+            ->whereIn('attribute_id', function ($query) use ($attributeId) {
+                $query->select('id')->from(Config::get('catalog.attributes_table'))->where('group_id', function ($subQuery) use ($attributeId) {
+                    $subQuery->select('group_id')->from(Config::get('catalog.attributes_table'))->where('id', $attributeId);
+                });
+            })->update(['is_selected' => 0]);
     }
 }

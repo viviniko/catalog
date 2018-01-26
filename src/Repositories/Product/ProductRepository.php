@@ -51,24 +51,26 @@ interface ProductRepository
     public function delete($id);
 
     /**
-     * Sync attribute groups.
+     * Attach attribute groups.
      *
      * @param $productId
-     * @param array $data
+     * @param $attributeGroupId
+     * @param array $attributes
      *
      * @return mixed
      */
-    public function attachAttributeGroups($productId, array $data);
+    public function attachProductAttributeGroup($productId, $attributeGroupId, array $attributes = []);
 
     /**
      * Update attribute group.
      *
      * @param $productId
-     * @param array $data
+     * @param $attributeGroupId
+     * @param array $attributes
      *
      * @return mixed
      */
-    public function updateAttributeGroups($productId, array $data);
+    public function updateProductAttributeGroup($productId, $attributeGroupId, array $attributes = []);
 
     /**
      * Detach attribute group.
@@ -78,7 +80,14 @@ interface ProductRepository
      *
      * @return mixed
      */
-    public function detachAttributeGroup($productId, $specificationGroupId);
+    public function detachProductAttributeGroup($productId, $specificationGroupId);
+
+    /**
+     * @param $productId
+     * @param $attributeId
+     * @return mixed
+     */
+    public function resetProductSelectedAttribute($productId, $attributeId);
 
     /**
      * Get latest products.

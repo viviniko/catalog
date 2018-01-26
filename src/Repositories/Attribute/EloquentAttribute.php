@@ -8,6 +8,9 @@ class EloquentAttribute extends SimpleRepository implements AttributeRepository
 {
     protected $modelConfigKey = 'catalog.attribute';
 
+    /**
+     * {@inheritdoc}
+     */
     public function findByGroupId($groupId)
     {
         return $this->findBy('group_id', $groupId);

@@ -5,6 +5,12 @@ namespace Viviniko\Catalog\Repositories\Attribute;
 interface AttributeRepository
 {
     /**
+     * @param $groupId
+     * @return mixed
+     */
+    public function findByGroupId($groupId);
+
+    /**
      * Find data by id
      *
      * @param       $id
