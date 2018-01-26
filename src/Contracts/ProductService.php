@@ -70,4 +70,34 @@ interface ProductService
      * @return mixed
      */
     public function detachAttributeGroup($productId, $specificationGroupId);
+
+    /**
+     * Attach attribute.
+     *
+     * @param $productId
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function attachAttribute($productId, array $data);
+
+    /**
+     * Update attribute.
+     *
+     * @param $productId
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function updateAttribute($productId, array $data);
+
+    /**
+     * Detach attribute.
+     *
+     * @param $productId
+     * @param $specificationId
+     *
+     * @return mixed
+     */
+    public function detachAttribute($productId, $specificationId);
 }
