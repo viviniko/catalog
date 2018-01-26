@@ -54,7 +54,6 @@ class ProductServiceImpl implements ProductService
     {
         return DB::transaction(function () use ($data) {
             $product = $this->productRepository->create($data);
-            $product->items()->updateOrCreate(['product_id' => $product->id, 'is_master' => true], $data);
             $this->syncProductData($product, $data);
 
             return $product;
