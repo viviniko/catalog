@@ -15,6 +15,12 @@ interface AttributeGroupRepository
     public function paginate($pageSize, $searchName = 'search', $search = null);
 
     /**
+     *
+     * @return mixed
+     */
+    public function lists();
+
+    /**
      * Find data by id
      *
      * @param       $id

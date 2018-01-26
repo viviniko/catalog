@@ -29,11 +29,11 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
             'category' => "{$categoryTable}.id:=",
             'sku' => 'like',
             'manufacturer' => "{$manufacturerTable}.id:=",
-            'product_origin_sku' => "{$productManufacturerTable}.product_origin_sku:like",
+            'manufacturer_product_sku' => "{$productManufacturerTable}.sku:like",
             'manufacturer_status' => "{$productManufacturerTable}.status:=",
             'price' => "{$productItemsTable}.price:=",
             'market_price' => "{$productItemsTable}.market_price:=",
-            'stock_quantity' => "{$productItemsTable}.stock_quantity:=",
+            'quantity' => "{$productItemsTable}.quantity:=",
             'created_at' => "{$productTable}.created_at:betweenDate",
             'updated_at' => "{$productTable}.updated_at:betweenDate",
             'created_by' => 'like',
@@ -78,42 +78,46 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
     /**
      * {@inheritdoc}
      */
-    public function createProductItem($productId, array $attributes, $index=1)
-    {
-        $productItem = null;
-        DB::transaction(function () use ($productId, $attributes, &$productItem, $index) {
-            $product = $this->find($productId);
-            $productItem = $product->items()->create([
-                'sku' => preg_replace('|[0-9/]+|','',$product->sku) . sprintf("%04d",$index),
-                'upc' => '',
-                'price' => 0,
-                'weight' => $product->weight,
-                'stock_quantity' => $product->stock_quantity,
-                'is_active' => true,
-                'is_master' => false,
-            ]);
-
-            $productItem->attributes()->attach(array_map(function ($item) {
-                return $item instanceof Attribute ? $item->id : $item;
-            }, $attributes));
-        });
-
-        return $productItem;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function changeProductStatus($productId, $status)
-    {
-        return DB::table($this->createModel()->getTable())->where('id', $productId)->update(['is_active' => $status ? 1 : 0]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getLatestProducts($take, $columns = ['*'])
     {
         return $this->createModel()->latest()->limit($take)->get($columns);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attachAttributeGroups($productId, array $data)
+    {
+        $product = $this->find($productId);
+        foreach ($data as $groupId => $attributes) {
+            $product->attributeGroups()->attach($groupId, $attributes);
+        }
+
+        return $product;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateAttributeGroups($productId, array $data)
+    {
+        $product = $this->find($productId);
+
+        foreach ($data as $groupId => $attributes) {
+            $product->attributeGroups()->updateExistingPivot($groupId, $attributes);
+        }
+
+        return $product;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function detachAttributeGroup($productId, $groupId)
+    {
+        $product = $this->find($productId);
+        $product->attributeGroups()->detach($groupId);
+
+        return $product;
     }
 }

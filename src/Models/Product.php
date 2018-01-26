@@ -103,19 +103,14 @@ class Product extends Model
         return data_get($this->master, 'price');
     }
 
-    public function getUpcAttribute()
-    {
-        return data_get($this->master, 'upc');
-    }
-
     public function getWeightAttribute()
     {
         return data_get($this->master, 'weight');
     }
 
-    public function getStockQuantityAttribute()
+    public function getQuantityAttribute()
     {
-        return data_get($this->master, 'stock_quantity');
+        return data_get($this->master, 'quantity');
     }
 
     public function getReviewableNameAttribute()

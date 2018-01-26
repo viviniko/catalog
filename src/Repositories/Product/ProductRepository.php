@@ -51,23 +51,34 @@ interface ProductRepository
     public function delete($id);
 
     /**
-     * Create product item.
+     * Sync attribute groups.
      *
      * @param $productId
-     * @param array $attributes
+     * @param array $data
      *
      * @return mixed
      */
-    public function createProductItem($productId, array $attributes);
+    public function attachAttributeGroups($productId, array $data);
 
     /**
-     * Set product status.
+     * Update attribute group.
      *
      * @param $productId
-     * @param $status
-     * @return int
+     * @param array $data
+     *
+     * @return mixed
      */
-    public function changeProductStatus($productId, $status);
+    public function updateAttributeGroups($productId, array $data);
+
+    /**
+     * Detach attribute group.
+     *
+     * @param $productId
+     * @param $specificationGroupId
+     *
+     * @return mixed
+     */
+    public function detachAttributeGroup($productId, $specificationGroupId);
 
     /**
      * Get latest products.

@@ -15,7 +15,7 @@ class AttributeGroup extends Model
 
     public function attributes()
     {
-        return $this->hasMany(Config::get('attribute'), 'group_id');
+        return $this->hasMany(Config::get('catalog.attribute'), 'group_id');
     }
 
     public function getTextPromptAttribute()
