@@ -23,6 +23,13 @@ interface ItemService
 
     /**
      * @param $id
+     * @param $data
+     * @return mixed
+     */
+    public function update($id, $data);
+
+    /**
+     * @param $id
      * @return mixed
      */
     public function delete($id);

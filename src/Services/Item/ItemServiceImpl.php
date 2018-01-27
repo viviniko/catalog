@@ -59,6 +59,28 @@ class ItemServiceImpl implements ItemService
     /**
      * {@inheritdoc}
      */
+    public function update($id, $data)
+    {
+        return DB::transaction(function () use ($id, $data) {
+            $item = $this->itemRepository->find($id);
+            if (isset($data['is_master']) && $item->is_master != $data['is_master']) {
+                $master = $this->itemRepository->findMasterByProductId($item->product_id);
+                if (!$master) {
+                    $data['is_master'] = true;
+                } else if ($master->id != $item->id) {
+                    if ($data['is_master']) {
+                        $this->itemRepository->update($master->id, ['is_master' => false]);
+                    }
+                }
+            }
+
+            return $this->itemRepository->update($item->id, $data);
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function delete($id)
     {
         return DB::transaction(function () use ($id) {
@@ -68,7 +90,6 @@ class ItemServiceImpl implements ItemService
 
             return $this->itemRepository->delete($id);
         });
-
     }
 
     /**

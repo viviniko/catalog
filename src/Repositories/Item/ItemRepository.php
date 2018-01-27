@@ -20,6 +20,12 @@ interface ItemRepository
     public function findByProductId($productId);
 
     /**
+     * @param $productId
+     * @return mixed
+     */
+    public function findMasterByProductId($productId);
+
+    /**
      * Save a new entity in repository
      *
      * @param array $data

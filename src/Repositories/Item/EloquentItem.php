@@ -18,4 +18,12 @@ class EloquentItem extends SimpleRepository implements ItemRepository
     {
         return $this->findBy('product_id', $productId);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findMasterByProductId($productId)
+    {
+        return $this->findBy(['product_id' => $productId, 'is_master' => true])->first();
+    }
 }
