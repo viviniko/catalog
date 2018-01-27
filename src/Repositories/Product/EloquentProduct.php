@@ -45,8 +45,10 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
             ->join($categoryTable, "{$productTable}.category_id", '=', "{$categoryTable}.id", 'left')
             ->join($productManufacturerTable, "{$productTable}.id", '=', "{$productManufacturerTable}.product_id", 'left')
             ->join($manufacturerTable, "{$manufacturerTable}.id", '=', "{$productManufacturerTable}.manufacturer_id", 'left')
-            ->join($productItemsTable, "{$productTable}.id", '=', "{$productItemsTable}.product_id", 'left')
-            ->where("{$productItemsTable}.is_master", true);
+            ->leftJoin($productItemsTable, function($join) use ($productTable, $productItemsTable) {
+                $join->on("{$productTable}.id", '=', "{$productItemsTable}.product_id")
+                    ->where("{$productItemsTable}.is_master", '=', '1');
+            });
         if (isset($search['has_tag'])) {
             if ($search['has_tag'] == '1') {
                 $builder->has('tags');
