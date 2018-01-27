@@ -24,6 +24,6 @@ class EloquentItem extends SimpleRepository implements ItemRepository
      */
     public function findMasterByProductId($productId)
     {
-        return $this->findBy(['product_id' => $productId, 'is_master' => true])->first();
+        return $this->createModel()->where(['product_id' => $productId, 'is_master' => true])->first();
     }
 }
