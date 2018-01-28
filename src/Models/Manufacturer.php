@@ -2,6 +2,7 @@
 
 namespace Viviniko\Catalog\Models;
 
+use Illuminate\Support\Facades\Config;
 use Viviniko\Catalog\Contracts\ProductService;
 use Viviniko\Support\Database\Eloquent\Model;
 
@@ -22,8 +23,16 @@ class Manufacturer extends Model
         'active_product_count'
     ];
 
+    public function products()
+    {
+        return $this->hasMany(Config::get('catalog.manufacturer_product'), 'manufacturer_id');
+    }
+
     public function getActiveProductCountAttribute()
     {
-        return app(ProductService::class)->countManufacturerProduct($this->id);
+        return $this->products()
+            ->join(Config::get('catalog.products_table'), Config::get('catalog.manufacturer_product') . '.product_id', '=', Config::get('catalog.products_table') . '.id')
+            ->where(Config::get('catalog.products_table').'.is_active', true)
+            ->count();
     }
 }
