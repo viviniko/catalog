@@ -31,7 +31,7 @@ class Manufacturer extends Model
     public function getActiveProductCountAttribute()
     {
         return $this->products()
-            ->join(Config::get('catalog.products_table'), Config::get('catalog.manufacturer_product') . '.product_id', '=', Config::get('catalog.products_table') . '.id')
+            ->join(Config::get('catalog.products_table'), Config::get('catalog.manufacturer_products_table') . '.product_id', '=', Config::get('catalog.products_table') . '.id')
             ->where(Config::get('catalog.products_table').'.is_active', true)
             ->count();
     }
