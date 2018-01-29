@@ -8,10 +8,11 @@ interface ProductRepository
      * Paginate the given query into a simple paginator.
      *
      * @param null $perPage
+     * @param string $searchName
      * @param null $search
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = null, $search = null);
+    public function paginate($perPage = null, $searchName = 'search', $search = null);
 
     /**
      * Find data by id
