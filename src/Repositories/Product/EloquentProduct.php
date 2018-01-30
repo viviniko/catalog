@@ -14,7 +14,7 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
     /**
      * {@inheritdoc}
      */
-    public function paginate($perPage = null, $searchName = 'search', $search = null)
+    public function paginate($perPage = null, $searchName = 'search', $search = null, $order = null)
     {
         $productTable = Config::get('catalog.products_table');
         $productManufacturerTable = Config::get('catalog.manufacturer_products_table');
