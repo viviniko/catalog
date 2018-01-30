@@ -5,13 +5,15 @@ namespace Viviniko\Catalog\Repositories\Manufacturer;
 interface ManufacturerRepository
 {
     /**
-     * Paginate categories.
+     * Paginate the given query into a simple paginator.
      *
-     * @param mixed $query
-     *
-     * @return \Common\Repository\Builder
+     * @param null $perPage
+     * @param string $searchName
+     * @param null $search
+     * @param null $order
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function search($query);
+    public function paginate($perPage = null, $searchName = 'search', $search = null, $order = null);
 
     /**
      * Find data by id
