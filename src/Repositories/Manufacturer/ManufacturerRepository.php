@@ -13,7 +13,7 @@ interface ManufacturerRepository
      * @param null $order
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = null, $searchName = 'search', $search = null, $order = null);
+    public function paginate($perPage, $searchName = 'search', $search = null, $order = null);
 
     /**
      * Find data by id
