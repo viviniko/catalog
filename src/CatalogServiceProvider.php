@@ -2,7 +2,10 @@
 
 namespace Viviniko\Catalog;
 
+use Illuminate\Support\Facades\Event;
 use Viviniko\Catalog\Console\Commands\CatalogTableCommand;
+use Viviniko\Catalog\Listeners\CategoryEventSubscriber;
+use Viviniko\Catalog\Listeners\ItemEventSubscriber;
 use Viviniko\Catalog\Models\Category;
 use Viviniko\Catalog\Models\Product;
 use Viviniko\Catalog\Models\Item;
@@ -42,6 +45,9 @@ class CatalogServiceProvider extends BaseServiceProvider
         Category::observe(CategoryObserver::class);
         Item::observe(ItemObserver::class);
         Product::observe(ProductObserver::class);
+
+        Event::subscribe(CategoryEventSubscriber::class);
+        Event::subscribe(ItemEventSubscriber::class);
 
         $config = $this->app['config'];
 
