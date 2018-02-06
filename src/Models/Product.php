@@ -10,7 +10,9 @@ use Laravel\Scout\Searchable;
 
 class Product extends Model
 {
-    use Reviewable, Favoritable, Searchable;
+    use Reviewable, Favoritable, Searchable {
+        Searchable::searchable as makeSearchable;
+    }
 
     protected $tableConfigKey = 'catalog.products_table';
 
@@ -32,6 +34,11 @@ class Product extends Model
     protected $hidden = [
         'created_by', 'updated_by', 'pictures', 'master',
     ];
+
+    /**
+     * @var \Viviniko\Catalog\Contracts\ProductService
+     */
+    protected static $productService;
 
     public function category()
     {
@@ -114,6 +121,18 @@ class Product extends Model
     }
 
     /**
+     * Make the given model instance searchable.
+     *
+     * @return void
+     */
+    public function searchable()
+    {
+        if (static::getProductService()->isProductCanSearchable($this->id)) {
+            $this->makeSearchable();
+        }
+    }
+
+    /**
      * Get the index name for the model.
      *
      * @return string
@@ -130,52 +149,30 @@ class Product extends Model
      */
     public function toSearchableArray()
     {
-        $searchArray = $this->toArray();
-
-        unset($searchArray['master'], $searchArray['pictures']);
-
-        if ($this->category) {
-            $searchArray['category_name'] = $this->category->name;
-            $searchArray['categories'] = app(\Common\Catalog\Contracts\CategoryService::class)
-                ->getAllChildren($this->category_id)
-                ->pluck('name')
-                ->prepend($this->category->name)
-                ->implode(',');
-        }
-
-        $specIds = [];
-        $specNames = [];
-        app(\Common\Catalog\Contracts\ProductService::class)->getSpecifications($this->id)->each(function ($spec) use (&$specIds, &$specNames) {
-            $specIds[] = $spec->id;
-            if (data_get($spec->group, 'is_searchable')) {
-                $specNames[] = $spec->name;
-            }
-        });
-
-        $searchArray['price'] = (float)$searchArray['price'];
-        $searchArray['market_price'] = (float)$searchArray['market_price'];
-        $searchArray['weight'] = (float)$searchArray['weight'];
-        $searchArray['sort'] = (int)$searchArray['sort'];
-
-        $searchArray['specifications'] = $specIds;
-        $searchArray['specification_names'] = $specNames;
-        $searchArray['created_at'] = strtotime($this->created_at);
-        $searchArray['updated_at'] = strtotime($this->updated_at);
-
-        return $searchArray;
+        return static::getProductService()->getProductSearchableArray($this->id);
     }
 
+    /**
+     * Get the field type mapping for the model.
+     *
+     * @return array
+     */
     public function searchableMapping()
     {
-        return [
-            'properties' => [
-                'price' => ['type' => 'double', 'coerce' => true],
-                'market_price' => ['type' => 'double', 'coerce' => true],
-                'weight' => ['type' => 'double', 'coerce' => true],
-                'created_at' => ['type' => 'long', 'coerce' => true],
-                'updated_at' => ['type' => 'long', 'coerce' => true],
-                'sort' => ['type' => 'long', 'coerce' => true],
-            ]
-        ];
+        return static::getProductService()->getProductSearchableMapping();
+    }
+
+    public static function setProductService($productService)
+    {
+        static::$productService = $productService;
+    }
+
+    public static function getProductService()
+    {
+        if (!static::$productService) {
+            static::$productService = app(\Viviniko\Catalog\Contracts\ProductService::class);
+        }
+
+        return static::$productService;
     }
 }

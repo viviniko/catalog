@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Viviniko\Catalog\Contracts\CategoryService;
 use Viviniko\Catalog\Contracts\ItemService;
 use Viviniko\Catalog\Contracts\ProductService;
 use Viviniko\Catalog\Models\Product;
@@ -14,21 +15,39 @@ use Viviniko\Media\Contracts\ImageService;
 
 class ProductServiceImpl implements ProductService
 {
+    use ProductSearchableTrait;
+
+    /**
+     * @var \Viviniko\Catalog\Repositories\Product\ProductRepository
+     */
     protected $productRepository;
 
+    /**
+     * @var \Viviniko\Catalog\Contracts\ItemService
+     */
     protected $itemService;
 
+    /**
+     * @var \Viviniko\Catalog\Contracts\CategoryService
+     */
+    protected $categoryService;
+
+    /**
+     * @var \Viviniko\Media\Contracts\ImageService
+     */
     protected $imageService;
 
     public function __construct(
         ProductRepository $productRepository,
         ItemService $itemService,
+        CategoryService $categoryService,
         ImageService $imageService
     )
     {
         $this->productRepository = $productRepository;
         $this->itemService = $itemService;
         $this->imageService = $imageService;
+        $this->categoryService = $categoryService;
     }
 
     /**

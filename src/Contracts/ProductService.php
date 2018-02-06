@@ -118,4 +118,22 @@ interface ProductService
      * @return mixed
      */
     public function updateProductAttributeSwatchPicture($productId, $attributeId, $pictureId, $x, $y);
+
+    /**
+     * @param $productId
+     * @return mixed
+     */
+    public function getProductSearchableMapping();
+
+    /**
+     * @param $productId
+     * @return mixed
+     */
+    public function getProductSearchableArray($productId);
+
+    /**
+     * @param $productId
+     * @return bool
+     */
+    public function isProductCanSearchable($productId);
 }
