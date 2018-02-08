@@ -17,7 +17,8 @@
         "viviniko/media": "dev-master",
         "viviniko/review": "dev-master",
         "viviniko/repository": "dev-master",
-        "viviniko/support": "dev-master"
+        "viviniko/support": "dev-master",
+        "viviniko/urlrewrite": "dev-master"
     },
     "autoload": {
         "psr-0": {
