@@ -5,6 +5,18 @@ namespace Viviniko\Catalog\Contracts;
 interface ProductService
 {
     /**
+     * Search products.
+     *
+     * @param null $keyword
+     * @param null $filters
+     * @param null $order
+     * @param null $except
+     * @param array $categories
+     * @return \Laravel\Scout\Builder
+     */
+    public function search($keyword = null, $filters = null, $order = null, $except = null, $categories = []);
+
+    /**
      * Find data by id
      *
      * @param       $id

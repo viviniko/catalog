@@ -53,6 +53,49 @@ class ProductServiceImpl implements ProductService
     /**
      * {@inheritdoc}
      */
+    public function search($keyword = null, $filters = null, $order = null, $except = null, $categories = [])
+    {
+        $builder = $this->makeSearchBuilder($keyword, $filters, $except);
+
+        if (empty($order)) {
+            $order = 'recommend_score';
+        } else if (is_string($order)) {
+            if ($order == 'recommend') {
+                $order = 'recommend_score';
+            } else if ($order == 'hot') {
+                $order = 'quarter_sold_count';
+            } else if ($order == 'new') {
+                $order = 'created_at';
+            } else if ($order == 'high_price') {
+                $order = 'price';
+            } else if ($order == 'low_price') {
+                $order = ['price', 'asc'];
+            } else if ($order == 'score') {
+                $order = ['_score', 'desc'];
+            } else {
+                $order = [$order ?? 'sort', 'desc'];
+            }
+        }
+
+        if (!empty($order)) {
+            if (!is_array($order)) {
+                $order = [$order, 'desc'];
+            }
+            $builder->orderBy(...$order);
+            if ($order[0] == 'recommend_score') {
+                $builder->orderBy('sort', 'desc');
+            }
+        } else {
+            $builder->orderBy('sort', 'desc');
+            $builder->orderBy('created_at', 'desc');
+        }
+
+        return $builder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function find($id)
     {
         if (is_array($id) || $id instanceof Arrayable) {
@@ -238,5 +281,61 @@ class ProductServiceImpl implements ProductService
                 'manufacturer_id' => $data['manufacturer_product']['manufacturer_id'],
             ], $data['manufacturer_product']);
         }
+    }
+
+    protected function makeSearchBuilder($keyword = null, $filters = null, $except = null, $fields = null)
+    {
+        if (!empty($keyword)) {
+            $keyword = str_replace(['{', '}', '*', '[', ']', '(', ')', '!', '&', '^', '"', '\\', ':', '/'], '', $keyword);
+        }
+
+        $builder = (new (Config::get('catalog.product')))->search($keyword);
+
+        if (!empty($filters)) {
+            foreach ($filters as $name => $value) {
+                if (empty($value)) continue;
+                if ($name == 'category_id') {
+                    $builder->where('category_id', $this->categoryService->getChildrenId($value)->prepend($value)->toArray());
+                } else if ($name == 'specifications') {
+                    foreach ($value as $key=>$val){
+                        if (is_array($val)) {
+                            $builder->where('specifications:'.$key,$val);
+                        } else {
+                            $builder->where('term.specifications:'.$key,array_unique((array)$val));
+                        }
+                    }
+                } else if ($name == 'tags' || $name == 'term.tags') {
+                    $builder->where($name, array_unique(array_filter((array)$value)));
+                } else {
+                    $builder->where($name, $value);
+                }
+            }
+        }
+
+        $builder->where('is_active', 1);
+
+        if ($except) {
+            $mustNot = [];
+            foreach ($except as $key => $values) {
+                $values = array_unique(array_values((array) $values));
+                if (count($values) == 1) {
+                    $mustNot['term'] = [$key => $values[0]];
+                } else {
+                    $mustNot['terms'] = [$key => $values];
+                }
+            }
+
+            $builder->rawFilters = [
+                'bool' => [
+                    'must_not' => $mustNot,
+                ],
+            ];
+        }
+
+        if ($fields) {
+            $builder->fields = $fields;
+        }
+
+        return $builder;
     }
 }
