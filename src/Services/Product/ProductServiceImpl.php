@@ -289,7 +289,7 @@ class ProductServiceImpl implements ProductService
             $keyword = str_replace(['{', '}', '*', '[', ']', '(', ')', '!', '&', '^', '"', '\\', ':', '/'], '', $keyword);
         }
 
-        $builder = (new (Config::get('catalog.product')))->search($keyword);
+        $builder = Config::get('catalog.product')::search($keyword);
 
         if (!empty($filters)) {
             foreach ($filters as $name => $value) {
