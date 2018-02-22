@@ -12,11 +12,12 @@
     ],
     "require": {
         "php": ">=7.0",
-        "viviniko/scoutelasticsearch": "dev-master",
+        "viviniko/configuration": "dev-master",
         "viviniko/favorite": "dev-master",
         "viviniko/media": "dev-master",
         "viviniko/review": "dev-master",
         "viviniko/repository": "dev-master",
+        "viviniko/scoutelasticsearch": "dev-master",
         "viviniko/support": "dev-master",
         "viviniko/urlrewrite": "dev-master"
     },
