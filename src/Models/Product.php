@@ -87,6 +87,11 @@ class Product extends Model
             ->withPivot(['sort']);
     }
 
+    public function getUrlAttribute()
+    {
+        return url($this->url_rewrite);
+    }
+
     public function getCoverAttribute()
     {
         if (!$this->product_cover) {
