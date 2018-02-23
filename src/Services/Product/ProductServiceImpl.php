@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Viviniko\Catalog\Contracts\AttributeService;
 use Viviniko\Catalog\Contracts\CategoryService;
 use Viviniko\Catalog\Contracts\ItemService;
 use Viviniko\Catalog\Contracts\ProductService;
@@ -33,6 +34,11 @@ class ProductServiceImpl implements ProductService
     protected $categoryService;
 
     /**
+     * @var \Viviniko\Catalog\Contracts\AttributeService
+     */
+    protected $attributeService;
+
+    /**
      * @var \Viviniko\Media\Contracts\ImageService
      */
     protected $imageService;
@@ -41,6 +47,7 @@ class ProductServiceImpl implements ProductService
         ProductRepository $productRepository,
         ItemService $itemService,
         CategoryService $categoryService,
+        AttributeService $attributeService,
         ImageService $imageService
     )
     {
@@ -48,6 +55,7 @@ class ProductServiceImpl implements ProductService
         $this->itemService = $itemService;
         $this->imageService = $imageService;
         $this->categoryService = $categoryService;
+        $this->attributeService = $attributeService;
     }
 
     /**
@@ -260,6 +268,24 @@ class ProductServiceImpl implements ProductService
         }
 
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductSwatchPictures($productId)
+    {
+        return $this->productRepository->getProductAttribute($productId)
+            ->filter(function ($item) { return !empty($item->swatch_picture_id);})
+            ->sortBy('sort')
+            ->map(function ($item) {
+                $swatch = new \stdClass();
+                $swatch->swatch_picture_url = $this->imageService->getUrl($item->swatch_picture_id);
+                $swatch->picture_url = $this->imageService->getUrl($item->picture_id);
+                $swatch->attribute_id = $item->attribute_id;
+                $swatch->swatch_picture_name = data_get($this->attributeService->find($item->attribute_id), 'title');
+                return $swatch;
+            });
     }
 
     protected function syncProductData(Product $product, array $data)

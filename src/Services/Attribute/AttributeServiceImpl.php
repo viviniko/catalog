@@ -26,18 +26,18 @@ class AttributeServiceImpl implements AttributeServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function guessByName($name, $groupId = null)
+    public function find($id)
     {
-        return Cache::remember("catalog.attribute.guess-name?:{$name}", Config::get('cache.ttl', 10), function () use ($name, $groupId) {
-            return $this->attributeRepository->guessByName($name, $groupId);
-        });
+        return $this->attributeRepository->find($id);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function groups()
+    public function guessByName($name, $groupId = null)
     {
-        return $this->attributeGroupRepository->pluck('name', 'id');
+        return Cache::remember("catalog.attribute.guess-name?:{$name}", Config::get('cache.ttl', 10), function () use ($name, $groupId) {
+            return $this->attributeRepository->guessByName($name, $groupId);
+        });
     }
 }

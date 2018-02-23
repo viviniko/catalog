@@ -120,6 +120,16 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
     /**
      * {@inheritdoc}
      */
+    public function getProductAttribute($productId)
+    {
+        return DB::table(Config::get('catalog.product_attribute_table'))
+            ->where('product_id', $productId)
+            ->get();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function resetProductSelectedAttribute($productId, $attributeId)
     {
         DB::table(Config::get('catalog.product_attribute_table'))

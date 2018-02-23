@@ -148,4 +148,10 @@ interface ProductService
      * @return bool
      */
     public function isProductCanSearchable($productId);
+
+    /**
+     * @param $productId
+     * @return mixed
+     */
+    public function getProductSwatchPictures($productId);
 }

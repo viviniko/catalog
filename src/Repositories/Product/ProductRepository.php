@@ -91,6 +91,12 @@ interface ProductRepository
     public function resetProductSelectedAttribute($productId, $attributeId);
 
     /**
+     * @param $productId
+     * @return mixed
+     */
+    public function getProductAttribute($productId);
+
+    /**
      * Get latest products.
      *
      * @param $take
