@@ -61,7 +61,7 @@ trait ProductSearchableTrait
 
         $orderService = app(\Viviniko\Sale\Contracts\OrderService::class);
         $favoriteService = app(\Viviniko\Favorite\Contracts\FavoriteService::class);
-        $latestQuarterSold = $orderService ? $orderService->getProductQtyByLatestMonth($product->id, 3) : 1;
+        $latestQuarterSold = $orderService ? $orderService->countOrderProductQtyByLatestMonth($product->id, 3) : 1;
         $searchArray['quarter_sold_count'] = (int) $latestQuarterSold;
         $searchArray['hot_score'] = (isset($searchArray['is_hot']) && $searchArray['is_hot'] ? 1 : 0) * 5 + $latestQuarterSold;
         $searchArray['new_score'] = (isset($searchArray['is_new']) && $searchArray['is_new'] ? 1 : 0) * 5 + $latestQuarterSold;
