@@ -4,6 +4,7 @@ namespace Viviniko\Catalog\Services\Item;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Viviniko\Catalog\Contracts\ItemService;
 use Viviniko\Catalog\Contracts\ProductSkuGenerater;
