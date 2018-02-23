@@ -20,7 +20,7 @@ class Product extends Model
 
     protected $fillable = [
         'category_id', 'name', 'description', 'content', 'is_active', 'sort',
-        'meta_title', 'meta_keywords', 'meta_description',
+        'url_rewrite', 'meta_title', 'meta_keywords', 'meta_description',
         'created_by', 'updated_by'
     ];
 
