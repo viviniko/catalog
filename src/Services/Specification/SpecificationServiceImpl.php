@@ -46,4 +46,12 @@ class SpecificationServiceImpl implements SpecificationServiceInterface
     {
        return $this->specificationRepository->getSearchableSpecificationsByProductId($productId);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getViewableSpecificationsByProductId($productId)
+    {
+        return $this->specificationRepository->getViewableSpecificationsByProductId($productId);
+    }
 }

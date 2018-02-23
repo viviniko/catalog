@@ -21,4 +21,12 @@ interface SpecificationService
      * @return mixed
      */
     public function getSearchableSpecificationsByProductId($productId);
+
+    /**
+     * Get specification attributes by product id.
+     *
+     * @param $productId
+     * @return mixed
+     */
+    public function getViewableSpecificationsByProductId($productId);
 }
