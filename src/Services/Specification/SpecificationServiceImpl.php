@@ -24,18 +24,26 @@ class SpecificationServiceImpl implements SpecificationServiceInterface
     /**
      * {@inheritdoc}
      */
+    public function find($id)
+    {
+        return $this->specificationRepository->find($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getFilterableSpecificationsByCategoryId($categoryId)
     {
         return Cache::tags('catalog.specifications')->remember('catalog.specification.category-filterable?:' . $categoryId, Config::get('cache.ttl', 10), function () use ($categoryId) {
-            $productTableName = Config::get('catalog.products_table');
-            $productSpecificationTableName = Config::get('catalog.product_specification_table');
-            $categories = $this->categoryRepository->getChildren($categoryId, ['id'], true)->pluck('id')->prepend($categoryId)->toArray();
-            $specificationIds = DB::table($productSpecificationTableName)
-                ->whereIn('product_id', function ($query) use ($categories, $productTableName) {
-                    $query->select('id')->from($productTableName)->whereIn('category_id', $categories)->where('is_active', true);
-                })->distinct()->pluck('specification_id');
-
-            return $this->specificationRepository->getFilterableSpecifications($specificationIds);
+            return $this->specificationRepository->getFilterableSpecificationsByCategoryId($this->categoryRepository->getChildren($categoryId, ['id'], true)->pluck('id')->prepend($categoryId)->toArray());
         });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSearchableSpecificationsByProductId($productId)
+    {
+       return $this->specificationRepository->getSearchableSpecificationsByProductId($productId);
     }
 }

@@ -54,20 +54,20 @@ trait ProductSearchableTrait
 
         $specIds = [];
         $specNames = [];
-        $this->getSpecifications($product->id)->each(function ($spec) use (&$specIds, &$specNames) {
+        $this->specificationService->getSearchableSpecificationsByProductId($productId)->each(function ($spec) use (&$specIds, &$specNames) {
             $specIds[] = $spec->id;
-            if (data_get($spec->group, 'is_searchable')) {
-                $specNames[$spec->group->title][] = $spec->title;
-            }
+            $specNames[$spec->group->title][] = $spec->title;
         });
 
-        $latestQuarterSold = app(\Viviniko\Sale\Contracts\OrderService::class)->getProductQtyByLatestMonth($product->id, 3);
+        $orderService = app(\Viviniko\Sale\Contracts\OrderService::class);
+        $favoriteService = app(\Viviniko\Favorite\Contracts\FavoriteService::class);
+        $latestQuarterSold = $orderService ? $orderService->getProductQtyByLatestMonth($product->id, 3) : 1;
         $searchArray['quarter_sold_count'] = (int) $latestQuarterSold;
         $searchArray['hot_score'] = (isset($searchArray['is_hot']) && $searchArray['is_hot'] ? 1 : 0) * 5 + $latestQuarterSold;
         $searchArray['new_score'] = (isset($searchArray['is_new']) && $searchArray['is_new'] ? 1 : 0) * 5 + $latestQuarterSold;
         $searchArray['promote_score'] = (isset($searchArray['is_promote']) && $searchArray['is_promote'] ? 1 : 0) * 5 + $latestQuarterSold;
         $searchArray['recommend_score'] = $searchArray['hot_score'] * 3 + $searchArray['new_score'] * 2 + $searchArray['promote_score'] * 2;
-        $searchArray['favorite_count'] = app(\Viviniko\Favorite\Contracts\FavoriteService::class)->count($product);
+        $searchArray['favorite_count'] = $favoriteService ? $favoriteService->count($product) : 0;
 
         $searchArray['price'] = (float)$searchArray['price'];
         $searchArray['market_price'] = (float)$searchArray['market_price'];

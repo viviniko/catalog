@@ -4,6 +4,8 @@ namespace Viviniko\Catalog\Contracts;
 
 interface SpecificationService
 {
+    public function find($id);
+
     /**
      * Get specification attributes by category id.
      *
@@ -11,4 +13,12 @@ interface SpecificationService
      * @return mixed
      */
     public function getFilterableSpecificationsByCategoryId($categoryId);
+
+    /**
+     * Get specification attributes by product id.
+     *
+     * @param $productId
+     * @return mixed
+     */
+    public function getSearchableSpecificationsByProductId($productId);
 }

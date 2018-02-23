@@ -5,12 +5,20 @@ namespace Viviniko\Catalog\Repositories\Specification;
 interface SpecificationRepository
 {
     /**
-     * Get filterable specifications
+     * Get filterable specifications by given categories.
      *
-     * @param mixed $id
+     * @param mixed $categoryId
      * @return mixed
      */
-    public function getFilterableSpecifications($id);
+    public function getFilterableSpecificationsByCategoryId($categoryId);
+
+    /**
+     * Get searchable specifications by given product id.
+     *
+     * @param $productId
+     * @return mixed
+     */
+    public function getSearchableSpecificationsByProductId($productId);
 
     /**
      * Find data by id
@@ -21,8 +29,6 @@ interface SpecificationRepository
      * @return mixed
      */
     public function find($id, $columns = ['*']);
-
-    public function findInWithGroup($ids);
 
     /**
      * Save a new entity in repository

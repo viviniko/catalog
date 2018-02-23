@@ -10,6 +10,7 @@ use Viviniko\Catalog\Contracts\AttributeService;
 use Viviniko\Catalog\Contracts\CategoryService;
 use Viviniko\Catalog\Contracts\ItemService;
 use Viviniko\Catalog\Contracts\ProductService;
+use Viviniko\Catalog\Contracts\SpecificationService;
 use Viviniko\Catalog\Models\Product;
 use Viviniko\Catalog\Repositories\Product\ProductRepository;
 use Viviniko\Media\Contracts\ImageService;
@@ -39,6 +40,11 @@ class ProductServiceImpl implements ProductService
     protected $attributeService;
 
     /**
+     * @var \Viviniko\Catalog\Contracts\SpecificationService
+     */
+    protected $specificationService;
+
+    /**
      * @var \Viviniko\Media\Contracts\ImageService
      */
     protected $imageService;
@@ -48,6 +54,7 @@ class ProductServiceImpl implements ProductService
         ItemService $itemService,
         CategoryService $categoryService,
         AttributeService $attributeService,
+        SpecificationService $specificationService,
         ImageService $imageService
     )
     {
@@ -56,6 +63,7 @@ class ProductServiceImpl implements ProductService
         $this->imageService = $imageService;
         $this->categoryService = $categoryService;
         $this->attributeService = $attributeService;
+        $this->specificationService = $specificationService;
     }
 
     /**
