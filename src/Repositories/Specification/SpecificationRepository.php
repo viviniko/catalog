@@ -21,6 +21,14 @@ interface SpecificationRepository
     public function getSearchableSpecificationsByProductId($productId);
 
     /**
+     * Get viewable specifications by given product id.
+     *
+     * @param $productId
+     * @return mixed
+     */
+    public function getViewableSpecificationsByProductId($productId);
+
+    /**
      * Find data by id
      *
      * @param       $id
