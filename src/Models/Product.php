@@ -2,6 +2,7 @@
 
 namespace Viviniko\Catalog\Models;
 
+use Viviniko\Catalog\Services\Product\ProductCover;
 use Viviniko\Favorite\Favoritable;
 use Viviniko\Review\Reviewable;
 use Viviniko\Support\Database\Eloquent\Model;
@@ -88,7 +89,10 @@ class Product extends Model
 
     public function getCoverAttribute()
     {
-        return data_get($this->pictures->sortBy('sort')->first(), 'url');
+        if (!$this->product_cover) {
+            $this->product_cover = new ProductCover($this->pictures->sortBy('sort')->slice(0, 2)->map(function ($pic) { return $pic->url; }));
+        }
+        return $this->product_cover;
     }
 
     public function getSkuAttribute()

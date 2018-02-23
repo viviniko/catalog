@@ -67,7 +67,7 @@ trait ProductSearchableTrait
         $searchArray['new_score'] = (isset($searchArray['is_new']) && $searchArray['is_new'] ? 1 : 0) * 5 + $latestQuarterSold;
         $searchArray['promote_score'] = (isset($searchArray['is_promote']) && $searchArray['is_promote'] ? 1 : 0) * 5 + $latestQuarterSold;
         $searchArray['recommend_score'] = $searchArray['hot_score'] * 3 + $searchArray['new_score'] * 2 + $searchArray['promote_score'] * 2;
-        $searchArray['favorite_count'] = app(\Viviniko\Favorite\Contracts\FavoriteService::class)->count($this);
+        $searchArray['favorite_count'] = app(\Viviniko\Favorite\Contracts\FavoriteService::class)->count($product);
 
         $searchArray['price'] = (float)$searchArray['price'];
         $searchArray['market_price'] = (float)$searchArray['market_price'];
