@@ -317,6 +317,18 @@ class ProductServiceImpl implements ProductService
         }
     }
 
+    public function getPictureByProductAttributes($productId, $attributes)
+    {
+        $pictureId = DB::table(Config::get('catalog.product_attribute_table'))
+            ->where('product_id', $productId)
+            ->whereIn('attribute_id', $attributes)
+            ->whereNotNull('picture_id')
+            ->distinct()
+            ->value('picture_id');
+
+        return ($pictureId ? $this->imageService->getUrl($pictureId) : null) ?? data_get($this->find($productId), 'cover.first');
+    }
+
     protected function makeSearchBuilder($keyword = null, $filters = null, $except = null, $fields = null)
     {
         if (!empty($keyword)) {
