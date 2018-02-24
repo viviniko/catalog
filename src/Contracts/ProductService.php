@@ -151,13 +151,6 @@ interface ProductService
 
     /**
      * @param $productId
-     * @param $attributes
-     * @return mixed
-     */
-    public function getPictureByProductAttributes($productId, $attributes);
-
-    /**
-     * @param $productId
      * @return mixed
      */
     public function getProductSwatchPictures($productId);

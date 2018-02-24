@@ -53,6 +53,7 @@ class ItemServiceImpl implements ItemService
         DB::transaction(function () use ($productId, $attributes, $data, &$item) {
             $item = $this->itemRepository->create(array_merge([
                 'product_id' => $productId,
+                'picture_id' => $this->getPictureIdByProductAttributes($productId, $attributes),
                 'sku' => '',
                 'price' => 0,
                 'weight' => 0,
@@ -83,6 +84,9 @@ class ItemServiceImpl implements ItemService
                         $this->itemRepository->update($master->id, ['is_master' => false]);
                     }
                 }
+            }
+            if (!isset($data['picture_id'])) {
+                $data['picture_id'] = $this->getPictureIdByProductAttributes($item->product_id, $item->attributes->pluck('id'));
             }
 
             return $this->itemRepository->update($item->id, $data);
@@ -118,5 +122,24 @@ class ItemServiceImpl implements ItemService
         });
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getPictureIdByProductAttributes($productId, $attributes)
+    {
+        $result = DB::table(Config::get('catalog.product_attribute_table'))
+            ->where('product_id', $productId)
+            ->whereIn('attribute_id', $attributes)
+            ->whereNotNull('picture_id')
+            ->distinct()
+            ->first('picture_id');
+        if (!$result) {
+            $result = DB::table(Config::get('catalog.product_picture_table'))
+                ->where('product_id', $productId)
+                ->orderBy('sort')
+                ->first('picture_id');
+        }
 
+        return $result ? $result->picture_id : 0;
+    }
 }
