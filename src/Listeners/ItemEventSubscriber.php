@@ -16,18 +16,18 @@ class ItemEventSubscriber extends EventSubscriber
         ItemDeleted::class => 'onItemDeleted',
     ];
 
-    public function onCategoryCreated($event)
+    public function onItemCreated($event)
     {
         Cache::tags('catalog.items.low')->flush();
     }
 
-    public function onCategoryUpdated($event)
+    public function onItemUpdated($event)
     {
         Cache::tags('catalog.items.low')->flush();
         Cache::forget('catalog.items.item?:'. $event->item->id);
     }
 
-    public function onCategoryDeleted($event)
+    public function onItemDeleted($event)
     {
         Cache::tags('catalog.items.low')->flush();
         Cache::forget('catalog.items.item?:'. $event->item->id);
