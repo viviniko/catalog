@@ -132,12 +132,12 @@ class ItemServiceImpl implements ItemService
             ->whereIn('attribute_id', $attributes)
             ->whereNotNull('picture_id')
             ->distinct()
-            ->first('picture_id');
+            ->first(['picture_id']);
         if (!$result) {
             $result = DB::table(Config::get('catalog.product_picture_table'))
                 ->where('product_id', $productId)
                 ->orderBy('sort')
-                ->first('picture_id');
+                ->first(['picture_id']);
         }
 
         return $result ? $result->picture_id : 0;
