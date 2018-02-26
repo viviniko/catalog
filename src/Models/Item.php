@@ -30,7 +30,7 @@ class Item extends Model
         return $this->belongsTo(Config::get('media.media'), 'picture_id');
     }
 
-    public function attributes()
+    public function attrs()
     {
         return $this->belongsToMany(Config::get('catalog.attribute'), Config::get('catalog.item_attribute_table'));
     }
