@@ -18,6 +18,7 @@
         "viviniko/review": "dev-master",
         "viviniko/repository": "dev-master",
         "viviniko/scoutelasticsearch": "dev-master",
+        "viviniko/tag": "dev-master",
         "viviniko/support": "dev-master",
         "viviniko/urlrewrite": "dev-master"
     },
