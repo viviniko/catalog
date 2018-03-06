@@ -315,6 +315,10 @@ class ProductServiceImpl implements ProductService
                 'manufacturer_id' => $data['manufacturer_product']['manufacturer_id'],
             ], $data['manufacturer_product']);
         }
+
+        if (!empty($data['tags'])) {
+            $product->tags()->sync($data['tags']);
+        }
     }
 
     protected function makeSearchBuilder($keyword = null, $filters = null, $except = null, $fields = null)
