@@ -5,12 +5,12 @@ namespace Viviniko\Catalog\Models;
 use Illuminate\Support\Facades\Config;
 use Viviniko\Configuration\Configable;
 use Viviniko\Support\Database\Eloquent\Model;
-use Viviniko\Tag\TagCategoryTrait;
+use Viviniko\Tag\CategoryTagTrait;
 use Viviniko\Urlrewrite\UrlrewriteTrait;
 
 class Category extends Model
 {
-    use UrlrewriteTrait, Configable, TagCategoryTrait;
+    use UrlrewriteTrait, Configable, CategoryTagTrait;
 
     protected $tableConfigKey = 'catalog.categories_table';
 
