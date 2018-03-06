@@ -8,11 +8,12 @@ use Viviniko\Review\Reviewable;
 use Viviniko\Support\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Laravel\Scout\Searchable;
+use Viviniko\Tag\Taggable;
 use Viviniko\Urlrewrite\UrlrewriteTrait;
 
 class Product extends Model
 {
-    use Reviewable, Favoritable, UrlrewriteTrait, Searchable {
+    use Reviewable, Favoritable, UrlrewriteTrait, Taggable, Searchable {
         Searchable::searchable as makeSearchable;
     }
 
