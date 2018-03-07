@@ -3,6 +3,7 @@
 namespace Viviniko\Catalog\Services\Product;
 
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -294,6 +295,42 @@ class ProductServiceImpl implements ProductService
                 $swatch->swatch_picture_name = data_get($this->attributeService->find($item->attribute_id), 'title');
                 return $swatch;
             });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateProductItems($productId)
+    {
+        $product = $this->productRepository->find($productId);
+        $productItems = $product->items->all();
+        $items = [];
+        $comAttrs = Arr::crossJoin(...$product->attributes->groupBy('group_id')->map(function ($item) { return $item->all(); }));
+
+        foreach ($comAttrs as $comAttr) {
+            $attributes = array_map(function ($item) { return $item->id; }, $comAttr);
+            foreach ($productItems as $key => $productItem) {
+                $productItemAttributes = $productItem->attrs->pluck('id')->all();
+                if (count($attributes) == count($productItemAttributes) && empty(array_diff($attributes, $productItemAttributes))) {
+                    $items[] = $productItem;
+                    unset($productItems[$key]);
+                    continue 2;
+                }
+            }
+            $items[] = $this->itemService->createByAttributes($product->id, $attributes);
+        }
+
+        if (collect($items)->filter(function ($item) { return $item->is_master; })->isEmpty()) {
+            $this->itemService->update($items[0]->id, ['is_master' => true]);
+        }
+
+        if (!empty($productItems)) {
+            foreach ($productItems as $productItem) {
+                $this->itemService->delete($productItem->id);
+            }
+        }
+
+        return $items;
     }
 
     protected function syncProductData(Product $product, array $data)

@@ -154,4 +154,9 @@ interface ProductService
      * @return mixed
      */
     public function getProductSwatchPictures($productId);
+
+    /**
+     * @return mixed
+     */
+    public function generateProductItems($productId);
 }
