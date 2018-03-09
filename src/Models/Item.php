@@ -35,6 +35,11 @@ class Item extends Model
         return $this->belongsToMany(Config::get('catalog.attribute'), Config::get('catalog.item_attribute_table'));
     }
 
+    public function getDescAttrsAttribute()
+    {
+        return $this->attrs->pluck('value', 'group.text_prompt');
+    }
+
     public function getCoverAttribute()
     {
         return $this->picture->url;
