@@ -145,7 +145,7 @@ class ItemServiceImpl implements ItemService
             $productItemId = DB::table($productItemTable)->select('id')->where(['product_id' => $productId, 'is_master' => '1'])->first();
         }
 
-        return $productItemId ? $this->find($productItemId) : null;
+        return $productItemId ? $this->find($productItemId->id) : null;
     }
 
     /**
