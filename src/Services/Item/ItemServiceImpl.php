@@ -131,8 +131,8 @@ class ItemServiceImpl implements ItemService
      */
     public function findByProductAttributes($productId, array $attributes)
     {
-        $productItemAttributeTable = Config::get('catalog.product_item_attribute_table');
-        $productItemTable = Config::get('catalog.product_items_table');
+        $productItemAttributeTable = Config::get('catalog.item_attribute_table');
+        $productItemTable = Config::get('catalog.items_table');
         $productItemId = DB::table($productItemTable)
             ->select("$productItemTable.id")
             ->where('product_id', $productId)
