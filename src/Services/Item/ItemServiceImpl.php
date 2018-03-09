@@ -136,7 +136,7 @@ class ItemServiceImpl implements ItemService
         $productItemId = DB::table($productItemTable)
             ->select("$productItemTable.id")
             ->where('product_id', $productId)
-            ->join($productItemAttributeTable, "$productItemTable.id", '=', "$productItemAttributeTable.product_item_id")
+            ->join($productItemAttributeTable, "$productItemTable.id", '=', "$productItemAttributeTable.item_id")
             ->whereIn("$productItemAttributeTable.attribute_id", $attributes)
             ->groupBy("$productItemTable.id")
             ->havingRaw("count($productItemTable.id)=" . count($attributes))
