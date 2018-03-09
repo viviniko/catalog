@@ -123,6 +123,32 @@ class ItemServiceImpl implements ItemService
     }
 
     /**
+     * Get item.
+     *
+     * @param $productId
+     * @param array $attributes
+     * @return mixed
+     */
+    public function findByProductAttributes($productId, array $attributes)
+    {
+        $productItemAttributeTable = Config::get('catalog.product_item_attribute_table');
+        $productItemTable = Config::get('catalog.product_items_table');
+        $productItemId = DB::table($productItemTable)
+            ->select("$productItemTable.id")
+            ->where('product_id', $productId)
+            ->join($productItemAttributeTable, "$productItemTable.id", '=', "$productItemAttributeTable.product_item_id")
+            ->whereIn("$productItemAttributeTable.attribute_id", $attributes)
+            ->groupBy("$productItemTable.id")
+            ->havingRaw("count($productItemTable.id)=" . count($attributes))
+            ->first();
+        if (!$productItemId) {
+            $productItemId = DB::table($productItemTable)->select('id')->where(['product_id' => $productId, 'is_master' => '1'])->first();
+        }
+
+        return $productItemId ? $this->find($productItemId) : null;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getPictureIdByProductAttributes($productId, $attributes)

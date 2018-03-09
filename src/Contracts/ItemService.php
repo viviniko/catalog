@@ -39,4 +39,13 @@ interface ItemService
      * @return mixed
      */
     public function deleteByProductId($productId);
+
+    /**
+     * Get item.
+     *
+     * @param $productId
+     * @param array $attributes
+     * @return mixed
+     */
+    public function findByProductAttributes($productId, array $attributes);
 }
