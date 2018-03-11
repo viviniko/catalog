@@ -304,7 +304,7 @@ class ProductServiceImpl implements ProductService
     {
         $product = $this->productRepository->find($productId);
         $productItems = $product->items->all();
-        $items = [];
+        $items = collect([]);
         $comAttrs = Arr::crossJoin(...$product->attributes->groupBy('group_id')->map(function ($item) { return $item->all(); }));
 
         foreach ($comAttrs as $comAttr) {
@@ -317,10 +317,10 @@ class ProductServiceImpl implements ProductService
                     continue 2;
                 }
             }
-            $items[] = $this->itemService->createByAttributes($product->id, $attributes);
+            $items->push($this->itemService->createByAttributes($product->id, $attributes));
         }
 
-        if (collect($items)->filter(function ($item) { return $item->is_master; })->isEmpty()) {
+        if ($items->filter(function ($item) { return $item->is_master; })->isEmpty()) {
             $this->itemService->update($items[0]->id, ['is_master' => true]);
         }
 
