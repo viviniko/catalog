@@ -62,7 +62,7 @@ class ItemServiceImpl implements ItemService
                 'is_master' => false,
             ], $data));
 
-            $item->attributes()->attach($attributes);
+            $item->attrs()->attach($attributes);
         });
 
         return $item;
@@ -100,7 +100,7 @@ class ItemServiceImpl implements ItemService
     {
         return DB::transaction(function () use ($id) {
             if ($item = $this->itemRepository->find($id)) {
-                $item->attributes()->sync([]);
+                $item->attrs()->sync([]);
             }
 
             return $this->itemRepository->delete($id);
