@@ -19,7 +19,7 @@ class EloquentSpecification extends SimpleRepository implements SpecificationRep
         $productTableName = Config::get('catalog.products_table');
         return $this->getSpecificationsByProductId(function ($query) use ($categoryId, $productTableName) {
             $query->select('id')->from($productTableName)->whereIn('category_id', $categoryId instanceof Arrayable ? $categoryId : [$categoryId])->where('is_active', true);
-        }, 'is_searchable');
+        }, 'is_filterable');
     }
 
     /**
