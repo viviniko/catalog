@@ -62,7 +62,7 @@ class ItemServiceImpl implements ItemService
                 'is_master' => false,
             ], $data));
 
-            $item->attributes()->attach($attributes);
+            $item->attrs()->attach($attributes);
         });
 
         return $item;
@@ -86,7 +86,7 @@ class ItemServiceImpl implements ItemService
                 }
             }
             if (!isset($data['picture_id'])) {
-                $data['picture_id'] = $this->getPictureIdByProductAttributes($item->product_id, $item->attributes->pluck('id'));
+                $data['picture_id'] = $this->getPictureIdByProductAttributes($item->product_id, $item->attrs->pluck('id'));
             }
 
             return $this->itemRepository->update($item->id, $data);
@@ -100,7 +100,7 @@ class ItemServiceImpl implements ItemService
     {
         return DB::transaction(function () use ($id) {
             if ($item = $this->itemRepository->find($id)) {
-                $item->attributes()->sync([]);
+                $item->attrs()->sync([]);
             }
 
             return $this->itemRepository->delete($id);

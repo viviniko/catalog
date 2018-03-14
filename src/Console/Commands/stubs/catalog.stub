@@ -184,7 +184,7 @@ class CreateCatalogTable extends Migration
         Schema::create($this->productsTable, function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('category_id');
-            $table->string('name', 100);
+            $table->string('name');
             $table->string('description');
             $table->longText('content')->nullable();
             $table->boolean('is_active')->default(true);
