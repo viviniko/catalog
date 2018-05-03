@@ -114,6 +114,14 @@ interface ProductService
     public function detachAttribute($productId, $specificationId);
 
     /**
+     * Detach product picture.
+     *
+     * @param $pictureId
+     * @return mixed
+     */
+    public function detachProductPicture($pictureId);
+
+    /**
      * @param array $attributes
      * @param null $x
      * @param null $y

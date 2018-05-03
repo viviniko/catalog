@@ -16,6 +16,6 @@ class MediaObserver
 
     public function deleted(Media $media)
     {
-        $this->productService->detachPicture($media->id);
+        $this->productService->detachProductPicture($media->id);
     }
 }

@@ -253,6 +253,14 @@ class ProductServiceImpl implements ProductService
     /**
      * {@inheritdoc}
      */
+    public function detachProductPicture($pictureId)
+    {
+        DB::table(config('catalog.product_picture_table'))->where('picture_id', $pictureId)->delete();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addProductAttributeSwatchPicture(array &$attributes, $x = null, $y = null)
     {
         $size = config('catalog.settings.swatch_picture_size', 60);
