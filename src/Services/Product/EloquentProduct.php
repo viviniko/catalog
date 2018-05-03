@@ -374,7 +374,7 @@ class EloquentProduct extends SimpleRepository implements ProductServiceInterfac
                 $product->pictures()->sync([]);
                 $product->specifications()->sync([]);
                 $product->attributeGroups()->sync([]);
-                $product->attributes()->sync([]);
+                $product->attrs()->sync([]);
                 DB::table(Config::get('catalog.product_manufacturer_table'))->where('product_id', $id)->delete();
                 DB::table(Config::get('catalog.product_difference_table'))->where('product_id', $id)->delete();
 
@@ -469,7 +469,7 @@ class EloquentProduct extends SimpleRepository implements ProductServiceInterfac
                     $this->resetProductSelectedAttribute($productId, $attributeId);
                 }
                 $this->addProductAttributeSwatchPicture($attributes);
-                $product->attributes()->attach($attributeId, $attributes);
+                $product->attrs()->attach($attributeId, $attributes);
             });
         }
 
@@ -487,7 +487,7 @@ class EloquentProduct extends SimpleRepository implements ProductServiceInterfac
     public function syncAttribute($productId, array $data)
     {
         $product = $this->find($productId);
-        $product->attributes()->sync($data);
+        $product->attrs()->sync($data);
 
         return $product;
     }
@@ -503,7 +503,7 @@ class EloquentProduct extends SimpleRepository implements ProductServiceInterfac
     public function detachAttribute($productId, $attributeId)
     {
         $product = $this->find($productId);
-        $product->attributes()->detach($attributeId);
+        $product->attrs()->detach($attributeId);
 
         return $product;
     }
@@ -525,7 +525,7 @@ class EloquentProduct extends SimpleRepository implements ProductServiceInterfac
                     $this->resetProductSelectedAttribute($productId, $attributeId);
                 }
                 $this->addProductAttributeSwatchPicture($attributes);
-                $product->attributes()->updateExistingPivot($attributeId, $attributes);
+                $product->attrs()->updateExistingPivot($attributeId, $attributes);
             });
         }
 
@@ -539,7 +539,7 @@ class EloquentProduct extends SimpleRepository implements ProductServiceInterfac
             $attributes = ['picture_id' => $pictureId];
             $this->addProductAttributeSwatchPicture($attributes, $x, $y);
 
-            return $product->attributes()->updateExistingPivot($attributeId, $attributes);
+            return $product->attrs()->updateExistingPivot($attributeId, $attributes);
         }
 
         return false;
@@ -581,7 +581,7 @@ class EloquentProduct extends SimpleRepository implements ProductServiceInterfac
     {
         return Cache::tags('catalog.products')->remember("catalog.product.attributes?:{$productId}", Config::get('cache.ttl', 10), function () use ($productId) {
             $product = $this->find($productId);
-            return $product ? $product->attributes : collect([]);
+            return $product ? $product->attrs : collect([]);
         });
     }
 

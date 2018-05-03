@@ -165,7 +165,7 @@ class ProductServiceImpl implements ProductService
                 $product->pictures()->sync([]);
                 $product->specifications()->sync([]);
                 $product->attributeGroups()->sync([]);
-                $product->attributes()->sync([]);
+                $product->attrs()->sync([]);
                 DB::table(Config::get('catalog.manufacturer_products_table'))->where('product_id', $product->id)->delete();
 
                 return $this->productRepository->delete($id);
@@ -213,7 +213,7 @@ class ProductServiceImpl implements ProductService
                     $this->productRepository->resetProductSelectedAttribute($productId, $attributeId);
                 }
                 $this->addProductAttributeSwatchPicture($attributes);
-                $product->attributes()->attach($attributeId, $attributes);
+                $product->attrs()->attach($attributeId, $attributes);
             });
         }
 
@@ -232,7 +232,7 @@ class ProductServiceImpl implements ProductService
                     $this->productRepository->resetProductSelectedAttribute($productId, $attributeId);
                 }
                 $this->addProductAttributeSwatchPicture($attributes);
-                $product->attributes()->updateExistingPivot($attributeId, $attributes);
+                $product->attrs()->updateExistingPivot($attributeId, $attributes);
             });
         }
 
@@ -245,7 +245,7 @@ class ProductServiceImpl implements ProductService
     public function detachAttribute($productId, $attributeId)
     {
         $product = $this->productRepository->find($productId);
-        $product->attributes()->detach($attributeId);
+        $product->attrs()->detach($attributeId);
 
         return $product;
     }
@@ -273,7 +273,7 @@ class ProductServiceImpl implements ProductService
             $attributes = ['picture_id' => $pictureId];
             $this->addProductAttributeSwatchPicture($attributes, $x, $y);
 
-            return $product->attributes()->updateExistingPivot($attributeId, $attributes);
+            return $product->attrs()->updateExistingPivot($attributeId, $attributes);
         }
 
         return false;
@@ -305,7 +305,7 @@ class ProductServiceImpl implements ProductService
         $product = $this->productRepository->find($productId);
         $productItems = $product->items->all();
         $items = collect([]);
-        $comAttrs = Arr::crossJoin(...$product->attributes->groupBy('group_id')->map(function ($item) { return $item->all(); }));
+        $comAttrs = Arr::crossJoin(...$product->attrs->groupBy('group_id')->map(function ($item) { return $item->all(); }));
 
         foreach ($comAttrs as $comAttr) {
             $attributes = array_map(function ($item) { return $item->id; }, $comAttr);

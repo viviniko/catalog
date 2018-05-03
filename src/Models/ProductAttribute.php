@@ -10,7 +10,7 @@ class ProductAttribute extends Pivot
     public $timestamps = false;
 
     protected $fillable = [
-        'product_id', 'attribute_id', 'customer_value', 'is_selected', 'picture_id',
+        'product_id', 'attribute_id', 'customer_value', 'is_selected', 'picture_id', 'swatch_picture_id', 'sort'
     ];
 
     protected $casts = [
@@ -20,5 +20,10 @@ class ProductAttribute extends Pivot
     public function picture()
     {
         return $this->belongsTo(Config::get('media.media'), 'picture_id');
+    }
+
+    public function swatchPicture()
+    {
+        return $this->belongsTo(Config::get('media.media'), 'swatch_picture_id');
     }
 }

@@ -65,11 +65,11 @@ class Product extends Model
             ->withPivot(['control_type', 'text_prompt', 'is_required', 'when', 'sort']);
     }
 
-    public function attributes()
+    public function attrs()
     {
         return $this->belongsToMany(Config::get('catalog.attribute'), Config::get('catalog.product_attribute_table'))
             ->using(ProductAttribute::class)
-            ->withPivot(['customer_value', 'is_selected', 'picture_id', 'sort']);
+            ->withPivot(['customer_value', 'is_selected', 'picture_id', 'swatch_picture_id', 'sort']);
     }
 
     public function master()
