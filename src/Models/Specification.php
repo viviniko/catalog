@@ -20,4 +20,9 @@ class Specification extends Model
     {
         return explode('/', $this->name, 2)[0];
     }
+
+    public function getSlugAttribute()
+    {
+        return str_slug($this->title);
+    }
 }
