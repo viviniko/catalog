@@ -36,6 +36,16 @@ class Attribute extends Model
         return data_get($this->pivot, 'picture.url');
     }
 
+    public function getSwatchPictureIdAttribute()
+    {
+        return data_get($this->pivot, 'swatch_picture_id');
+    }
+
+    public function getSwatchPictureAttribute()
+    {
+        return data_get($this->pivot, 'swatchPicture.url');
+    }
+
     public function getTitleAttribute()
     {
         return explode('/', $this->name, 2)[0];
