@@ -20,6 +20,10 @@ class Item extends Model
         'is_master' => 'boolean',
     ];
 
+    protected $hidden = [
+        'is_master', 'weight', 'picture_id', 'is_active',
+    ];
+
     public function product()
     {
         return $this->belongsTo(Config::get('catalog.product'), 'product_id');
