@@ -40,8 +40,13 @@ class Item extends Model
         return $this->attrs->pluck('value', 'group.text_prompt');
     }
 
+    public function getSkuKeyAttribute()
+    {
+        return $this->attrs()->pluck('id')->sort()->implode(':');
+    }
+
     public function getCoverAttribute()
     {
-        return $this->picture->url;
+        return data_get($this->picture, 'url');
     }
 }
