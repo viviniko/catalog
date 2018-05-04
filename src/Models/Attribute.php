@@ -33,6 +33,11 @@ class Attribute extends Model
 
     public function getPictureAttribute()
     {
+        return data_get($this->pivot, 'picture');
+    }
+
+    public function getCoverAttribute()
+    {
         return data_get($this->pivot, 'picture.url');
     }
 
@@ -42,6 +47,11 @@ class Attribute extends Model
     }
 
     public function getSwatchPictureAttribute()
+    {
+        return data_get($this->pivot, 'swatchPicture');
+    }
+
+    public function getSwatchCoverAttribute()
     {
         return data_get($this->pivot, 'swatchPicture.url');
     }
