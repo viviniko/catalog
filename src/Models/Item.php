@@ -32,7 +32,7 @@ class Item extends Model
 
     public function attrs()
     {
-        return $this->belongsToMany(Config::get('catalog.attribute'), Config::get('catalog.item_attribute_table'))->select(Config::get('catalog.attribute'). '.*');
+        return $this->belongsToMany(Config::get('catalog.attribute'), Config::get('catalog.item_attribute_table'))->select(Config::get('catalog.attributes_table'). '.*');
     }
 
     public function getDescAttrsAttribute()
