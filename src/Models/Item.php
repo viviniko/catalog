@@ -41,7 +41,7 @@ class Item extends Model
 
     public function getDescAttrsAttribute()
     {
-        return $this->attrs->pluck('value', 'group.text_prompt');
+        return $this->attrs->pluck('value', 'group.text_prompt')->toArray();
     }
 
     public function getSkuKeyAttribute()
