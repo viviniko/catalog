@@ -62,14 +62,16 @@ class Product extends Model
     {
         return $this->belongsToMany(Config::get('catalog.attribute_group'), Config::get('catalog.product_attribute_group_table'))
             ->using(ProductAttributeGroup::class)
-            ->withPivot(['control_type', 'text_prompt', 'is_required', 'when', 'sort']);
+            ->withPivot(['control_type', 'text_prompt', 'is_required', 'when', 'sort'])
+            ->orderBy('sort');
     }
 
     public function attrs()
     {
         return $this->belongsToMany(Config::get('catalog.attribute'), Config::get('catalog.product_attribute_table'))
             ->using(ProductAttribute::class)
-            ->withPivot(['customer_value', 'is_selected', 'picture_id', 'swatch_picture_id', 'sort']);
+            ->withPivot(['customer_value', 'is_selected', 'picture_id', 'swatch_picture_id', 'sort'])
+            ->orderBy('sort');
     }
 
     public function master()
@@ -85,7 +87,8 @@ class Product extends Model
     public function pictures()
     {
         return $this->belongsToMany(Config::get('media.media'), Config::get('catalog.product_picture_table'), 'product_id', 'picture_id')
-            ->withPivot(['sort']);
+            ->withPivot(['sort'])
+            ->orderBy('sort');
     }
 
     public function getUrlAttribute()
