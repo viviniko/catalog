@@ -99,7 +99,7 @@ class Product extends Model
     public function getCoverAttribute()
     {
         if (!$this->product_cover) {
-            $this->product_cover = new ProductCover($this->pictures->sortBy('sort')->slice(0, 2)->map(function ($pic) { return $pic->url; }));
+            $this->product_cover = new ProductCover($this->pictures->slice(0, 2)->map(function ($pic) { return $pic->url; }));
         }
         return $this->product_cover;
     }
