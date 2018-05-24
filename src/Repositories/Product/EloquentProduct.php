@@ -26,6 +26,7 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
         $this->fieldSearchable = [
             'id' => "{$productTable}.id:=",
             'name' => "{$productTable}.name:like",
+            'spu' => "{$productTable}.spu:like",
             'category' => "{$categoryTable}.id:=",
             'sku' => 'like',
             'manufacturer' => "{$manufacturerTable}.id:=",
