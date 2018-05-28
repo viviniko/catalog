@@ -29,7 +29,7 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
             'spu' => "{$productTable}.spu:like",
             'category' => "{$categoryTable}.id:=",
             'sku' => 'like',
-            'manufacturer' => "{$manufacturerTable}.id:=",
+            'manufacturer_id' => "{$manufacturerTable}.id:=",
             'manufacturer_product_sku' => "{$productManufacturerTable}.sku:like",
             'manufacturer_status' => "{$productManufacturerTable}.status:=",
             'price' => "{$productItemsTable}.price:=",
