@@ -2,6 +2,7 @@
 
 namespace Viviniko\Catalog\Repositories\Product;
 
+use Illuminate\Support\Arr;
 use Viviniko\Media\Contracts\ImageService;
 use Viviniko\Repository\SimpleRepository;
 use Illuminate\Support\Facades\Config;
@@ -42,7 +43,9 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
             'is_active' => "{$productTable}.is_active:=",
         ];
 
-        $builder = parent::search($search)->select(["{$productTable}.*"])
+        $query = $searchName ? (array)request()->get($searchName) : [];
+        $search = array_merge($query, $search instanceof Arrayable ? $search->toArray() : (array)$search);
+        $builder = $this->search($search)->select(["{$productTable}.*"])
             ->join($categoryTable, "{$productTable}.category_id", '=', "{$categoryTable}.id", 'left')
             ->join($productManufacturerTable, "{$productTable}.id", '=', "{$productManufacturerTable}.product_id", 'left')
             ->join($manufacturerTable, "{$manufacturerTable}.id", '=', "{$productManufacturerTable}.manufacturer_id", 'left')
@@ -50,32 +53,27 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
                 $join->on("{$productTable}.id", '=', "{$productItemsTable}.product_id")
                     ->where("{$productItemsTable}.is_master", '=', '1');
             });
-        if (isset($search['has_tag'])) {
-            if ($search['has_tag'] == '1') {
-                $builder->has('tags');
+        if (!empty($order)) {
+            $orders = [];
+            if (is_string($order)) {
+                $orders = [[$order, 'desc']];
+            } else if (Arr::isAssoc($order)) {
+                foreach ($order as $name => $direct) {
+                    $orders[] = [$name, $direct];
+                }
             } else {
-                $builder->doesntHave('tags');
+                $orders = $order;
+            }
+            foreach ($orders as $params) {
+                $builder->orderBy(...(is_array($params) ? $params : [$params, 'desc']));
             }
         }
-        if (isset($search['tags'])) {
-            $builder->join("$taggablesTable", "{$productTable}.id", '=', "{$taggablesTable}.taggable_id", 'left');
-            $builder->whereIn("{$taggablesTable}.tag_id", $search['tags']);
+        $items = $builder->paginate($perPage);
+        if (!empty($query)) {
+            $items->appends([$searchName => $query]);
         }
 
-        $builder->orderBy('created_at', 'desc');
-
-        $result = $builder->paginate($perPage);
-
-        if (!empty($search)) {
-            $query = [];
-            foreach($search as $key => $value) {
-                $query[$searchName][$key] = $value;
-            }
-
-            $result->appends($query);
-        }
-
-        return $result;
+        return $items;
     }
 
     /**
