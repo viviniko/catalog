@@ -280,8 +280,9 @@ class ProductServiceImpl implements ProductService
         if ($product) {
             $attributes = ['picture_id' => $pictureId];
             $this->addProductAttributeSwatchPicture($attributes, $x, $y);
+            $product->attrs()->updateExistingPivot($attributeId, $attributes);
 
-            return $product->attrs()->updateExistingPivot($attributeId, $attributes);
+            return true;
         }
 
         return false;
