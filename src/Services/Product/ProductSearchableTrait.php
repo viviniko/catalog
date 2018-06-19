@@ -23,7 +23,7 @@ trait ProductSearchableTrait
                 'quarter_sold_count' => ['type' => 'long', 'coerce' => true],
                 'favorite_count' => ['type' => 'long', 'coerce' => true],
                 'sort' => ['type' => 'long', 'coerce' => true],
-                'sku' => ['type' => 'text', 'index' => 'not_analyzed']
+                'sku' => ['type' => 'keyword']
             ]
         ];
     }
