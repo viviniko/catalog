@@ -4,11 +4,7 @@ namespace Viviniko\Catalog\Repositories\Spec;
 
 interface SpecRepository
 {
-    /**
-     * @param $groupId
-     * @return mixed
-     */
-    public function findByGroupId($groupId);
+    public function findAllBy($column, $value = null, $columns = ['*']);
 
     /**
      * Find data by id

@@ -15,7 +15,7 @@ class Category extends Model
     protected $tableConfigKey = 'catalog.categories_table';
 
     protected $fillable = [
-        'name', 'description', 'is_active', 'parent_id', 'path', 'picture_id', 'sort',
+        'name', 'display_name', 'description', 'is_active', 'parent_id', 'path', 'picture_id', 'sort',
         'url_rewrite', 'meta_title', 'meta_keywords', 'meta_description',
     ];
 

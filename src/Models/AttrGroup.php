@@ -10,7 +10,7 @@ class AttrGroup extends Model
     protected $tableConfigKey = 'catalog.attr_groups_table';
 
     protected $fillable = [
-        'category_id', 'name', 'slug', 'type', 'is_filterable', 'is_searchable', 'is_viewable', 'sort'
+        'category_id', 'name', 'display_name', 'slug', 'type', 'is_filterable', 'is_searchable', 'is_viewable', 'sort'
     ];
 
     protected $casts = [
@@ -28,10 +28,5 @@ class AttrGroup extends Model
     public function attrs()
     {
         return $this->hasMany(Config::get('catalog.attr'), 'group_id');
-    }
-
-    public function getTitleAttribute()
-    {
-        return explode('/', $this->name, 2)[0];
     }
 }

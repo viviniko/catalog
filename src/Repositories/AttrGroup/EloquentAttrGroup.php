@@ -11,20 +11,4 @@ class EloquentAttrGroup extends SimpleRepository implements AttrGroupRepository
     protected $fieldSearchable = [
         'name'
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function all()
-    {
-        return $this->search([])->get();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function lists()
-    {
-        return $this->pluck('name', 'id');
-    }
 }

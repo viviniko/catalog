@@ -4,15 +4,7 @@ namespace Viviniko\Catalog\Repositories\SpecGroup;
 
 interface SpecGroupRepository
 {
-    /**
-     * Get attributes by category id.
-     *
-     * @param $categoryId
-     * @param $columns
-     *
-     * @return mixed
-     */
-    public function findByCategoryId($categoryId, $columns = ['*']);
+    public function all($columns = ['*']);
 
     /**
      * Find data by id

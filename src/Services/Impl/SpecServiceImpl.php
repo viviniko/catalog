@@ -42,5 +42,75 @@ class SpecServiceImpl implements SpecificationServiceInterface
         });
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function allGroups()
+    {
+        return $this->specificationGroupRepository->all();
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function listGroups($name = 'name', $key = 'id')
+    {
+        return $this->specificationGroupRepository->all([$name, $key])->pluck($name, $key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createSpec(array $data)
+    {
+        return $this->specificationRepository->create($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateSpec($specId, array $data)
+    {
+        return $this->specificationRepository->update($specId, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteSpec($specId)
+    {
+        return $this->specificationRepository->delete($specId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createGroup(array $data)
+    {
+        return $this->specificationGroupRepository->create($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateGroup($specGroupId, array $data)
+    {
+        return $this->specificationGroupRepository->update($specGroupId, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteGroup($specGroupId)
+    {
+        return $this->specificationGroupRepository->delete($specGroupId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSpecsByGroupId($groupId)
+    {
+        return $this->specificationRepository->findAllBy('group_id', $groupId);
+    }
 }

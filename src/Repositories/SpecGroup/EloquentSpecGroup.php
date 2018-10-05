@@ -8,11 +8,8 @@ class EloquentSpecGroup extends SimpleRepository implements SpecGroupRepository
 {
     protected $modelConfigKey = 'catalog.spec_group';
 
-    /**
-     * {@inheritdoc}
-     */
-    public function findByCategoryId($categoryId, $columns = ['*'])
+    public function all($columns = ['*'])
     {
-        return $this->createModel()->newQuery()->with('specs')->whereIn('category_id', (array) $categoryId)->get($columns);
+        return $this->search([])->get($columns);
     }
 }

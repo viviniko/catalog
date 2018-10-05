@@ -4,6 +4,20 @@ namespace Viviniko\Catalog\Services;
 
 interface AttrService
 {
+    public function getGroupsInCategoryId($categoryId);
+
+    public function createGroup(array $data);
+
+    public function updateGroup($attrGroupId, array $data);
+
+    public function deleteGroup($attrGroupId);
+
+    public function createAttr(array $data);
+
+    public function updateAttr($attrId, array $data);
+
+    public function deleteAttr($attrId);
+    
     public function find($id);
 
     /**

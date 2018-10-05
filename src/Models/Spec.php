@@ -9,15 +9,10 @@ class Spec extends Model
 {
     protected $tableConfigKey = 'catalog.specs_table';
 
-    protected $fillable = ['group_id', 'name', 'slug', 'sort'];
+    protected $fillable = ['group_id', 'name', 'display_name', 'slug', 'sort'];
 
     public function group()
     {
         return $this->belongsTo(Config::get('catalog.spec_group'), 'group_id');
-    }
-
-    public function getTitleAttribute()
-    {
-        return explode('/', $this->name, 2)[0];
     }
 }

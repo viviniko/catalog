@@ -2,6 +2,7 @@
 
 namespace Viviniko\Catalog\Services\Impl;
 
+use Viviniko\Catalog\Repositories\AttrGroup\AttrGroupRepository;
 use Viviniko\Catalog\Repositories\Category\CategoryRepository;
 use Viviniko\Catalog\Services\AttrService as AttrServiceInterface;
 use Illuminate\Support\Facades\Cache;
@@ -12,11 +13,17 @@ class AttrServiceImpl implements AttrServiceInterface
 {
     protected $attributeRepository;
 
+    protected $attrGroupRepository;
+
     protected $categoryRepository;
 
-    public function __construct(AttrRepository $attributeRepository, CategoryRepository $categoryRepository)
+    public function __construct(
+        AttrRepository $attributeRepository,
+        AttrGroupRepository $attrGroupRepository,
+        CategoryRepository $categoryRepository)
     {
         $this->attributeRepository = $attributeRepository;
+        $this->attrGroupRepository = $attrGroupRepository;
         $this->categoryRepository = $categoryRepository;
     }
 
@@ -52,5 +59,61 @@ class AttrServiceImpl implements AttrServiceInterface
     public function getViewableAttrsByProductId($productId)
     {
         return $this->attributeRepository->getViewableAttrsByProductId($productId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGroupsInCategoryId($categoryId)
+    {
+        return $this->attrGroupRepository->findAllBy('category_id', $categoryId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createGroup(array $data)
+    {
+        return $this->attrGroupRepository->create($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateGroup($attrGroupId, array $data)
+    {
+        return $this->attrGroupRepository->update($attrGroupId, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteGroup($attrGroupId)
+    {
+        return $this->attrGroupRepository->delete($attrGroupId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createAttr(array $data)
+    {
+        return $this->attributeRepository->create($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateAttr($attrId, array $data)
+    {
+        return $this->attributeRepository->update($attrId, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteAttr($attrId)
+    {
+        return $this->attributeRepository->delete($attrId);
     }
 }

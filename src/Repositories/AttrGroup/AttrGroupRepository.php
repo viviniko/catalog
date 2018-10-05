@@ -5,20 +5,14 @@ namespace Viviniko\Catalog\Repositories\AttrGroup;
 interface AttrGroupRepository
 {
     /**
-     * Paginate attribute groups.
+     * Find data by field and value
      *
-     * @param $pageSize
-     * @param string $searchName
-     * @param null $search
-     * @return mixed
+     * @param $column
+     * @param null $value
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function paginate($pageSize, $searchName = 'search', $search = null);
-
-    /**
-     *
-     * @return mixed
-     */
-    public function lists();
+    public function findAllBy($column, $value = null, $columns = ['*']);
 
     /**
      * Find data by id

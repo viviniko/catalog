@@ -14,14 +14,6 @@ class EloquentSpec extends SimpleRepository implements SpecRepository
     /**
      * {@inheritdoc}
      */
-    public function findByGroupId($groupId)
-    {
-        return $this->findBy('group_id', $groupId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function findIn($ids)
     {
         return $this->createModel()->newQuery()->whereIn('id', (array)$ids)->with('group')->get();
