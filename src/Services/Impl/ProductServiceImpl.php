@@ -11,9 +11,9 @@ use Viviniko\Catalog\Services\AttrService;
 use Viviniko\Catalog\Services\CategoryService;
 use Viviniko\Catalog\Services\ItemService;
 use Viviniko\Catalog\Services\ProductService;
-use Viviniko\Catalog\Services\SpecificationService;
 use Viviniko\Catalog\Models\Product;
 use Viviniko\Catalog\Repositories\Product\ProductRepository;
+use Viviniko\Catalog\Services\SpecService;
 use Viviniko\Media\Contracts\ImageService;
 
 class ProductServiceImpl implements ProductService
@@ -41,9 +41,9 @@ class ProductServiceImpl implements ProductService
     protected $attributeService;
 
     /**
-     * @var \Viviniko\Catalog\Services\SpecificationService
+     * @var \Viviniko\Catalog\Services\SpecService
      */
-    protected $specificationService;
+    protected $specService;
 
     /**
      * @var \Viviniko\Media\Contracts\ImageService
@@ -55,7 +55,7 @@ class ProductServiceImpl implements ProductService
         ItemService $itemService,
         CategoryService $categoryService,
         AttrService $attributeService,
-        SpecificationService $specificationService,
+        SpecService $specService,
         ImageService $imageService
     )
     {
@@ -64,7 +64,7 @@ class ProductServiceImpl implements ProductService
         $this->imageService = $imageService;
         $this->categoryService = $categoryService;
         $this->attributeService = $attributeService;
-        $this->specificationService = $specificationService;
+        $this->specService = $specService;
     }
 
     /**
@@ -301,7 +301,7 @@ class ProductServiceImpl implements ProductService
                 $swatch->swatch_picture_url = $this->imageService->getUrl($item->swatch_picture_id);
                 $swatch->picture_url = $this->imageService->getUrl($item->picture_id);
                 $swatch->spec_id = $item->spec_id;
-                $swatch->swatch_picture_name = data_get($this->specificationService->find($item->spec_id), 'title');
+                $swatch->swatch_picture_name = data_get($this->specService->find($item->spec_id), 'title');
                 return $swatch;
             });
     }
