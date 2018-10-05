@@ -207,7 +207,7 @@ class CatalogServiceProvider extends BaseServiceProvider
     {
         $this->app->singleton(
             \Viviniko\Catalog\Services\ItemService::class,
-            \Viviniko\Catalog\Services\Item\ItemServiceImpl::class
+            \Viviniko\Catalog\Services\Impl\ItemServiceImpl::class
         );
     }
 
