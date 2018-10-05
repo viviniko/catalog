@@ -4,7 +4,6 @@ namespace Viviniko\Catalog\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Viviniko\Catalog\Contracts\ProductSkuGenerater;
 use Viviniko\Catalog\Repositories\Category\CategoryRepository;
 use Viviniko\Catalog\Repositories\Product\ProductRepository;
 
