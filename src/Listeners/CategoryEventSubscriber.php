@@ -3,10 +3,10 @@
 namespace Viviniko\Catalog\Listeners;
 
 use Illuminate\Support\Facades\Cache;
-use Viviniko\Catalog\Contracts\CategoryService;
 use Viviniko\Catalog\Events\Category\CategoryCreated;
 use Viviniko\Catalog\Events\Category\CategoryDeleted;
 use Viviniko\Catalog\Events\Category\CategoryUpdated;
+use Viviniko\Catalog\Services\CategoryService;
 use Viviniko\Support\Event\EventSubscriber;
 
 class CategoryEventSubscriber extends EventSubscriber
