@@ -31,7 +31,7 @@ class Product extends Model
     ];
 
     protected $appends = [
-        'cover', 'sku', 'market_price', 'price', 'quantity', 'weight'
+        'cover', 'sku', 'amount', 'currency', 'discount', 'quantity', 'weight'
     ];
 
     protected $hidden = [
@@ -53,23 +53,23 @@ class Product extends Model
         return $this->hasOne(Config::get('catalog.manufacturer_product'), 'product_id');
     }
 
-    public function specifications()
+    public function attrs()
     {
-        return $this->belongsToMany(Config::get('catalog.specification'), Config::get('catalog.product_specification_table'));
+        return $this->belongsToMany(Config::get('catalog.attr'), Config::get('catalog.product_attr_table'));
     }
 
-    public function attributeGroups()
+    public function specGroups()
     {
-        return $this->belongsToMany(Config::get('catalog.attribute_group'), Config::get('catalog.product_attribute_group_table'))
-            ->using(ProductAttributeGroup::class)
+        return $this->belongsToMany(Config::get('catalog.spec_group'), Config::get('catalog.product_spec_group_table'))
+            ->using(ProductSpecGroup::class)
             ->withPivot(['control_type', 'text_prompt', 'is_required', 'when', 'sort'])
             ->orderBy('pivot_sort');
     }
 
-    public function attrs()
+    public function specs()
     {
-        return $this->belongsToMany(Config::get('catalog.attribute'), Config::get('catalog.product_attribute_table'))
-            ->using(ProductAttribute::class)
+        return $this->belongsToMany(Config::get('catalog.spec'), Config::get('catalog.product_spec_table'))
+            ->using(ProductSpec::class)
             ->withPivot(['customer_value', 'is_selected', 'picture_id', 'swatch_picture_id', 'sort'])
             ->orderBy('pivot_sort');
     }
@@ -109,14 +109,19 @@ class Product extends Model
         return data_get($this->master, 'sku');
     }
 
-    public function getMarketPriceAttribute()
+    public function getAmountAttribute()
     {
-        return data_get($this->master, 'market_price');
+        return data_get($this->master, 'amount');
     }
 
-    public function getPriceAttribute()
+    public function getCurrencyAttribute()
     {
-        return data_get($this->master, 'price');
+        return data_get($this->master, 'currency');
+    }
+
+    public function getDiscountAttribute()
+    {
+        return data_get($this->master, 'discount');
     }
 
     public function getWeightAttribute()

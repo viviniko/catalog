@@ -105,26 +105,26 @@ class CatalogServiceProvider extends BaseServiceProvider
 
         // Specification Group Repository
         $this->app->singleton(
-            \Viviniko\Catalog\Repositories\SpecificationGroup\SpecificationGroupRepository::class,
-            \Viviniko\Catalog\Repositories\SpecificationGroup\EloquentSpecificationGroup::class
+            \Viviniko\Catalog\Repositories\SpecGroup\SpecGroupRepository::class,
+            \Viviniko\Catalog\Repositories\SpecGroup\EloquentSpecGroup::class
         );
 
         // Specification Repository
         $this->app->singleton(
-            \Viviniko\Catalog\Repositories\Specification\SpecificationRepository::class,
-            \Viviniko\Catalog\Repositories\Specification\EloquentSpecification::class
+            \Viviniko\Catalog\Repositories\Spec\SpecRepository::class,
+            \Viviniko\Catalog\Repositories\Spec\EloquentSpec::class
         );
 
         // Attribute Group Repository
         $this->app->singleton(
-            \Viviniko\Catalog\Repositories\AttributeGroup\AttributeGroupRepository::class,
-            \Viviniko\Catalog\Repositories\AttributeGroup\EloquentAttributeGroup::class
+            \Viviniko\Catalog\Repositories\AttrGroup\AttrGroupRepository::class,
+            \Viviniko\Catalog\Repositories\AttrGroup\EloquentAttrGroup::class
         );
 
         // Attribute Repository
         $this->app->singleton(
-            \Viviniko\Catalog\Repositories\Attribute\AttributeRepository::class,
-            \Viviniko\Catalog\Repositories\Attribute\EloquentAttribute::class
+            \Viviniko\Catalog\Repositories\Attr\AttrRepository::class,
+            \Viviniko\Catalog\Repositories\Attr\EloquentAttr::class
         );
 
         // Manufacturer Repository
@@ -154,8 +154,8 @@ class CatalogServiceProvider extends BaseServiceProvider
     protected function registerCategoryService()
     {
         $this->app->singleton(
-            \Viviniko\Catalog\Contracts\CategoryService::class,
-            \Viviniko\Catalog\Services\Category\CategoryServiceImpl::class
+            \Viviniko\Catalog\Services\CategoryService::class,
+            \Viviniko\Catalog\Services\Impl\CategoryServiceImpl::class
         );
     }
 
@@ -167,8 +167,8 @@ class CatalogServiceProvider extends BaseServiceProvider
     protected function registerAttributeService()
     {
         $this->app->singleton(
-            \Viviniko\Catalog\Contracts\AttributeService::class,
-            \Viviniko\Catalog\Services\Attribute\AttributeServiceImpl::class
+            \Viviniko\Catalog\Services\AttrService::class,
+            \Viviniko\Catalog\Services\Impl\AttrServiceImpl::class
         );
     }
 
@@ -180,8 +180,8 @@ class CatalogServiceProvider extends BaseServiceProvider
     protected function registerSpecificationService()
     {
         $this->app->singleton(
-            \Viviniko\Catalog\Contracts\SpecificationService::class,
-            \Viviniko\Catalog\Services\Specification\SpecificationServiceImpl::class
+            \Viviniko\Catalog\Services\SpecService::class,
+            \Viviniko\Catalog\Services\Impl\SpecServiceImpl::class
         );
     }
 
@@ -193,8 +193,8 @@ class CatalogServiceProvider extends BaseServiceProvider
     protected function registerProductService()
     {
         $this->app->singleton(
-            \Viviniko\Catalog\Contracts\ProductService::class,
-            \Viviniko\Catalog\Services\Product\ProductServiceImpl::class
+            \Viviniko\Catalog\Services\ProductService::class,
+            \Viviniko\Catalog\Services\Impl\ProductServiceImpl::class
         );
     }
 
@@ -206,7 +206,7 @@ class CatalogServiceProvider extends BaseServiceProvider
     protected function registerItemService()
     {
         $this->app->singleton(
-            \Viviniko\Catalog\Contracts\ItemService::class,
+            \Viviniko\Catalog\Services\ItemService::class,
             \Viviniko\Catalog\Services\Item\ItemServiceImpl::class
         );
     }
@@ -214,7 +214,7 @@ class CatalogServiceProvider extends BaseServiceProvider
     protected function registerSKUGenerater()
     {
         $this->app->singleton(
-            \Viviniko\Catalog\Contracts\ProductSkuGenerater::class,
+            \Viviniko\Catalog\Services\ProductSkuGenerater::class,
             \Viviniko\Catalog\Services\DefaultProductSkuGenerater::class
         );
     }
@@ -227,11 +227,11 @@ class CatalogServiceProvider extends BaseServiceProvider
     public function provides()
     {
         return [
-            \Viviniko\Catalog\Contracts\CategoryService::class,
-            \Viviniko\Catalog\Contracts\AttributeService::class,
-            \Viviniko\Catalog\Contracts\SpecificationService::class,
-            \Viviniko\Catalog\Contracts\ProductService::class,
-            \Viviniko\Catalog\Contracts\ItemService::class,
+            \Viviniko\Catalog\Services\CategoryService::class,
+            \Viviniko\Catalog\Services\AttrService::class,
+            \Viviniko\Catalog\Services\SpecService::class,
+            \Viviniko\Catalog\Services\ProductService::class,
+            \Viviniko\Catalog\Services\ItemService::class,
         ];
     }
 }

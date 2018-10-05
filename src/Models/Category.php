@@ -23,9 +23,9 @@ class Category extends Model
         'is_active' => 'boolean',
     ];
 
-    public function specificationGroups()
+    public function attrGroups()
     {
-        return $this->hasMany(Config::get('catalog.specification_group'), 'category_id');
+        return $this->hasMany(Config::get('catalog.attr_group'), 'category_id');
     }
 
     public function parent()

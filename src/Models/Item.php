@@ -12,7 +12,7 @@ class Item extends Model
     protected $tableConfigKey = 'catalog.items_table';
 
     protected $fillable = [
-        'product_id', 'sku', 'market_price', 'price', 'weight', 'quantity', 'picture_id', 'is_active', 'is_master'
+        'product_id', 'sku', 'amount', 'currency', 'discount', 'weight', 'quantity', 'picture_id', 'is_active', 'is_master'
     ];
 
     protected $casts = [
@@ -34,19 +34,19 @@ class Item extends Model
         return $this->belongsTo(Config::get('media.media'), 'picture_id');
     }
 
-    public function attrs()
+    public function specs()
     {
-        return $this->belongsToMany(Config::get('catalog.attribute'), Config::get('catalog.item_attribute_table'))->select(Config::get('catalog.attributes_table'). '.*');
+        return $this->belongsToMany(Config::get('catalog.spec'), Config::get('catalog.item_spec_table'))->select(Config::get('catalog.specs_table'). '.*');
     }
 
-    public function getDescAttrsAttribute()
+    public function getDescSpecsAttribute()
     {
-        return $this->attrs->pluck('value', 'group.text_prompt')->toArray();
+        return $this->specs->pluck('value', 'group.text_prompt')->toArray();
     }
 
     public function getSkuKeyAttribute()
     {
-        return $this->attrs()->pluck('id')->sort()->implode(':');
+        return $this->specs()->pluck('id')->sort()->implode(':');
     }
 
     public function getCoverAttribute()

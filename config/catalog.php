@@ -19,7 +19,7 @@ return [
     | This is the Attribute Group model.
     |
     */
-    'attribute_group' => 'Viviniko\Catalog\Models\AttributeGroup',
+    'attr_group' => 'Viviniko\Catalog\Models\AttrGroup',
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ return [
     | This is the Attribute model.
     |
     */
-    'attribute' => 'Viviniko\Catalog\Models\Attribute',
+    'attr' => 'Viviniko\Catalog\Models\Attr',
 
     /*
     |--------------------------------------------------------------------------
@@ -39,7 +39,7 @@ return [
     | This is the Specification Value model.
     |
     */
-    'specification_group' => 'Viviniko\Catalog\Models\SpecificationGroup',
+    'spec_group' => 'Viviniko\Catalog\Models\SpecGroup',
 
     /*
     |--------------------------------------------------------------------------
@@ -49,7 +49,7 @@ return [
     | This is the Specification model.
     |
     */
-    'specification' => 'Viviniko\Catalog\Models\Specification',
+    'spec' => 'Viviniko\Catalog\Models\Spec',
 
     /*
     |--------------------------------------------------------------------------
@@ -109,7 +109,7 @@ return [
     | This is the attributes table.
     |
     */
-    'attributes_table' => 'catalog_attributes',
+    'attrs_table' => 'catalog_attrs',
 
     /*
     |--------------------------------------------------------------------------
@@ -119,7 +119,7 @@ return [
     | This is the attribute options table.
     |
     */
-    'attribute_groups_table' => 'catalog_attribute_groups',
+    'attr_groups_table' => 'catalog_attr_groups',
 
     /*
     |--------------------------------------------------------------------------
@@ -129,7 +129,7 @@ return [
     | This is the specifications table.
     |
     */
-    'specifications_table' => 'catalog_specifications',
+    'specs_table' => 'catalog_specs',
 
     /*
     |--------------------------------------------------------------------------
@@ -139,7 +139,7 @@ return [
     | This is the specification options table.
     |
     */
-    'specification_groups_table' => 'catalog_specification_groups',
+    'spec_groups_table' => 'catalog_spec_groups',
 
     /*
     |--------------------------------------------------------------------------
@@ -179,7 +179,7 @@ return [
     | This is the product_specification table.
     |
     */
-    'product_specification_table' => 'catalog_product_specification',
+    'product_spec_table' => 'catalog_product_spec',
 
     /*
     |--------------------------------------------------------------------------
@@ -189,7 +189,7 @@ return [
     | This is the product_attribute_group_table table.
     |
     */
-    'product_attribute_group_table' => 'catalog_product_attribute_group',
+    'product_spec_group_table' => 'catalog_product_spec_group',
 
     /*
     |--------------------------------------------------------------------------
@@ -199,17 +199,17 @@ return [
     | This is the product_attribute table.
     |
     */
-    'product_attribute_table' => 'catalog_product_attribute',
+    'product_attr_table' => 'catalog_product_attr',
 
     /*
     |--------------------------------------------------------------------------
-    | Catalog Product Item Attribute Mapping Table
+    | Catalog Product Item Specification Mapping Table
     |--------------------------------------------------------------------------
     |
-    | This is the product_item_attribute_value table.
+    | This is the item_specification_table table.
     |
     */
-    'item_attribute_table' => 'catalog_product_item_attribute',
+    'item_spec_table' => 'catalog_product_item_spec',
 
     /*
     |--------------------------------------------------------------------------

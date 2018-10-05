@@ -87,10 +87,10 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
     /**
      * {@inheritdoc}
      */
-    public function attachProductAttributeGroup($productId, $attributeGroupId, array $attributes = [])
+    public function attachProductSpecGroup($productId, $specificationGroupId, array $specifications = [])
     {
         if ($product = $this->find($productId)) {
-            $product->attributeGroups()->attach($attributeGroupId, $attributes);
+            $product->specGroups()->attach($specificationGroupId, $specifications);
         }
 
         return $product;
@@ -99,29 +99,29 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
     /**
      * {@inheritdoc}
      */
-    public function updateProductAttributeGroup($productId, $attributeGroupId, array $attributes = [])
+    public function updateProductSpecGroup($productId, $specificationGroupId, array $specifications = [])
     {
         if ($product = $this->find($productId)) {
-            $product->attributeGroups()->updateExistingPivot($attributeGroupId, $attributes);
+            $product->specGroups()->updateExistingPivot($specificationGroupId, $specifications);
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function detachProductAttributeGroup($productId, $groupId)
+    public function detachProductSpecGroup($productId, $groupId)
     {
         if ($product = $this->find($productId)) {
-            $product->attributeGroups()->detach($groupId);
+            $product->specGroups()->detach($groupId);
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getProductAttribute($productId)
+    public function getProductSpec($productId)
     {
-        return DB::table(Config::get('catalog.product_attribute_table'))
+        return DB::table(Config::get('catalog.product_spec_table'))
             ->where('product_id', $productId)
             ->get();
     }
@@ -129,14 +129,14 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
     /**
      * {@inheritdoc}
      */
-    public function resetProductSelectedAttribute($productId, $attributeId)
+    public function resetProductSelectedSpec($productId, $specificationId)
     {
-        DB::table(Config::get('catalog.product_attribute_table'))
+        DB::table(Config::get('catalog.product_spec_table'))
             ->where('product_id', $productId)
             ->where('is_selected', 1)
-            ->whereIn('attribute_id', function ($query) use ($attributeId) {
-                $query->select('id')->from(Config::get('catalog.attributes_table'))->where('group_id', function ($subQuery) use ($attributeId) {
-                    $subQuery->select('group_id')->from(Config::get('catalog.attributes_table'))->where('id', $attributeId);
+            ->whereIn('spec_id', function ($query) use ($specificationId) {
+                $query->select('id')->from(Config::get('catalog.specs_table'))->where('group_id', function ($subQuery) use ($specificationId) {
+                    $subQuery->select('group_id')->from(Config::get('catalog.specs_table'))->where('id', $specificationId);
                 });
             })->update(['is_selected' => 0]);
     }

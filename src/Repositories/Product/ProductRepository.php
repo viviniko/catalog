@@ -52,49 +52,49 @@ interface ProductRepository
     public function delete($id);
 
     /**
-     * Attach attribute groups.
+     * Attach specification groups.
      *
      * @param $productId
-     * @param $attributeGroupId
-     * @param array $attributes
+     * @param $specificationGroupId
+     * @param array $specifications
      *
      * @return mixed
      */
-    public function attachProductAttributeGroup($productId, $attributeGroupId, array $attributes = []);
+    public function attachProductSpecGroup($productId, $specificationGroupId, array $specifications = []);
 
     /**
-     * Update attribute group.
+     * Update specification group.
      *
      * @param $productId
-     * @param $attributeGroupId
-     * @param array $attributes
+     * @param $specificationGroupId
+     * @param array $specifications
      *
      * @return mixed
      */
-    public function updateProductAttributeGroup($productId, $attributeGroupId, array $attributes = []);
+    public function updateProductSpecGroup($productId, $specificationGroupId, array $specifications = []);
 
     /**
-     * Detach attribute group.
+     * Detach specification group.
      *
      * @param $productId
      * @param $specificationGroupId
      *
      * @return mixed
      */
-    public function detachProductAttributeGroup($productId, $specificationGroupId);
+    public function detachProductSpecGroup($productId, $specificationGroupId);
 
     /**
      * @param $productId
-     * @param $attributeId
+     * @param $specificationId
      * @return mixed
      */
-    public function resetProductSelectedAttribute($productId, $attributeId);
+    public function resetProductSelectedSpec($productId, $specificationId);
 
     /**
      * @param $productId
      * @return mixed
      */
-    public function getProductAttribute($productId);
+    public function getProductSpec($productId);
 
     /**
      * Get latest products.
