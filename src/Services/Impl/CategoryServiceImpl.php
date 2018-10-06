@@ -49,12 +49,4 @@ class CategoryServiceImpl implements CategoryServiceInterface
             return $this->categoryRepository->getChildren($id, ['id'], $recursive)->pluck('id');
         });
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function listen($event)
-    {
-
-    }
 }

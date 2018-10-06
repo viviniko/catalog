@@ -110,7 +110,6 @@ class CreateCatalogTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('parent_id')->default(0);
             $table->string('name', 32);
-            $table->string('display_name', 32)->nullable();
             $table->string('path')->default('');
             $table->text('description')->nullable();
             $table->unsignedInteger('picture_id')->nullable();
@@ -129,7 +128,6 @@ class CreateCatalogTable extends Migration
             $table->unsignedInteger('category_id');
             $table->string('name', 32);
             $table->string('display_name', 32)->nullable();
-            $table->string('slug', 32)->unique();
             $table->unsignedTinyInteger('type')->default(0);
             $table->boolean('is_filterable')->default(false);
             $table->boolean('is_searchable')->default(false);
@@ -144,7 +142,6 @@ class CreateCatalogTable extends Migration
             $table->unsignedInteger('group_id');
             $table->string('name', 32);
             $table->string('display_name', 32)->nullable();
-            $table->string('slug', 32)->unique();
             $table->integer('sort')->default(0);
             $table->timestamps();
         });
@@ -154,7 +151,6 @@ class CreateCatalogTable extends Migration
             $table->increments('id');
             $table->string('name', 32);
             $table->string('display_name', 32)->nullable();
-            $table->string('slug', 32)->unique();
             $table->integer('sort')->default(0);
             $table->timestamps();
         });
@@ -165,7 +161,6 @@ class CreateCatalogTable extends Migration
             $table->unsignedInteger('group_id');
             $table->string('name', 32);
             $table->string('display_name', 32)->nullable();
-            $table->string('slug', 32)->unique();
             $table->integer('sort')->default(0);
             $table->timestamps();
         });
