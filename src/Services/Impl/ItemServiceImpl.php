@@ -87,7 +87,7 @@ class ItemServiceImpl implements ItemService
                 }
             }
             if (!isset($data['picture_id'])) {
-                $data['picture_id'] = $this->getPictureIdByProductSpecs($item->product_id, $item->attrs->pluck('id'));
+                $data['picture_id'] = $this->getPictureIdByProductSpecs($item->product_id, $item->specs->pluck('id'));
             }
 
             return $this->itemRepository->update($item->id, $data);
