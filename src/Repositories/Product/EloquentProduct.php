@@ -3,7 +3,6 @@
 namespace Viviniko\Catalog\Repositories\Product;
 
 use Illuminate\Support\Arr;
-use Viviniko\Media\Contracts\ImageService;
 use Viviniko\Repository\SimpleRepository;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;

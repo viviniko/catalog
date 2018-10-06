@@ -2,6 +2,9 @@
 
 namespace Viviniko\Catalog\Repositories\Attr;
 
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Viviniko\Repository\SimpleRepository;
 
 class EloquentAttr extends SimpleRepository implements AttrRepository

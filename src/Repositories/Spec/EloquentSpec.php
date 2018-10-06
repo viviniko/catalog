@@ -3,9 +3,6 @@
 namespace Viviniko\Catalog\Repositories\Spec;
 
 use Viviniko\Repository\SimpleRepository;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 
 class EloquentSpec extends SimpleRepository implements SpecRepository
 {
