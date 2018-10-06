@@ -61,17 +61,17 @@ class Item extends Model
 
     public function getPriceAttribute()
     {
-        if (!$this->_price) {
-            $this->_price = new Amount($this->currency, $this->amount);
+        if (!$this->item_price) {
+            $this->item_price = new Amount($this->currency, $this->amount);
         }
-        return $this->_price;
+        return $this->item_price;
     }
 
     public function getDiscountPriceAttribute()
     {
-        if (!$this->_discount_price) {
-            $this->_discount_price = new Amount($this->currency, $this->amount, $this->discount);
+        if (!$this->item_discount_price) {
+            $this->item_discount_price = new Amount($this->currency, $this->amount, $this->discount);
         }
-        return $this->_discount_price;
+        return $this->item_discount_price;
     }
 }
