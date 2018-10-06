@@ -7,7 +7,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Viviniko\Catalog\Services\AttrService;
 use Viviniko\Catalog\Services\CategoryService;
 use Viviniko\Catalog\Services\ItemService;
 use Viviniko\Catalog\Services\ProductService;
@@ -36,11 +35,6 @@ class ProductServiceImpl implements ProductService
     protected $categoryService;
 
     /**
-     * @var \Viviniko\Catalog\Services\AttrService
-     */
-    protected $attributeService;
-
-    /**
      * @var \Viviniko\Catalog\Services\SpecService
      */
     protected $specService;
@@ -54,7 +48,6 @@ class ProductServiceImpl implements ProductService
         ProductRepository $productRepository,
         ItemService $itemService,
         CategoryService $categoryService,
-        AttrService $attributeService,
         SpecService $specService,
         ImageService $imageService
     )
@@ -63,7 +56,6 @@ class ProductServiceImpl implements ProductService
         $this->itemService = $itemService;
         $this->imageService = $imageService;
         $this->categoryService = $categoryService;
-        $this->attributeService = $attributeService;
         $this->specService = $specService;
     }
 

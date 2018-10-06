@@ -52,15 +52,15 @@ trait ProductSearchableTrait
             $searchArray['categories'] = $this->categoryService->find(array_filter(explode('/', $product->category->path)))->pluck('name')->implode(',');
         }
 
-        $specIds = [];
-        $specNames = [];
-        $this->specificationService->getSearchableSpecificationsByProductId($productId)->each(function ($spec) use (&$specIds, &$specNames) {
-            $specIds[] = $spec->id;
-            $specNames[$spec->group->title][] = $spec->title;
+        $attrIds = [];
+        $attrNames = [];
+        $this->getAttrService()->getSearchableAttrsByProductId($productId)->each(function ($attr) use (&$attrIds, &$attrNames) {
+            $attrIds[] = $attr->id;
+            $attrNames[$attr->group->title][] = $attr->title;
         });
 
-        $orderService = app(\Viviniko\Sale\Contracts\OrderService::class);
-        $favoriteService = app(\Viviniko\Favorite\Contracts\FavoriteService::class);
+        $orderService = $this->getOrderService();
+        $favoriteService = $this->getFavoriteService();
         $latestQuarterSold = $orderService ? $orderService->countOrderProductQtyByLatestMonth($product->id, 3) : 1;
         $searchArray['quarter_sold_count'] = (int) $latestQuarterSold;
         $searchArray['hot_score'] = (isset($searchArray['is_hot']) && $searchArray['is_hot'] ? 1 : 0) * 5 + $latestQuarterSold;
@@ -69,21 +69,44 @@ trait ProductSearchableTrait
         $searchArray['recommend_score'] = $searchArray['hot_score'] * 3 + $searchArray['new_score'] * 2 + $searchArray['promote_score'] * 2;
         $searchArray['favorite_count'] = $favoriteService ? $favoriteService->count($product) : 0;
 
-        $searchArray['price'] = (float)$searchArray['price'];
-        $searchArray['market_price'] = (float)$searchArray['market_price'];
+        $searchArray['amount'] = (float)$searchArray['amount'];
         $searchArray['weight'] = (float)$searchArray['weight'];
         $searchArray['sort'] = (int)$searchArray['sort'];
 
-        $searchArray['specifications'] = $specIds;
-        foreach ($specNames as $groupTitle => $specName) {
+        $searchArray['attrs'] = $attrIds;
+        foreach ($attrNames as $groupTitle => $specName) {
             $groupTitle = str_slug($groupTitle, '_');
-            $searchArray["specification_{$groupTitle}"] = implode(',', $specName);
+            $searchArray["attr_{$groupTitle}"] = implode(',', $specName);
         }
 
         $searchArray['created_at'] = (int) strtotime($product->created_at);
         $searchArray['updated_at'] = (int) strtotime($product->updated_at);
 
         return $searchArray;
+    }
+
+    /**
+     * @return \Viviniko\Favorite\Contracts\FavoriteService
+     */
+    private function getFavoriteService()
+    {
+        return app(\Viviniko\Favorite\Contracts\FavoriteService::class);
+    }
+
+    /**
+     * @return \Viviniko\Sale\Contracts\OrderService
+     */
+    private function getOrderService()
+    {
+        return app(\Viviniko\Sale\Contracts\OrderService::class);
+    }
+
+    /**
+     * @return \Viviniko\Catalog\Services\AttrService
+     */
+    private function getAttrService()
+    {
+        return app(\Viviniko\Catalog\Services\AttrService::class);
     }
 
     /**
