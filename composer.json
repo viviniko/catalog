@@ -12,15 +12,15 @@
     ],
     "require": {
         "php": ">=7.0",
-        "viviniko/configuration": "^v1.0",
-        "viviniko/favorite": "^v1.0",
-        "viviniko/media": "^v1.0",
-        "viviniko/review": "^v1.0",
-        "viviniko/repository": "^v1.0",
-        "viviniko/scoutelasticsearch": "^v1.0",
-        "viviniko/tag": "^v1.0",
-        "viviniko/support": "^v1.0",
-        "viviniko/urlrewrite": "^v1.0"
+        "viviniko/configuration": "^1.0",
+        "viviniko/favorite": "^1.0",
+        "viviniko/media": "^1.0",
+        "viviniko/review": "^1.0",
+        "viviniko/repository": "^1.0",
+        "viviniko/scoutelasticsearch": "^1.0",
+        "viviniko/tag": "^1.0",
+        "viviniko/support": "^1.0",
+        "viviniko/urlrewrite": "^1.0"
     },
     "autoload": {
         "psr-0": {
