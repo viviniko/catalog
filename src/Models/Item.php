@@ -2,6 +2,7 @@
 
 namespace Viviniko\Catalog\Models;
 
+use Viviniko\Currency\Amount;
 use Viviniko\Support\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 
@@ -21,7 +22,11 @@ class Item extends Model
     ];
 
     protected $hidden = [
-        'is_master', 'weight', 'picture_id', 'is_active',
+        'is_master', 'weight', 'picture_id', 'is_active'
+    ];
+
+    protected $appends = [
+        'price', 'discount_price'
     ];
 
     public function product()
@@ -52,5 +57,21 @@ class Item extends Model
     public function getCoverAttribute()
     {
         return data_get($this->picture, 'url');
+    }
+
+    public function getPriceAttribute()
+    {
+        if (!$this->_price) {
+            $this->_price = new Amount($this->currency, $this->amount);
+        }
+        return $this->_price;
+    }
+
+    public function getDiscountPriceAttribute()
+    {
+        if (!$this->_discount_price) {
+            $this->_discount_price = new Amount($this->currency, $this->amount, $this->discount);
+        }
+        return $this->_discount_price;
     }
 }

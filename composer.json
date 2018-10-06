@@ -13,6 +13,7 @@
     "require": {
         "php": ">=7.0",
         "viviniko/configuration": "dev-master",
+        "viviniko/currency": "dev-master",
         "viviniko/favorite": "dev-master",
         "viviniko/media": "dev-master",
         "viviniko/review": "dev-master",
