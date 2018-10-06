@@ -12,14 +12,14 @@
     ],
     "require": {
         "php": ">=7.0",
-        "viviniko/configuration": "dev-master",
+        "viviniko/configuration": "^v1.0",
         "viviniko/favorite": "dev-master",
-        "viviniko/media": "dev-master",
+        "viviniko/media": "^v1.0",
         "viviniko/review": "dev-master",
-        "viviniko/repository": "dev-master",
+        "viviniko/repository": "^v1.0",
         "viviniko/scoutelasticsearch": "dev-master",
         "viviniko/tag": "dev-master",
-        "viviniko/support": "dev-master",
+        "viviniko/support": "^v1.0",
         "viviniko/urlrewrite": "dev-master"
     },
     "autoload": {
