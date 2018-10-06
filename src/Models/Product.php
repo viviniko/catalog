@@ -2,7 +2,7 @@
 
 namespace Viviniko\Catalog\Models;
 
-use Viviniko\Catalog\Services\Product\ProductCover;
+use Viviniko\Catalog\Services\Impl\ProductCover;
 use Viviniko\Favorite\Favoritable;
 use Viviniko\Review\Reviewable;
 use Viviniko\Support\Database\Eloquent\Model;
@@ -189,7 +189,7 @@ class Product extends Model
     public static function getProductService()
     {
         if (!static::$productService) {
-            static::$productService = app(\Viviniko\Catalog\Contracts\ProductService::class);
+            static::$productService = app(\Viviniko\Catalog\Services\ProductService::class);
         }
 
         return static::$productService;
