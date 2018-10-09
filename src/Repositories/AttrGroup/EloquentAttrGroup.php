@@ -2,13 +2,17 @@
 
 namespace Viviniko\Catalog\Repositories\AttrGroup;
 
-use Viviniko\Repository\SimpleRepository;
+use Illuminate\Support\Facades\Config;
+use Viviniko\Repository\EloquentRepository;
 
-class EloquentAttrGroup extends SimpleRepository implements AttrGroupRepository
+class EloquentAttrGroup extends EloquentRepository implements AttrGroupRepository
 {
-    protected $modelConfigKey = 'catalog.attr_group';
-
-    protected $fieldSearchable = [
+    protected $searchRules = [
         'name'
     ];
+
+    public function __construct()
+    {
+        parent::__construct(Config::get('catalog.attr_group'));
+    }
 }

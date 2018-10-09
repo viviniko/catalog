@@ -3,17 +3,15 @@
 namespace Viviniko\Catalog\Repositories\Item;
 
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Config;
 use Viviniko\Catalog\Events\Item\ItemCreated;
 use Viviniko\Catalog\Events\Item\ItemDeleted;
 use Viviniko\Catalog\Events\Item\ItemUpdated;
-use Viviniko\Repository\SimpleRepository;
+use Viviniko\Repository\EloquentRepository;
 
-class EloquentItem extends SimpleRepository implements ItemRepository
+class EloquentItem extends EloquentRepository implements ItemRepository
 {
-    protected $modelConfigKey = 'catalog.item';
-
-    protected $fieldSearchable = ['sku', 'is_master'];
+    protected $searchRules = ['sku', 'is_master'];
 
     /**
      * @var \Illuminate\Contracts\Events\Dispatcher
@@ -26,6 +24,7 @@ class EloquentItem extends SimpleRepository implements ItemRepository
      */
     public function __construct(Dispatcher $events)
     {
+        parent::__construct(Config::get('catalog.item'));
         $this->events = $events;
     }
 
@@ -42,7 +41,7 @@ class EloquentItem extends SimpleRepository implements ItemRepository
      */
     public function findMasterByProductId($productId)
     {
-        return $this->createModel()->where(['product_id' => $productId, 'is_master' => true])->first();
+        return $this->createQuery()->where(['product_id' => $productId, 'is_master' => true])->first();
     }
 
     protected function postCreate($item)

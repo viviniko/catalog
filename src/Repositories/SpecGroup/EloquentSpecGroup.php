@@ -2,14 +2,13 @@
 
 namespace Viviniko\Catalog\Repositories\SpecGroup;
 
-use Viviniko\Repository\SimpleRepository;
+use Illuminate\Support\Facades\Config;
+use Viviniko\Repository\EloquentRepository;
 
-class EloquentSpecGroup extends SimpleRepository implements SpecGroupRepository
+class EloquentSpecGroup extends EloquentRepository implements SpecGroupRepository
 {
-    protected $modelConfigKey = 'catalog.spec_group';
-
-    public function all($columns = ['*'])
+    public function __construct()
     {
-        return $this->search([])->get($columns);
+        parent::__construct(Config::get('catalog.spec_group'));
     }
 }

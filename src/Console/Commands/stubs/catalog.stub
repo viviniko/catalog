@@ -174,7 +174,7 @@ class CreateCatalogTable extends Migration
             $table->string('im');
             $table->string('phone')->nullable();
             $table->integer('sort')->default(0);
-            $table->decimal('purchasing_discount', 16, 2)->default(0);
+            $table->unsignedTinyInteger('purchasing_discount')->default(0);
             $table->unsignedInteger('product_count')->default(0);
             $table->string('product_type')->default('');
             $table->string('product_update_period')->default('');
@@ -208,10 +208,9 @@ class CreateCatalogTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('product_id');
             $table->string('sku', 32)->default('')->index();
-            $table->decimal('amount', 16, 2);
-            $table->string('currency', 10);
+            $table->decimal('amount', 16, 4);
             $table->unsignedTinyInteger('discount')->default(0);
-            $table->decimal('weight', 16, 2)->default(0);
+            $table->decimal('weight', 16, 4)->default(0);
             $table->unsignedInteger('quantity')->default(0);
             $table->unsignedInteger('picture_id');
             $table->boolean('is_active')->default(true);
@@ -233,7 +232,6 @@ class CreateCatalogTable extends Migration
             $table->unsignedTinyInteger('control_type')->default(0);
             $table->string('text_prompt')->nullable();
             $table->boolean('is_required')->default(false);
-            $table->string('when')->nullable();
             $table->integer('sort')->default(0);
         });
 
@@ -272,8 +270,7 @@ class CreateCatalogTable extends Migration
             $table->string('sku', 32)->nullable();
             $table->string('name')->nullable();
             $table->string('url')->nullable();
-            $table->decimal('amount', 16, 2);
-            $table->string('currency', 10);
+            $table->decimal('price', 16, 2);
             $table->unsignedTinyInteger('discount')->default(0);
         });
     }

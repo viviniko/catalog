@@ -3,13 +3,16 @@
 namespace Viviniko\Catalog\Repositories\Product;
 
 use Illuminate\Support\Arr;
-use Viviniko\Repository\SimpleRepository;
+use Viviniko\Repository\EloquentRepository;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 
-class EloquentProduct extends SimpleRepository implements ProductRepository
+class EloquentProduct extends EloquentRepository implements ProductRepository
 {
-    protected $modelConfigKey = 'catalog.product';
+    public function __construct()
+    {
+        parent::__construct(Config::get('catalog.product'));
+    }
 
     /**
      * {@inheritdoc}
@@ -23,7 +26,7 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
         $categoryTable = Config::get('catalog.categories_table');
         $taggablesTable = Config::get('tag.taggables_table');
 
-        $this->fieldSearchable = [
+        $this->searchRules = [
             'id' => "{$productTable}.id:=",
             'name' => "{$productTable}.name:like",
             'spu' => "{$productTable}.spu:like",
@@ -80,7 +83,7 @@ class EloquentProduct extends SimpleRepository implements ProductRepository
      */
     public function getLatestProducts($take, $columns = ['*'])
     {
-        return $this->createModel()->latest()->limit($take)->get($columns);
+        return $this->createQuery()->latest()->limit($take)->get($columns);
     }
 
     /**

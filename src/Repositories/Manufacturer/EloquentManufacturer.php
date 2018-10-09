@@ -2,13 +2,12 @@
 
 namespace Viviniko\Catalog\Repositories\Manufacturer;
 
-use Viviniko\Repository\SimpleRepository;
+use Illuminate\Support\Facades\Config;
+use Viviniko\Repository\EloquentRepository;
 
-class EloquentManufacturer extends SimpleRepository implements ManufacturerRepository
+class EloquentManufacturer extends EloquentRepository implements ManufacturerRepository
 {
-    protected $modelConfigKey = 'catalog.manufacturer';
-
-    protected $fieldSearchable = [
+    protected $searchRules = [
         'id',
         'name' => "like",
         'product_type' => 'like',
@@ -18,12 +17,17 @@ class EloquentManufacturer extends SimpleRepository implements ManufacturerRepos
         'admin' => 'like'
     ];
 
+    public function __construct()
+    {
+        parent::__construct(Config::get('catalog.manufacturer'));
+    }
+
     /**
      * {@inheritdoc}
      */
     public function findByName($name)
     {
-        return $this->createModel()->where('name', $name)->first();
+        return $this->createQuery()->where('name', $name)->first();
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Viviniko\Catalog\Observers;
 
-use Viviniko\Catalog\Contracts\ProductService;
+use Viviniko\Catalog\Services\ProductService;
 use Viviniko\Media\Models\Media;
 
 class MediaObserver

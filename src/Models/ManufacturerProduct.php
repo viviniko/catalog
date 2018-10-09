@@ -12,7 +12,7 @@ class ManufacturerProduct extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'product_id', 'manufacturer_id', 'url', 'amount', 'currency', 'sku', 'name',
+        'product_id', 'manufacturer_id', 'url', 'price', 'sku', 'name',
     ];
 
     public function manufacturer()

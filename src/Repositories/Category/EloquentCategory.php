@@ -3,16 +3,15 @@
 namespace Viviniko\Catalog\Repositories\Category;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Facades\Config;
 use Viviniko\Catalog\Events\Category\CategoryCreated;
 use Viviniko\Catalog\Events\Category\CategoryDeleted;
 use Viviniko\Catalog\Events\Category\CategoryUpdated;
-use Viviniko\Repository\SimpleRepository;
+use Viviniko\Repository\EloquentRepository;
 
-class EloquentCategory extends SimpleRepository implements CategoryRepository
+class EloquentCategory extends EloquentRepository implements CategoryRepository
 {
-    protected $modelConfigKey = 'catalog.category';
-
-    protected $fieldSearchable = [
+    protected $searchRules = [
         'categories' => 'category_id:in',
     ];
 
@@ -27,15 +26,8 @@ class EloquentCategory extends SimpleRepository implements CategoryRepository
      */
     public function __construct(Dispatcher $events)
     {
+        parent::__construct(Config::get('catalog.category'));
         $this->events = $events;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function all()
-    {
-        return $this->search([])->get();
     }
 
     /**
@@ -45,7 +37,7 @@ class EloquentCategory extends SimpleRepository implements CategoryRepository
     {
         $children = collect([]);
 
-        foreach ($this->createModel()->where('parent_id', $categoryId)->get($columns) as $category) {
+        foreach ($this->createQuery()->where('parent_id', $categoryId)->get($columns) as $category) {
             $children->push($category);
             if ($recursive) {
                 $children = $children->merge($this->getChildren($category->id, $columns, $recursive));

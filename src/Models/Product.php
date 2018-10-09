@@ -114,21 +114,6 @@ class Product extends Model
         return data_get($this->master, 'amount');
     }
 
-    public function getCurrencyAttribute()
-    {
-        return data_get($this->master, 'currency');
-    }
-
-    public function getPriceAttribute()
-    {
-        return data_get($this->master, 'price');
-    }
-
-    public function getDiscountPriceAttribute()
-    {
-        return data_get($this->master, 'discount_price');
-    }
-
     public function getDiscountAttribute()
     {
         return data_get($this->master, 'discount');

@@ -13,7 +13,7 @@ class Item extends Model
     protected $tableConfigKey = 'catalog.items_table';
 
     protected $fillable = [
-        'product_id', 'sku', 'amount', 'currency', 'discount', 'weight', 'quantity', 'picture_id', 'is_active', 'is_master'
+        'product_id', 'sku', 'amount', 'discount', 'weight', 'quantity', 'picture_id', 'is_active', 'is_master'
     ];
 
     protected $casts = [
@@ -23,10 +23,6 @@ class Item extends Model
 
     protected $hidden = [
         'is_master', 'weight', 'picture_id', 'is_active'
-    ];
-
-    protected $appends = [
-        'price', 'discount_price'
     ];
 
     public function product()
@@ -59,19 +55,8 @@ class Item extends Model
         return data_get($this->picture, 'url');
     }
 
-    public function getPriceAttribute()
+    public function getAmountAttribute($amount)
     {
-        if (!$this->item_price) {
-            $this->item_price = new Amount($this->currency, $this->amount);
-        }
-        return $this->item_price;
-    }
-
-    public function getDiscountPriceAttribute()
-    {
-        if (!$this->item_discount_price) {
-            $this->item_discount_price = new Amount($this->currency, $this->amount, $this->discount);
-        }
-        return $this->item_discount_price;
+        return Amount::createBaseAmount($amount);
     }
 }

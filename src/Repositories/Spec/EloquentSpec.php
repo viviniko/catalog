@@ -2,18 +2,22 @@
 
 namespace Viviniko\Catalog\Repositories\Spec;
 
-use Viviniko\Repository\SimpleRepository;
+use Illuminate\Support\Facades\Config;
+use Viviniko\Repository\EloquentRepository;
 
-class EloquentSpec extends SimpleRepository implements SpecRepository
+class EloquentSpec extends EloquentRepository implements SpecRepository
 {
-    protected $modelConfigKey = 'catalog.spec';
+    public function __construct()
+    {
+        parent::__construct(Config::get('catalog.spec'));
+    }
 
     /**
      * {@inheritdoc}
      */
     public function findIn($ids)
     {
-        return $this->createModel()->newQuery()->whereIn('id', (array)$ids)->with('group')->get();
+        return $this->createQuery()->whereIn('id', (array)$ids)->with('group')->get();
     }
 
     /**
@@ -21,7 +25,7 @@ class EloquentSpec extends SimpleRepository implements SpecRepository
      */
     public function guessByName($name, $groupId = null)
     {
-        $query = $this->createModel()->newQuery();
+        $query = $this->createQuery();
         if ($groupId) {
             $query->where('group_id', $groupId);
         }
