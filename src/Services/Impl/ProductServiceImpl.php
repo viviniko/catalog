@@ -15,7 +15,6 @@ use Viviniko\Catalog\Repositories\Product\ProductRepository;
 use Viviniko\Catalog\Services\SpecService;
 use Viviniko\Media\Contracts\ImageService;
 use Viviniko\Repository\SearchPageRequest;
-use Viviniko\Support\AbstractRequestRepositoryService;
 
 class ProductServiceImpl implements ProductService
 {

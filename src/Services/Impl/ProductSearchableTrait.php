@@ -94,11 +94,11 @@ trait ProductSearchableTrait
     }
 
     /**
-     * @return \Viviniko\Sale\Contracts\OrderService
+     * @return \Viviniko\Sale\Services\OrderService
      */
     private function getOrderService()
     {
-        return app(\Viviniko\Sale\Contracts\OrderService::class);
+        return app(\Viviniko\Sale\Services\OrderService::class);
     }
 
     /**
