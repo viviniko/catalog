@@ -14,6 +14,8 @@ use Viviniko\Catalog\Models\Product;
 use Viviniko\Catalog\Repositories\Product\ProductRepository;
 use Viviniko\Catalog\Services\SpecService;
 use Viviniko\Media\Contracts\ImageService;
+use Viviniko\Repository\SearchPageRequest;
+use Viviniko\Support\AbstractRequestRepositoryService;
 
 class ProductServiceImpl implements ProductService
 {
@@ -57,6 +59,52 @@ class ProductServiceImpl implements ProductService
         $this->imageService = $imageService;
         $this->categoryService = $categoryService;
         $this->specService = $specService;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginate($perPage, $wheres = [], $orders = [])
+    {
+        $productTable = Config::get('catalog.products_table');
+        $productManufacturerTable = Config::get('catalog.manufacturer_products_table');
+        $productItemsTable = Config::get('catalog.items_table');
+        $manufacturerTable = Config::get('catalog.manufacturers_table');
+        $categoryTable = Config::get('catalog.categories_table');
+        $taggablesTable = Config::get('tag.taggables_table');
+
+        return $this->productRepository->search(
+            SearchPageRequest::create($perPage, $wheres = [], $orders = [])
+                ->rules([
+                    'id' => "{$productTable}.id:=",
+                    'name' => "{$productTable}.name:like",
+                    'spu' => "{$productTable}.spu:like",
+                    'category' => "{$categoryTable}.id:=",
+                    'sku' => 'like',
+                    'manufacturer_id' => "{$manufacturerTable}.id:=",
+                    'manufacturer_product_sku' => "{$productManufacturerTable}.sku:like",
+                    'manufacturer_status' => "{$productManufacturerTable}.status:=",
+                    'price' => "{$productItemsTable}.price:=",
+                    'market_price' => "{$productItemsTable}.market_price:=",
+                    'quantity' => "{$productItemsTable}.quantity:=",
+                    'created_at' => "{$productTable}.created_at:betweenDate",
+                    'updated_at' => "{$productTable}.updated_at:betweenDate",
+                    'created_by' => 'like',
+                    'updated_by' => 'like',
+                    'is_active' => "{$productTable}.is_active:=",
+                ])
+                ->request(request(), 'search')
+                ->filter(function ($builder) use ($productTable, $categoryTable, $productManufacturerTable, $manufacturerTable, $productItemsTable) {
+                    return $builder->select(["{$productTable}.*"])
+                        ->join($categoryTable, "{$productTable}.category_id", '=', "{$categoryTable}.id", 'left')
+                        ->join($productManufacturerTable, "{$productTable}.id", '=', "{$productManufacturerTable}.product_id", 'left')
+                        ->join($manufacturerTable, "{$manufacturerTable}.id", '=', "{$productManufacturerTable}.manufacturer_id", 'left')
+                        ->leftJoin($productItemsTable, function($join) use ($productTable, $productItemsTable) {
+                            $join->on("{$productTable}.id", '=', "{$productItemsTable}.product_id")
+                                ->where("{$productItemsTable}.is_master", '=', '1');
+                        });
+                })
+        );
     }
 
     /**

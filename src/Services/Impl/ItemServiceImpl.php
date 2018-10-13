@@ -12,6 +12,8 @@ use Viviniko\Catalog\Repositories\Item\ItemRepository;
 
 class ItemServiceImpl implements ItemService
 {
+    protected $searchRules = ['sku', 'is_master'];
+
     /**
      * @var \Viviniko\Catalog\Repositories\Item\ItemRepository
      */

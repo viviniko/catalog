@@ -10,6 +10,10 @@ use Viviniko\Catalog\Repositories\Category\CategoryRepository;
 
 class CategoryServiceImpl implements CategoryServiceInterface
 {
+    protected $searchRules = [
+        'categories' => 'category_id:in',
+    ];
+
     /**
      * @var \Viviniko\Catalog\Repositories\Category\CategoryRepository
      */

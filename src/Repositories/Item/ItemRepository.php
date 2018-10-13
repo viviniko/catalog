@@ -17,7 +17,7 @@ interface ItemRepository
      * @param $productId
      * @return mixed
      */
-    public function findByProductId($productId);
+    public function findAllByProductId($productId);
 
     /**
      * @param $productId

@@ -7,16 +7,6 @@ use Viviniko\Repository\EloquentRepository;
 
 class EloquentManufacturer extends EloquentRepository implements ManufacturerRepository
 {
-    protected $searchRules = [
-        'id',
-        'name' => "like",
-        'product_type' => 'like',
-        'product_update_period' => 'like',
-        'product_update_time' => 'betweenDate',
-        'is_active',
-        'admin' => 'like'
-    ];
-
     public function __construct()
     {
         parent::__construct(Config::get('catalog.manufacturer'));

@@ -11,8 +11,6 @@ use Viviniko\Repository\EloquentRepository;
 
 class EloquentItem extends EloquentRepository implements ItemRepository
 {
-    protected $searchRules = ['sku', 'is_master'];
-
     /**
      * @var \Illuminate\Contracts\Events\Dispatcher
      */
@@ -31,9 +29,9 @@ class EloquentItem extends EloquentRepository implements ItemRepository
     /**
      * {@inheritdoc}
      */
-    public function findByProductId($productId)
+    public function findAllByProductId($productId)
     {
-        return $this->findBy('product_id', $productId);
+        return $this->findAllBy('product_id', $productId);
     }
 
     /**
@@ -41,7 +39,7 @@ class EloquentItem extends EloquentRepository implements ItemRepository
      */
     public function findMasterByProductId($productId)
     {
-        return $this->createQuery()->where(['product_id' => $productId, 'is_master' => true])->first();
+        return $this->findBy(['product_id' => $productId, 'is_master' => true]);
     }
 
     protected function postCreate($item)

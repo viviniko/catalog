@@ -11,10 +11,6 @@ use Viviniko\Repository\EloquentRepository;
 
 class EloquentCategory extends EloquentRepository implements CategoryRepository
 {
-    protected $searchRules = [
-        'categories' => 'category_id:in',
-    ];
-
     /**
      * @var \Illuminate\Contracts\Events\Dispatcher
      */

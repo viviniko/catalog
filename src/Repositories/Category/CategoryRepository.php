@@ -5,15 +5,6 @@ namespace Viviniko\Catalog\Repositories\Category;
 interface CategoryRepository
 {
     /**
-     * Paginate categories.
-     *
-     * @param mixed $query
-     *
-     * @return \Common\Repository\Builder
-     */
-    public function search($query);
-
-    /**
      * Get all categories.
      *
      * @return mixed

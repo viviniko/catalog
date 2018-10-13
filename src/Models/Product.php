@@ -39,7 +39,7 @@ class Product extends Model
     ];
 
     /**
-     * @var \Viviniko\Catalog\Contracts\ProductService
+     * @var \Viviniko\Catalog\Services\ProductService
      */
     protected static $productService;
 

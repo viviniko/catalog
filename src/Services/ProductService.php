@@ -5,6 +5,16 @@ namespace Viviniko\Catalog\Services;
 interface ProductService
 {
     /**
+     * Paginate the given query into a simple paginator.
+     *
+     * @param $pageSize
+     * @param array $wheres
+     * @param array $orders
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginate($pageSize, $wheres = [], $orders = []);
+
+    /**
      * Search products.
      *
      * @param null $keyword
