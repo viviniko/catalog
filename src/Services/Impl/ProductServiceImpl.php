@@ -2,9 +2,7 @@
 
 namespace Viviniko\Catalog\Services\Impl;
 
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Viviniko\Catalog\Services\CategoryService;
@@ -13,7 +11,7 @@ use Viviniko\Catalog\Services\ProductService;
 use Viviniko\Catalog\Models\Product;
 use Viviniko\Catalog\Repositories\Product\ProductRepository;
 use Viviniko\Catalog\Services\SpecService;
-use Viviniko\Media\Contracts\ImageService;
+use Viviniko\Media\Services\ImageService;
 use Viviniko\Repository\SearchPageRequest;
 
 class ProductServiceImpl implements ProductService
@@ -41,7 +39,7 @@ class ProductServiceImpl implements ProductService
     protected $specService;
 
     /**
-     * @var \Viviniko\Media\Contracts\ImageService
+     * @var \Viviniko\Media\Services\ImageService
      */
     protected $imageService;
 
@@ -152,23 +150,15 @@ class ProductServiceImpl implements ProductService
     /**
      * {@inheritdoc}
      */
-    public function find($id)
+    public function getProduct($id)
     {
-        if (is_array($id) || $id instanceof Arrayable) {
-            return collect($id)->map(function ($item) {
-                return $this->find($item);
-            });
-        }
-
-        return Cache::tags('catalog.products')->remember("catalog.product?:{$id}", Config::get('cache.ttl', 10), function () use ($id) {
-            return $this->productRepository->find($id);
-        });
+        return $this->productRepository->find($id);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function create(array $data)
+    public function createProduct(array $data)
     {
         return DB::transaction(function () use ($data) {
             $product = $this->productRepository->create($data);
@@ -181,7 +171,7 @@ class ProductServiceImpl implements ProductService
     /**
      * {@inheritdoc}
      */
-    public function update($id, array $data)
+    public function updateProduct($id, array $data)
     {
         return DB::transaction(function () use ($id, $data) {
             $product = $this->productRepository->update($id, $data);
@@ -195,10 +185,10 @@ class ProductServiceImpl implements ProductService
     /**
      * {@inheritdoc}
      */
-    public function delete($id)
+    public function deleteProduct($id)
     {
         return DB::transaction(function () use ($id) {
-            $product = $this->find($id);
+            $product = $this->productRepository->find($id);
             if ($product) {
                 $this->itemService->deleteByProductId($product->id);
                 $product->pictures()->sync([]);
@@ -215,7 +205,7 @@ class ProductServiceImpl implements ProductService
     /**
      * {@inheritdoc}
      */
-    public function attachSpecGroups($productId, array $data)
+    public function attachProductSpecGroups($productId, array $data)
     {
         foreach ($data as $groupId => $attributes) {
             $this->productRepository->attachProductSpecGroup($productId, $groupId, $attributes);
@@ -225,7 +215,7 @@ class ProductServiceImpl implements ProductService
     /**
      * {@inheritdoc}
      */
-    public function updateSpecGroups($productId, array $data)
+    public function updateProductSpecGroups($productId, array $data)
     {
         foreach ($data as $groupId => $attributes) {
             $this->productRepository->updateProductSpecGroup($productId, $groupId, $attributes);
@@ -235,7 +225,7 @@ class ProductServiceImpl implements ProductService
     /**
      * {@inheritdoc}
      */
-    public function detachSpecGroup($productId, $groupId)
+    public function detachProductSpecGroup($productId, $groupId)
     {
         $this->productRepository->detachProductSpecGroup($productId, $groupId);
     }
@@ -243,7 +233,7 @@ class ProductServiceImpl implements ProductService
     /**
      * {@inheritdoc}
      */
-    public function attachSpec($productId, array $data)
+    public function attachProductSpec($productId, array $data)
     {
         $product = $this->productRepository->find($productId);
         foreach ($data as $attributeId => $attributes) {
@@ -262,7 +252,7 @@ class ProductServiceImpl implements ProductService
     /**
      * {@inheritdoc}
      */
-    public function updateSpec($productId, array $data)
+    public function updateProductSpec($productId, array $data)
     {
         $product = $this->productRepository->find($productId);
         foreach ($data as $attributeId => $attributes) {
@@ -281,7 +271,7 @@ class ProductServiceImpl implements ProductService
     /**
      * {@inheritdoc}
      */
-    public function detachSpec($productId, $attributeId)
+    public function detachProductSpec($productId, $attributeId)
     {
         $product = $this->productRepository->find($productId);
         $product->specs()->detach($attributeId);
@@ -294,7 +284,7 @@ class ProductServiceImpl implements ProductService
      */
     public function detachProductPicture($pictureId)
     {
-        DB::table(config('catalog.product_picture_table'))->where('picture_id', $pictureId)->delete();
+        DB::table(Config::get('catalog.product_picture_table'))->where('picture_id', $pictureId)->delete();
     }
 
     /**
@@ -302,7 +292,7 @@ class ProductServiceImpl implements ProductService
      */
     public function addProductSpecSwatchPicture(array &$attributes, $x = null, $y = null)
     {
-        $size = config('catalog.settings.swatch_picture_size', 60);
+        $size = Config::get('catalog.settings.swatch_picture_size', 60);
         if (isset($attributes['picture_id']) && $attributes['picture_id'] != 0 && !isset($attributes['swatch_picture_id'])) {
             $picture = $this->imageService->crop($attributes['picture_id'], $size, $size, $x, $y);
 
@@ -340,7 +330,7 @@ class ProductServiceImpl implements ProductService
                 $swatch->swatch_picture_url = $this->imageService->getUrl($item->swatch_picture_id);
                 $swatch->picture_url = $this->imageService->getUrl($item->picture_id);
                 $swatch->spec_id = $item->spec_id;
-                $swatch->swatch_picture_name = data_get($this->specService->find($item->spec_id), 'title');
+                $swatch->swatch_picture_name = data_get($this->specService->getSpec($item->spec_id), 'title');
                 return $swatch;
             });
     }
@@ -418,7 +408,7 @@ class ProductServiceImpl implements ProductService
             foreach ($filters as $name => $value) {
                 if (empty($value)) continue;
                 if ($name == 'category_id') {
-                    $builder->where('category_id', $this->categoryService->getChildrenId($value)->prepend($value)->toArray());
+                    $builder->where('category_id', $this->categoryService->getCategoryChildren($value)->pluck('id')->prepend($value)->toArray());
                 } else if ($name == 'attrs') {
                     foreach ($value as $key=>$val){
                         if (is_array($val)) {

@@ -33,7 +33,7 @@ interface ProductService
      *
      * @return mixed
      */
-    public function find($id);
+    public function getProduct($id);
 
     /**
      * Save a new entity in repository
@@ -42,7 +42,7 @@ interface ProductService
      *
      * @return mixed
      */
-    public function create(array $data);
+    public function createProduct(array $data);
 
     /**
      * Update a entity in repository by id
@@ -52,7 +52,7 @@ interface ProductService
      *
      * @return mixed
      */
-    public function update($id, array $data);
+    public function updateProduct($id, array $data);
 
     /**
      * Delete a entity in repository by id
@@ -61,7 +61,7 @@ interface ProductService
      *
      * @return int
      */
-    public function delete($id);
+    public function deleteProduct($id);
 
     /**
      * Attach attribute groups.
@@ -71,7 +71,7 @@ interface ProductService
      *
      * @return mixed
      */
-    public function attachSpecGroups($productId, array $data);
+    public function attachProductSpecGroups($productId, array $data);
 
     /**
      * Update attribute group.
@@ -81,7 +81,7 @@ interface ProductService
      *
      * @return mixed
      */
-    public function updateSpecGroups($productId, array $data);
+    public function updateProductSpecGroups($productId, array $data);
 
     /**
      * Detach attribute group.
@@ -91,7 +91,7 @@ interface ProductService
      *
      * @return mixed
      */
-    public function detachSpecGroup($productId, $specificationGroupId);
+    public function detachProductSpecGroup($productId, $specificationGroupId);
 
     /**
      * Attach attribute.
@@ -101,7 +101,7 @@ interface ProductService
      *
      * @return mixed
      */
-    public function attachSpec($productId, array $data);
+    public function attachProductSpec($productId, array $data);
 
     /**
      * Update attribute.
@@ -111,7 +111,7 @@ interface ProductService
      *
      * @return mixed
      */
-    public function updateSpec($productId, array $data);
+    public function updateProductSpec($productId, array $data);
 
     /**
      * Detach attribute.
@@ -121,7 +121,7 @@ interface ProductService
      *
      * @return mixed
      */
-    public function detachSpec($productId, $specificationId);
+    public function detachProductSpec($productId, $specificationId);
 
     /**
      * Detach product picture.

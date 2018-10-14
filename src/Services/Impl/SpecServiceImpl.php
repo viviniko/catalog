@@ -27,7 +27,7 @@ class SpecServiceImpl implements SpecificationServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function find($id)
+    public function getSpec($id)
     {
         return $this->specificationRepository->find($id);
     }

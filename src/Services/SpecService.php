@@ -26,7 +26,7 @@ interface SpecService
      * @param $id
      * @return mixed
      */
-    public function find($id);
+    public function getSpec($id);
 
     /**
      * Get attribute by name like the given name
