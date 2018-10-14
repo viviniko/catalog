@@ -2,10 +2,10 @@
 
 namespace Viviniko\Catalog\Services;
 
-use Illuminate\Support\Collection;
-
 interface CategoryService
 {
+    public function all();
+
     /**
      * Find data by id
      *
@@ -13,15 +13,21 @@ interface CategoryService
      *
      * @return mixed
      */
-    public function find($id);
+    public function getCategory($id);
 
     /**
-     * Get all children id.
+     * @param array $id
+     * @return \Illuminate\Support\Collection
+     */
+    public function getCategoryByIdIn(array $id);
+
+    /**
+     * Get all children.
      *
-     * @param int $id
+     * @param int $categoryId
      * @param bool $recursive
      *
-     * @return Collection
+     * @return \Illuminate\Support\Collection
      */
-    public function getChildrenId($id, $recursive = true);
+    public function getChildren($categoryId, $recursive = true);
 }

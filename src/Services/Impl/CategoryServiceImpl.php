@@ -10,10 +10,6 @@ use Viviniko\Catalog\Repositories\Category\CategoryRepository;
 
 class CategoryServiceImpl implements CategoryServiceInterface
 {
-    protected $searchRules = [
-        'categories' => 'category_id:in',
-    ];
-
     /**
      * @var \Viviniko\Catalog\Repositories\Category\CategoryRepository
      */
@@ -31,26 +27,47 @@ class CategoryServiceImpl implements CategoryServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function find($id)
+    public function all()
+    {
+        return $this->categoryRepository->all();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCategory($id)
     {
         if (is_array($id) || $id instanceof Arrayable) {
-            return collect($id)->map(function ($item) {
-                return $this->find($item);
-            });
+
         }
 
         return Cache::tags('catalog.categories')->remember("catalog.categories.category?:{$id}", Config::get('cache.ttl', 10), function () use ($id) {
-            return $this->categoryRepository->find($id);
+            return $this->categoryRepository->getCategory($id);
         });
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getChildrenId($id, $recursive = true)
+    public function getCategoryByIdIn(array $id)
     {
-        return Cache::tags(['catalog.categories', 'catalog.categories.low'])->remember("catalog.categories.category_children_id?:{$id}:" . (int) $recursive, Config::get('cache.ttl', 10), function () use ($id, $recursive) {
-            return $this->categoryRepository->getChildren($id, ['id'], $recursive)->pluck('id');
-        });
+        return $this->categoryRepository->findAllBy('id', $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getChildren($categoryId, $recursive = true)
+    {
+        $children = collect([]);
+
+        foreach ($this->categoryRepository->findAllBy('parent_id', $categoryId) as $category) {
+            $children->push($category);
+            if ($recursive) {
+                $children = $children->merge($this->getChildren($category->id, $recursive));
+            }
+        }
+
+        return $children;
     }
 }

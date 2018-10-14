@@ -22,6 +22,17 @@ interface CategoryRepository
     public function find($id, $columns = ['*']);
 
     /**
+     * Find all data by id
+     *
+     * @param       $column
+     * @param       $value
+     * @param       $columns
+     *
+     * @return mixed
+     */
+    public function findAllBy($column, $value = null, $columns = ['*']);
+
+    /**
      * Save a new entity in repository
      *
      * @param array $data
@@ -48,15 +59,4 @@ interface CategoryRepository
      * @return int
      */
     public function delete($id);
-
-    /**
-     * Get all children.
-     *
-     * @param int $categoryId
-     * @param mixed $columns
-     * @param bool $recursive
-     *
-     * @return mixed
-     */
-    public function getChildren($categoryId, $columns = ['*'], $recursive = false);
 }
