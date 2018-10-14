@@ -2,9 +2,6 @@
 
 namespace Viviniko\Catalog\Services\Impl;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 use Viviniko\Catalog\Services\CategoryService as CategoryServiceInterface;
 use Viviniko\Catalog\Repositories\Category\CategoryRepository;
 
@@ -65,16 +62,25 @@ class CategoryServiceImpl implements CategoryServiceInterface
         return $children;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function createCategory(array $data)
     {
         return $this->categoryRepository->create($data);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateCategory($id, array $data)
     {
         return $this->categoryRepository->update($id, $data);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function deleteCategory($id)
     {
         return $this->categoryRepository->delete($id);

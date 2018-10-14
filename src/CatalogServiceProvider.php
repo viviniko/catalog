@@ -80,6 +80,8 @@ class CatalogServiceProvider extends BaseServiceProvider
 
         $this->registerItemService();
 
+        $this->registerManufacturerService();
+
         $this->registerCommands();
     }
 
@@ -211,6 +213,14 @@ class CatalogServiceProvider extends BaseServiceProvider
         );
     }
 
+    protected function registerManufacturerService()
+    {
+        $this->app->singleton(
+            \Viviniko\Catalog\Services\ManufacturerService::class,
+            \Viviniko\Catalog\Services\Impl\ManufacturerServiceImpl::class
+        );
+    }
+
     protected function registerSKUGenerater()
     {
         $this->app->singleton(
@@ -232,6 +242,7 @@ class CatalogServiceProvider extends BaseServiceProvider
             \Viviniko\Catalog\Services\SpecService::class,
             \Viviniko\Catalog\Services\ProductService::class,
             \Viviniko\Catalog\Services\ItemService::class,
+            \Viviniko\Catalog\Services\ManufacturerService::class,
         ];
     }
 }
