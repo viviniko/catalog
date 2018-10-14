@@ -4,7 +4,13 @@ namespace Viviniko\Catalog\Services;
 
 interface CategoryService
 {
-    public function all();
+    public function categories();
+
+    public function createCategory(array $data);
+
+    public function updateCategory($id, array $data);
+
+    public function deleteCategory($id);
 
     /**
      * Find data by id
@@ -29,5 +35,5 @@ interface CategoryService
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getChildren($categoryId, $recursive = true);
+    public function getCategoryChildren($categoryId, $recursive = true);
 }

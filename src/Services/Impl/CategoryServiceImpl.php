@@ -27,7 +27,7 @@ class CategoryServiceImpl implements CategoryServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function all()
+    public function categories()
     {
         return $this->categoryRepository->all();
     }
@@ -37,13 +37,7 @@ class CategoryServiceImpl implements CategoryServiceInterface
      */
     public function getCategory($id)
     {
-        if (is_array($id) || $id instanceof Arrayable) {
-
-        }
-
-        return Cache::tags('catalog.categories')->remember("catalog.categories.category?:{$id}", Config::get('cache.ttl', 10), function () use ($id) {
-            return $this->categoryRepository->getCategory($id);
-        });
+        return $this->categoryRepository->find($id);
     }
 
     /**
@@ -57,17 +51,32 @@ class CategoryServiceImpl implements CategoryServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getChildren($categoryId, $recursive = true)
+    public function getCategoryChildren($categoryId, $recursive = true)
     {
         $children = collect([]);
 
         foreach ($this->categoryRepository->findAllBy('parent_id', $categoryId) as $category) {
             $children->push($category);
             if ($recursive) {
-                $children = $children->merge($this->getChildren($category->id, $recursive));
+                $children = $children->merge($this->getCategoryChildren($category->id, $recursive));
             }
         }
 
         return $children;
+    }
+
+    public function createCategory(array $data)
+    {
+        return $this->categoryRepository->create($data);
+    }
+
+    public function updateCategory($id, array $data)
+    {
+        return $this->categoryRepository->update($id, $data);
+    }
+
+    public function deleteCategory($id)
+    {
+        return $this->categoryRepository->delete($id);
     }
 }
