@@ -62,7 +62,7 @@ class Product extends Model
     {
         return $this->belongsToMany(Config::get('catalog.spec_group'), Config::get('catalog.product_spec_group_table'))
             ->using(ProductSpecGroup::class)
-            ->withPivot(['control_type', 'text_prompt', 'is_required', 'when', 'sort'])
+            ->withPivot(['control_type', 'text_prompt', 'is_required', 'sort'])
             ->orderBy('pivot_sort');
     }
 
