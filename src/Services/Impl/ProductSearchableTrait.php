@@ -86,11 +86,11 @@ trait ProductSearchableTrait
     }
 
     /**
-     * @return \Viviniko\Favorite\Contracts\FavoriteService
+     * @return \Viviniko\Favorite\Services\FavoriteService
      */
     private function getFavoriteService()
     {
-        return app(\Viviniko\Favorite\Contracts\FavoriteService::class);
+        return app(\Viviniko\Favorite\Services\FavoriteService::class);
     }
 
     /**
