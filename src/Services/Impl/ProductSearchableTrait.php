@@ -49,7 +49,7 @@ trait ProductSearchableTrait
 
         if ($product->category) {
             $searchArray['category_name'] = $product->category->name;
-            $searchArray['categories'] = $this->categoryService->find(array_filter(explode('/', $product->category->path)))->pluck('name')->implode(',');
+            $searchArray['categories'] = $this->categoryService->getCategoriesByIdIn(array_filter(explode('/', $product->category->path)))->pluck('name')->implode(',');
         }
 
         $attrIds = [];

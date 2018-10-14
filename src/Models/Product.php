@@ -31,7 +31,7 @@ class Product extends Model
     ];
 
     protected $appends = [
-        'cover', 'sku', 'amount', 'currency', 'discount', 'quantity', 'weight'
+        'cover', 'sku', 'amount', 'discount', 'quantity', 'weight'
     ];
 
     protected $hidden = [

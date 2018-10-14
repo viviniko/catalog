@@ -40,7 +40,7 @@ class CategoryServiceImpl implements CategoryServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getCategoryByIdIn(array $id)
+    public function getCategoriesByIdIn(array $id)
     {
         return $this->categoryRepository->findAllBy('id', $id);
     }

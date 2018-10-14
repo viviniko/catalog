@@ -25,7 +25,7 @@ interface CategoryService
      * @param array $id
      * @return \Illuminate\Support\Collection
      */
-    public function getCategoryByIdIn(array $id);
+    public function getCategoriesByIdIn(array $id);
 
     /**
      * Get all children.
