@@ -58,7 +58,6 @@ class ItemServiceImpl implements ItemService
                 'picture_id' => $this->getPictureIdByProductSpecs($productId, $specifications),
                 'sku' => '',
                 'amount' => 0,
-                'currency' => 'USD',
                 'weight' => 0,
                 'quantity' => 0,
                 'is_active' => true,

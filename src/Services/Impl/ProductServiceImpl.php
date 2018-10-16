@@ -71,7 +71,7 @@ class ProductServiceImpl implements ProductService
         $taggablesTable = Config::get('tag.taggables_table');
 
         return $this->productRepository->search(
-            SearchPageRequest::create($perPage, $wheres = [], $orders = [])
+            SearchPageRequest::create($perPage, $wheres, $orders)
                 ->rules([
                     'id' => "{$productTable}.id:=",
                     'name' => "{$productTable}.name:like",
