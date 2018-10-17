@@ -127,7 +127,7 @@ class CreateCatalogTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('category_id');
             $table->string('name', 32);
-            $table->string('display_name', 32)->nullable();
+            $table->string('description')->nullable();
             $table->unsignedTinyInteger('type')->default(0);
             $table->boolean('is_filterable')->default(false);
             $table->boolean('is_searchable')->default(false);
@@ -141,7 +141,7 @@ class CreateCatalogTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('group_id');
             $table->string('name', 32);
-            $table->string('display_name', 32)->nullable();
+            $table->string('description')->nullable();
             $table->integer('sort')->default(0);
             $table->timestamps();
         });
@@ -150,7 +150,7 @@ class CreateCatalogTable extends Migration
         Schema::create($this->specGroupsTable, function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 32);
-            $table->string('display_name', 32)->nullable();
+            $table->string('description')->nullable();
             $table->integer('sort')->default(0);
             $table->timestamps();
         });
@@ -160,7 +160,7 @@ class CreateCatalogTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('group_id');
             $table->string('name', 32);
-            $table->string('display_name', 32)->nullable();
+            $table->string('description')->nullable();
             $table->integer('sort')->default(0);
             $table->timestamps();
         });

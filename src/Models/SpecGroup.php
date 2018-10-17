@@ -10,7 +10,7 @@ class SpecGroup extends Model
     protected $tableConfigKey = 'catalog.spec_groups_table';
 
     protected $fillable = [
-        'name', 'display_name', 'sort'
+        'name', 'description', 'sort'
     ];
 
     public function specs()

@@ -9,7 +9,7 @@ class Attr extends Model
 {
     protected $tableConfigKey = 'catalog.attrs_table';
 
-    protected $fillable = ['group_id', 'name', 'display_name', 'sort'];
+    protected $fillable = ['group_id', 'name', 'description', 'sort'];
 
     public function group()
     {

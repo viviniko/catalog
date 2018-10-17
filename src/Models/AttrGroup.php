@@ -10,7 +10,7 @@ class AttrGroup extends Model
     protected $tableConfigKey = 'catalog.attr_groups_table';
 
     protected $fillable = [
-        'category_id', 'name', 'display_name', 'type', 'is_filterable', 'is_searchable', 'is_viewable', 'sort'
+        'category_id', 'name', 'description', 'type', 'is_filterable', 'is_searchable', 'is_viewable', 'sort'
     ];
 
     protected $casts = [
