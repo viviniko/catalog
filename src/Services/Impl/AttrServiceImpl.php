@@ -4,8 +4,6 @@ namespace Viviniko\Catalog\Services\Impl;
 
 use Viviniko\Catalog\Repositories\AttrGroup\AttrGroupRepository;
 use Viviniko\Catalog\Services\AttrService as AttrServiceInterface;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 use Viviniko\Catalog\Repositories\Attr\AttrRepository;
 use Viviniko\Catalog\Services\CategoryService;
 
@@ -40,9 +38,7 @@ class AttrServiceImpl implements AttrServiceInterface
      */
     public function getFilterableAttrsByCategoryId($categoryId)
     {
-        return Cache::tags('catalog.attrs')->remember('catalog.attr.category-filterable?:' . $categoryId, Config::get('cache.ttl', 10), function () use ($categoryId) {
-            return $this->attributeRepository->getFilterableAttrsByCategoryId($this->categoryService->getCategoryChildren($categoryId, ['id'], true)->pluck('id')->prepend($categoryId)->toArray());
-        });
+        return $this->attributeRepository->getFilterableAttrsByCategoryId($this->categoryService->getCategoryChildren($categoryId, true)->pluck('id')->prepend($categoryId)->toArray());
     }
 
     /**

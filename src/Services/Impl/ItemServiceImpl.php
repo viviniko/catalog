@@ -2,8 +2,6 @@
 
 namespace Viviniko\Catalog\Services\Impl;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Viviniko\Catalog\Services\ItemService;
@@ -20,7 +18,7 @@ class ItemServiceImpl implements ItemService
     protected $itemRepository;
 
     /**
-     * @var \Viviniko\Catalog\Contracts\ProductSkuGenerater
+     * @var \Viviniko\Catalog\Services\ProductSkuGenerater
      */
     protected $productSkuGenerater;
 
@@ -35,15 +33,7 @@ class ItemServiceImpl implements ItemService
      */
     public function find($id)
     {
-        if (is_array($id) || $id instanceof Arrayable) {
-            return collect($id)->map(function ($item) {
-                return $this->find($item);
-            });
-        }
-
-        return Cache::tags('catalog.items')->remember("catalog.items.item?:{$id}", Config::get('cache.ttl', 10), function () use ($id) {
-            return $this->itemRepository->find($id);
-        });
+        return $this->itemRepository->find($id);
     }
 
     /**
