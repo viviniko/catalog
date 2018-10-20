@@ -12,5 +12,9 @@ interface Catalog
 
     public function getProductSpecGroupsByProductId($productId);
 
+    public function getProductAttrsByProductId($productId);
+
+    public function getAttrGroupsByCategoryId($categoryId);
+
     public function getProductItemsByProductId($productId);
 }

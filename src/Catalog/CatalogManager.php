@@ -30,7 +30,7 @@ class CatalogManager implements Catalog
 
     protected $itemSpecs;
 
-    public function getAttrGroupsCategoryId($categoryId)
+    public function getAttrGroupsByCategoryId($categoryId)
     {
         return $this->getAttrGroupRepository()->findAllBy('category_id', $categoryId);
     }
@@ -50,7 +50,7 @@ class CatalogManager implements Catalog
             ->findAllBy('item_id', $items->pluck('id'))
             ->groupBy('item_id');
         foreach ($items as $item) {
-            $item->sku_id = $itemSpecs->get($item->id)->pluck('spec_id')->sort()->implode(':');
+            $item->specs = $itemSpecs->get($item->id)->pluck('spec_id');
         }
 
         return $items;
