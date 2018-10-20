@@ -58,11 +58,11 @@ class CatalogManager implements Catalog
 
     public function getProductSpecGroupsByProductId($productId)
     {
-        $productSpecGroups = $this->getProductSpecRepository()
+        $productSpecGroups = $this->getProductSpecGroupRepository()
             ->findAllBy('product_id', $productId,
-                ['spec_group_id', 'control_type', 'text_prompt', 'is_required', 'sort']);
-        $specGroups = $this->getProductSpecGroupRepository()
-            ->findAllBy('id', $productSpecGroups->pluck('spec_group_id'), ['id', 'name'])
+                ['group_id', 'control_type', 'text_prompt', 'is_required', 'sort']);
+        $specGroups = $this->getSpecGroupRepository()
+            ->findAllBy('id', $productSpecGroups->pluck('group_id'), ['id', 'name'])
             ->pluck('name', 'id');
         foreach ($productSpecGroups as $productSpecGroup) {
             $productSpecGroup->name = !empty($productSpecGroup->text_prompt)
