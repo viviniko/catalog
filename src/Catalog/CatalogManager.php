@@ -60,9 +60,9 @@ class CatalogManager implements Catalog
     {
         $productSpecGroups = $this->getProductSpecGroupRepository()
             ->findAllBy('product_id', $productId,
-                ['group_id', 'control_type', 'text_prompt', 'is_required', 'sort']);
+                ['spec_group_id', 'control_type', 'text_prompt', 'is_required', 'sort']);
         $specGroups = $this->getSpecGroupRepository()
-            ->findAllBy('id', $productSpecGroups->pluck('group_id'), ['id', 'name'])
+            ->findAllBy('id', $productSpecGroups->pluck('spec_group_id'), ['id', 'name'])
             ->pluck('name', 'id');
         foreach ($productSpecGroups as $productSpecGroup) {
             $productSpecGroup->name = !empty($productSpecGroup->text_prompt)
