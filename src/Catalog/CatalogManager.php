@@ -38,28 +38,28 @@ class CatalogManager implements Catalog
 
     public function getAttrGroup($id)
     {
-        return Cache::remember("catalog.specGroup:{$id}", $this->cacheSeconds, function () use ($id) {
+        return Cache::remember("catalog.attr_group:{$id}", $this->cacheSeconds, function () use ($id) {
             return $this->getAttrGroupRepository()->find($id);
         });
     }
 
     public function getAttr($id)
     {
-        return Cache::remember("catalog.specGroup:{$id}", $this->cacheSeconds, function () use ($id) {
+        return Cache::remember("catalog.attr:{$id}", $this->cacheSeconds, function () use ($id) {
             return $this->getAttrRepository()->find($id);
         });
     }
 
     public function getSpec($id)
     {
-        return Cache::remember("catalog.specGroup:{$id}", $this->cacheSeconds, function () use ($id) {
+        return Cache::remember("catalog.spec:{$id}", $this->cacheSeconds, function () use ($id) {
             return $this->getSpecRepository()->find($id);
         });
     }
 
     public function getSpecGroup($id)
     {
-        return Cache::remember("catalog.specGroup:{$id}", $this->cacheSeconds, function () use ($id) {
+        return Cache::remember("catalog.spec_group:{$id}", $this->cacheSeconds, function () use ($id) {
             return $this->getSpecGroupRepository()->find($id);
         });
     }
