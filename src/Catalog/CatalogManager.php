@@ -2,7 +2,9 @@
 
 namespace Viviniko\Catalog\Catalog;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Viviniko\Catalog\Contracts\Catalog;
 use Viviniko\Repository\SimpleRepository;
 
@@ -30,68 +32,91 @@ class CatalogManager implements Catalog
 
     protected $itemSpecs;
 
-    public function getAttrGroupsByCategoryId($categoryId)
+    protected $productPictures;
+
+    protected $cacheSeconds = 180;
+
+    public function getAttrGroup($id)
     {
-        return $this->getAttrGroupRepository()->findAllBy('category_id', $categoryId);
+        return Cache::remember("catalog.specGroup:{$id}", $this->cacheSeconds, function () use ($id) {
+            return $this->getAttrGroupRepository()->find($id);
+        });
     }
 
-    public function getProductAttrsByProductId($productId)
+    public function getAttr($id)
     {
-        $productAttrs = $this->getProductAttrRepository()->findAllBy('product_id', $productId);
-        $attrs = $this->getAttrRepository()->findAllBy('id', $productAttrs->pluck('attr_id'));
-
-        return $attrs;
+        return Cache::remember("catalog.specGroup:{$id}", $this->cacheSeconds, function () use ($id) {
+            return $this->getAttrRepository()->find($id);
+        });
     }
 
-    public function getProductItemsByProductId($productId)
+    public function getSpec($id)
     {
-        $items = $this->getItemRepository()->findAllBy('product_id', $productId);
-        $itemSpecs = $this->getItemSpecRepository()
-            ->findAllBy('item_id', $items->pluck('id'))
-            ->groupBy('item_id');
-        foreach ($items as $item) {
-            $item->specs = $itemSpecs->get($item->id)->pluck('spec_id');
-        }
-
-        return $items;
+        return Cache::remember("catalog.specGroup:{$id}", $this->cacheSeconds, function () use ($id) {
+            return $this->getSpecRepository()->find($id);
+        });
     }
 
-    public function getProductSpecGroupsByProductId($productId)
+    public function getSpecGroup($id)
     {
-        $productSpecGroups = $this->getProductSpecGroupRepository()
-            ->findAllBy('product_id', $productId,
-                ['spec_group_id', 'control_type', 'text_prompt', 'is_required', 'sort']);
-        $specGroups = $this->getSpecGroupRepository()
-            ->findAllBy('id', $productSpecGroups->pluck('spec_group_id'), ['id', 'name'])
-            ->pluck('name', 'id');
-        foreach ($productSpecGroups as $productSpecGroup) {
-            $productSpecGroup->name = !empty($productSpecGroup->text_prompt)
-                ? $productSpecGroup->text_prompt
-                : ($specGroups[$productSpecGroup->spec_group_id] ?? '^_^');
-        }
-
-        return $productSpecGroups->sortBy('sort');
+        return Cache::remember("catalog.specGroup:{$id}", $this->cacheSeconds, function () use ($id) {
+            return $this->getSpecGroupRepository()->find($id);
+        });
     }
 
-    public function getProductSpecsByProductId($productId)
-    {
-        $productSpecs = $this->getProductSpecRepository()->findAllBy('product_id', $productId,
-            ['spec_id', 'customer_value', 'is_selected', 'picture_id', 'swatch_picture_id', 'sort']);
-        $specs = $this->getSpecRepository()
-            ->findAllBy('id', $productSpecs->pluck('spec_id'), ['id', 'name'])
-            ->pluck('name', 'id');
-        foreach ($productSpecs as $productSpec) {
-            $productSpec->name = !empty($productSpec->customer_value)
-                ? $productSpec->customer_value
-                : ($specs[$productSpec->spec_id] ?? '^_^');
-        }
-
-        return $productSpecs->sortBy('sort');
-    }
-
+    /**
+     * 获取产品，查询所有与该产品相关的数据（公共数据不查询），缓存用
+     *
+     * @param $id
+     * @return object
+     * @throws \Throwable
+     */
     public function getProduct($id)
     {
-        return $this->getProductRepository()->find($id);
+        $product = Cache::remember("catalog.product:{$id}", $this->cacheSeconds, function () use ($id) {
+            $product = $this->getProductRepository()->find($id);
+            throw_if(!$product || !$product->is_active, new NotFoundHttpException());
+            $product->attrs = $this->getProductAttrRepository()->findAllBy('product_id', $id,
+                ['attr_id', 'customer_value']);
+            $product->specs = $this->getProductSpecRepository()->findAllBy('product_id', $id,
+                ['spec_id', 'customer_value', 'is_selected', 'picture_id', 'swatch_picture_id', 'sort'])->sortBy('sort');
+            $product->specGroups = $this->getProductSpecGroupRepository()->findAllBy('product_id', $id,
+                ['spec_group_id', 'control_type', 'text_prompt', 'is_required', 'sort'])->sortBy('sort');
+            $product->pictures = $this->getProductPictureRepository()->findAllBy('product_id', $id)->sortBy('sort');
+            $items = $this->getItemRepository()->findAllBy('product_id', $id);
+            $itemSpecs = $this->getItemSpecRepository()->findAllBy('item_id', $items->pluck('id'))->groupBy('item_id');
+            foreach ($items as $item) {
+                $item->specs = $itemSpecs->get($item->id)->pluck('spec_id');
+            }
+            $product->items = $items;
+
+            return $product;
+        });
+
+        $product->specGroups = $product->specGroups->map(function ($prodSpecGroup) {
+            $specGroup = $this->getSpecGroup($prodSpecGroup->spec_group_id);
+            $prodSpecGroup->name = !empty($prodSpecGroup->text_prompt) ? $prodSpecGroup->text_prompt : $specGroup->name;
+            return $prodSpecGroup;
+        });
+
+        $product->specs = $product->specs->map(function($prodSpec) {
+            $spec = $this->getSpec($prodSpec->spec_id);
+            $prodSpec->name = !empty($prodSpec->customer_value) ? $prodSpec->customer_value : $spec->name;
+            return $prodSpec;
+        });
+
+        $attrGroups = collect([]);
+        $product->attrs = $product->attrs->map(function($prodAttr) use ($attrGroups) {
+            $attr = $this->getAttr($prodAttr->attr_id);
+            if (!isset($attrGroups[$attr->group_id]))
+                $attrGroups[$attr->group_id] = $this->getSpecGroup($attr->group_id);
+            $prodAttr->name = !empty($prodAttr->customer_value) ? $prodAttr->customer_value : $attr->name;
+            return $prodAttr;
+        });
+
+        $product->attrGroups = $attrGroups;
+
+        return $product;
     }
 
     public function getCategory($id)
@@ -196,5 +221,14 @@ class CatalogManager implements Catalog
         }
 
         return $this->itemSpecs;
+    }
+
+    public function getProductPictureRepository()
+    {
+        if (!$this->productPictures) {
+            $this->productPictures = new SimpleRepository(Config::get('catalog.product_picture_table'));
+        }
+
+        return $this->productPictures;
     }
 }

@@ -222,6 +222,7 @@ class CreateCatalogTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('attr_id');
+            $table->string('customer_value')->nullable();
         });
 
         // Create table for storing product specification group attribute
