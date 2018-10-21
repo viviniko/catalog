@@ -97,6 +97,7 @@ class CatalogManager implements Catalog
                 ->map(function ($spec) {
                     $spec->picture = $this->imageService->getUrl($spec->picture_id);
                     $spec->swatch_picture = $this->imageService->getUrl($spec->swatch_picture_id);
+                    return $spec;
                 })
                 ->sortBy('sort');
             $product->specGroups = $this->getProductSpecGroupRepository()->findAllBy('product_id', $id,
