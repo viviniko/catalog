@@ -111,6 +111,11 @@ class CatalogManager implements Catalog
             return $product;
         });
 
+        $product->size_chart = null;
+        if (!empty($product->content) && ($json = json_encode($product->content))) {
+            $product->size_chart = data_get($json, 'size_chart');
+        }
+
         $product->specGroups = $product->specGroups->map(function ($prodSpecGroup) {
             $specGroup = $this->getSpecGroup($prodSpecGroup->spec_group_id);
             $prodSpecGroup->name = !empty($prodSpecGroup->text_prompt) ? $prodSpecGroup->text_prompt : $specGroup->name;
