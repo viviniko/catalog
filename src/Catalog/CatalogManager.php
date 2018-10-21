@@ -111,8 +111,8 @@ class CatalogManager implements Catalog
             return $product;
         });
 
-        $product->size_chart = null;
-        if (!empty($product->content) && ($json = json_encode($product->content))) {
+        $product->size_chart = ['data' => []];
+        if (!empty($product->content) && ($json = json_decode($product->content, true))) {
             $product->size_chart = data_get($json, 'size_chart');
         }
 
