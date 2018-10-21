@@ -92,8 +92,13 @@ class CatalogManager implements Catalog
             throw_if(!$product || !$product->is_active, new NotFoundHttpException());
             $product->attrs = $this->getProductAttrRepository()->findAllBy('product_id', $id,
                 ['attr_id', 'customer_value']);
-            $product->specs = $this->getProductSpecRepository()->findAllBy('product_id', $id,
-                ['spec_id', 'customer_value', 'is_selected', 'picture_id', 'swatch_picture_id', 'sort'])->sortBy('sort');
+            $product->specs = $this->getProductSpecRepository()
+                ->findAllBy('product_id', $id, ['spec_id', 'customer_value', 'is_selected', 'picture_id', 'swatch_picture_id', 'sort'])
+                ->map(function ($spec) {
+                    $spec->picture = $this->imageService->getUrl($spec->picture_id);
+                    $spec->swatch_picture = $this->imageService->getUrl($spec->swatch_picture_id);
+                })
+                ->sortBy('sort');
             $product->specGroups = $this->getProductSpecGroupRepository()->findAllBy('product_id', $id,
                 ['spec_group_id', 'control_type', 'text_prompt', 'is_required', 'sort'])->sortBy('sort');
             $product->pictures = $this->getProductPictureRepository()
