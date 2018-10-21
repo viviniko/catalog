@@ -40,6 +40,8 @@ class CatalogManager implements Catalog
 
     protected $productPictures;
 
+    protected $configurations;
+
     protected $cacheMinutes = 5;
 
     public function __construct(ImageService $imageService, CurrencyService $currencyService)
@@ -158,7 +160,13 @@ class CatalogManager implements Catalog
 
     public function getCategory($id)
     {
-        return $this->getCategoryRepository()->find($id);
+        return Cache::remember("catalog.category:{$id}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($id) {
+            $category = $this->getCategoryRepository()->find($id);
+            $category->config = $this->getConfigurationRepository()
+                ->findAllBy(['configable_type' => 'catalog.category', 'configable_id' => $id], null, ['key', 'value'])
+                ->pluck('value', 'key');
+            return $category;
+        });
     }
 
     public function getProductRepository()
@@ -269,5 +277,12 @@ class CatalogManager implements Catalog
         return $this->productPictures;
     }
 
+    public function getConfigurationRepository()
+    {
+        if (!$this->configurations) {
+            $this->configurations = new SimpleRepository(Config::get('configuration.configables_table'));
+        }
 
+        return $this->configurations;
+    }
 }
