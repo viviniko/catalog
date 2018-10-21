@@ -129,6 +129,7 @@ class CatalogManager implements Catalog
             $spec = $this->getSpec($prodSpec->spec_id);
             $prodSpec->name = !empty($prodSpec->customer_value) ? $prodSpec->customer_value : $spec->name;
             $prodSpec->id = $spec->id;
+            $prodSpec->group_id = $spec->group_id;
             $prodSpec->slug = $spec->slug;
             $prodSpec->description = $spec->description;
             return $prodSpec;
