@@ -141,6 +141,7 @@ class CatalogManager implements Catalog
                 $attrGroups[$attr->group_id] = $this->getAttrGroup($attr->group_id);
             $prodAttr->name = !empty($prodAttr->customer_value) ? $prodAttr->customer_value : $attr->name;
             $prodAttr->id = $attr->id;
+            $prodAttr->group_id = $attr->group_id;
             $prodAttr->slug = $attr->slug;
             $prodAttr->description = $attr->description;
             return $prodAttr;
