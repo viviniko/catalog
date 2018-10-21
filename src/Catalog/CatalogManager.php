@@ -112,12 +112,16 @@ class CatalogManager implements Catalog
         $product->specGroups = $product->specGroups->map(function ($prodSpecGroup) {
             $specGroup = $this->getSpecGroup($prodSpecGroup->spec_group_id);
             $prodSpecGroup->name = !empty($prodSpecGroup->text_prompt) ? $prodSpecGroup->text_prompt : $specGroup->name;
+            $prodSpecGroup->slug = $specGroup->slug;
+            $prodSpecGroup->description = $specGroup->description;
             return $prodSpecGroup;
         });
 
         $product->specs = $product->specs->map(function($prodSpec) {
             $spec = $this->getSpec($prodSpec->spec_id);
             $prodSpec->name = !empty($prodSpec->customer_value) ? $prodSpec->customer_value : $spec->name;
+            $prodSpec->slug = $spec->slug;
+            $prodSpec->description = $spec->description;
             return $prodSpec;
         });
 
@@ -127,6 +131,8 @@ class CatalogManager implements Catalog
             if (!isset($attrGroups[$attr->group_id]))
                 $attrGroups[$attr->group_id] = $this->getSpecGroup($attr->group_id);
             $prodAttr->name = !empty($prodAttr->customer_value) ? $prodAttr->customer_value : $attr->name;
+            $prodAttr->slug = $attr->slug;
+            $prodAttr->description = $attr->description;
             return $prodAttr;
         });
         $product->attrGroups = $attrGroups;

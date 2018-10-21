@@ -9,7 +9,7 @@ class Spec extends Model
 {
     protected $tableConfigKey = 'catalog.specs_table';
 
-    protected $fillable = ['group_id', 'name', 'description', 'sort'];
+    protected $fillable = ['group_id', 'name', 'slug', 'description', 'sort'];
 
     public function group()
     {
