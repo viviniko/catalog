@@ -40,7 +40,7 @@ class CatalogManager implements Catalog
 
     protected $productPictures;
 
-    protected $cacheSeconds = 180;
+    protected $cacheMinutes = 5;
 
     public function __construct(ImageService $imageService, CurrencyService $currencyService)
     {
@@ -50,28 +50,28 @@ class CatalogManager implements Catalog
 
     public function getAttrGroup($id)
     {
-        return Cache::remember("catalog.attr_group:{$id}", $this->cacheSeconds, function () use ($id) {
+        return Cache::remember("catalog.attr_group:{$id}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($id) {
             return $this->getAttrGroupRepository()->find($id);
         });
     }
 
     public function getAttr($id)
     {
-        return Cache::remember("catalog.attr:{$id}", $this->cacheSeconds, function () use ($id) {
+        return Cache::remember("catalog.attr:{$id}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($id) {
             return $this->getAttrRepository()->find($id);
         });
     }
 
     public function getSpec($id)
     {
-        return Cache::remember("catalog.spec:{$id}", $this->cacheSeconds, function () use ($id) {
+        return Cache::remember("catalog.spec:{$id}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($id) {
             return $this->getSpecRepository()->find($id);
         });
     }
 
     public function getSpecGroup($id)
     {
-        return Cache::remember("catalog.spec_group:{$id}", $this->cacheSeconds, function () use ($id) {
+        return Cache::remember("catalog.spec_group:{$id}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($id) {
             return $this->getSpecGroupRepository()->find($id);
         });
     }
@@ -85,7 +85,7 @@ class CatalogManager implements Catalog
      */
     public function getProduct($id)
     {
-        $product = Cache::remember("catalog.product:{$id}", $this->cacheSeconds, function () use ($id) {
+        $product = Cache::remember("catalog.product:{$id}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($id) {
             $product = $this->getProductRepository()->find($id);
             throw_if(!$product || !$product->is_active, new NotFoundHttpException());
             $product->attrs = $this->getProductAttrRepository()->findAllBy('product_id', $id,
