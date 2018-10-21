@@ -69,8 +69,7 @@ trait ProductSearchableTrait
         $searchArray['recommend_score'] = $searchArray['hot_score'] * 3 + $searchArray['new_score'] * 2 + $searchArray['promote_score'] * 2;
         $searchArray['favorite_count'] = $favoriteService ? $favoriteService->count($product) : 0;
 
-        $searchArray['amount'] = (float)$searchArray['amount']->value;
-        $searchArray['weight'] = (float)$searchArray['weight'];
+        $searchArray['amount'] = empty($searchArray['amount']) ? 0 : (float)$searchArray['amount']->value;
         $searchArray['sort'] = (int)$searchArray['sort'];
 
         $searchArray['attrs'] = $attrIds;
