@@ -2,12 +2,11 @@
 
 namespace Viviniko\Catalog\Models;
 
-use Viviniko\Catalog\Services\Impl\ProductCover;
+use Laravel\Scout\Searchable;
+use Illuminate\Support\Facades\Config;
 use Viviniko\Favorite\Favoritable;
 use Viviniko\Review\Reviewable;
 use Viviniko\Support\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Config;
-use Laravel\Scout\Searchable;
 use Viviniko\Tag\Taggable;
 use Viviniko\Urlrewrite\UrlrewriteTrait;
 

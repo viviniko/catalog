@@ -6,10 +6,13 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Viviniko\Catalog\Contracts\Catalog;
+use Viviniko\Media\Services\ImageService;
 use Viviniko\Repository\SimpleRepository;
 
 class CatalogManager implements Catalog
 {
+    protected $imageService;
+
     protected $products;
 
     protected $categories;
@@ -35,6 +38,11 @@ class CatalogManager implements Catalog
     protected $productPictures;
 
     protected $cacheSeconds = 180;
+
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
 
     public function getAttrGroup($id)
     {
@@ -82,7 +90,11 @@ class CatalogManager implements Catalog
                 ['spec_id', 'customer_value', 'is_selected', 'picture_id', 'swatch_picture_id', 'sort'])->sortBy('sort');
             $product->specGroups = $this->getProductSpecGroupRepository()->findAllBy('product_id', $id,
                 ['spec_group_id', 'control_type', 'text_prompt', 'is_required', 'sort'])->sortBy('sort');
-            $product->pictures = $this->getProductPictureRepository()->findAllBy('product_id', $id)->sortBy('sort');
+            $product->pictures = $this->getProductPictureRepository()
+                ->findAllBy('product_id', $id)
+                ->sortBy('sort')
+                ->map(function ($media) { return $this->imageService->getUrl($media->picture_id); })
+                ->values();
             $items = $this->getItemRepository()->findAllBy('product_id', $id);
             $itemSpecs = $this->getItemSpecRepository()->findAllBy('item_id', $items->pluck('id'))->groupBy('item_id');
             foreach ($items as $item) {
@@ -231,4 +243,6 @@ class CatalogManager implements Catalog
 
         return $this->productPictures;
     }
+
+
 }
