@@ -4,6 +4,7 @@ namespace Viviniko\Catalog\Catalog;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Viviniko\Catalog\Contracts\Catalog;
 use Viviniko\Currency\Services\CurrencyService;
@@ -48,6 +49,58 @@ class CatalogManager implements Catalog
     {
         $this->imageService = $imageService;
         $this->currencyService = $currencyService;
+    }
+
+    public function getCategoryChildrenIdByCategoryId($categoryId)
+    {
+        return Cache::remember("catalog.category.children:{$categoryId}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($categoryId) {
+            $children = collect([]);
+
+            foreach ($this->getCategoryRepository()->findAllBy('parent_id', $categoryId, ['id']) as $category) {
+                $children->push($category->id);
+                $children = $children->merge($this->getCategoryChildrenIdByCategoryId($category->id));
+            }
+
+            return $children;
+        });
+    }
+
+    /**
+     * 获取给出分类及子分类所设置的属性
+     *
+     * @param $categoryId
+     * @return mixed
+     */
+    public function getProductFilterableAttrGroupsByCategoryId($categoryId)
+    {
+        $attrGroups = collect([]);
+
+        DB::table($this->getAttrRepository()->getTable())->whereIn('id', function ($query) use ($categoryId) {
+            $query
+                ->select('attr_id')
+                ->from($this->getProductAttrRepository()->getTable())
+                ->whereIn('product_id', function ($subQuery) use ($categoryId) {
+                    $subQuery
+                        ->select('id')
+                        ->from($this->getProductRepository()->getTable())
+                        ->where('is_active', 1)
+                        ->whereIn('category_id', $this->getCategoryChildrenIdByCategoryId($categoryId)->prepend($categoryId));
+                });
+        })->pluck(['id'])->map(function ($attrId) use ($attrGroups) {
+            $attr = $this->getAttr($attrId);
+            if (!isset($attrGroups[$attr->group_id])) {
+                $attrGroups[$attr->group_id] = $this->getAttrGroup($attr->group_id);
+                $attrGroups[$attr->group_id]->attrs = collect([]);
+            }
+            $attrGroups[$attr->group_id]->attrs->push($attr);
+        });
+
+        return $attrGroups->filter(function ($attrGroup) {
+            return $attrGroup->is_filterable;
+        })->map(function ($attrGroup) {
+            $attrGroup->attrs->sortBy('sort');
+            return $attrGroup;
+        })->sortBy('sort');
     }
 
     public function getAttrGroup($id)
