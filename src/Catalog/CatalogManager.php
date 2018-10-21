@@ -51,6 +51,75 @@ class CatalogManager implements Catalog
         $this->currencyService = $currencyService;
     }
 
+    protected function makeProductSearchBuilder($keyword = null, $filters = null, $except = null, $fields = null, $order = null)
+    {
+        if (!empty($keyword)) {
+            $keyword = str_replace(['{', '}', '*', '[', ']', '(', ')', '!', '&', '^', '"', '\\', ':', '/'], '', $keyword);
+        }
+
+        $builder = Config::get('catalog.product')::search($keyword);
+
+        if (!empty($filters)) {
+            foreach ($filters as $name => $value) {
+                if (empty($value)) continue;
+                if ($name == 'category_id') {
+                    $builder->where('category_id', $this->getCategoryChildrenIdByCategoryId($value)->prepend($value)->toArray());
+                } else if ($name == 'attrs') {
+                    foreach ($value as $key=>$val){
+                        if (is_array($val)) {
+                            $builder->where('attrs:'.$key,$val);
+                        } else {
+                            $builder->where('term.attrs:'.$key,array_unique((array)$val));
+                        }
+                    }
+                } else if ($name == 'tags' || $name == 'term.tags') {
+                    $builder->where($name, array_unique(array_filter((array)$value)));
+                } else {
+                    $builder->where($name, $value);
+                }
+            }
+        }
+
+        $builder->where('is_active', 1);
+
+        if ($except) {
+            $mustNot = [];
+            foreach ($except as $key => $values) {
+                $values = array_unique(array_values((array) $values));
+                if (count($values) == 1) {
+                    $mustNot['term'] = [$key => $values[0]];
+                } else {
+                    $mustNot['terms'] = [$key => $values];
+                }
+            }
+
+            $builder->rawFilters = [
+                'bool' => [
+                    'must_not' => $mustNot,
+                ],
+            ];
+        }
+
+        if ($fields) {
+            $builder->fields = $fields;
+        }
+
+        if (!empty($order)) {
+            if (!is_array($order)) {
+                $order = [$order, 'desc'];
+            }
+            $builder->orderBy(...$order);
+            if ($order[0] == 'recommend_score') {
+                $builder->orderBy('sort', 'desc');
+            }
+        } else {
+            $builder->orderBy('sort', 'desc');
+            $builder->orderBy('created_at', 'desc');
+        }
+
+        return $builder;
+    }
+
     public function getCategoryChildrenIdByCategoryId($categoryId)
     {
         return Cache::remember("catalog.category.children:{$categoryId}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($categoryId) {
@@ -86,7 +155,7 @@ class CatalogManager implements Catalog
                         ->where('is_active', 1)
                         ->whereIn('category_id', $this->getCategoryChildrenIdByCategoryId($categoryId)->prepend($categoryId));
                 });
-        })->pluck(['id'])->map(function ($attrId) use ($attrGroups) {
+        })->pluck('id')->map(function ($attrId) use ($attrGroups) {
             $attr = $this->getAttr($attrId);
             if (!isset($attrGroups[$attr->group_id])) {
                 $attrGroups[$attr->group_id] = $this->getAttrGroup($attr->group_id);
