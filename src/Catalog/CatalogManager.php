@@ -6,12 +6,15 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Viviniko\Catalog\Contracts\Catalog;
+use Viviniko\Currency\Services\CurrencyService;
 use Viviniko\Media\Services\ImageService;
 use Viviniko\Repository\SimpleRepository;
 
 class CatalogManager implements Catalog
 {
     protected $imageService;
+
+    protected $currencyService;
 
     protected $products;
 
@@ -39,9 +42,10 @@ class CatalogManager implements Catalog
 
     protected $cacheSeconds = 180;
 
-    public function __construct(ImageService $imageService)
+    public function __construct(ImageService $imageService, CurrencyService $currencyService)
     {
         $this->imageService = $imageService;
+        $this->currencyService = $currencyService;
     }
 
     public function getAttrGroup($id)
@@ -125,8 +129,20 @@ class CatalogManager implements Catalog
             $prodAttr->name = !empty($prodAttr->customer_value) ? $prodAttr->customer_value : $attr->name;
             return $prodAttr;
         });
-
         $product->attrGroups = $attrGroups;
+
+        $master = $product->items->first();
+        foreach ($product->items as $item) {
+            $item->amount = $this->currencyService->createBaseAmount($item->amount);
+            if ($item->is_master) {
+                $master = $item;
+            }
+        }
+        if ($master) {
+            foreach (['amount', 'discount', 'sku', 'quantity'] as $prop) {
+                $product->{$prop} = $master->{$prop};
+            }
+        }
 
         return $product;
     }
