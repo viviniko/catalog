@@ -5,6 +5,7 @@ namespace Viviniko\Catalog\Catalog;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Laravel\Scout\EngineManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Viviniko\Catalog\Contracts\Catalog;
 use Viviniko\Currency\Services\CurrencyService;
@@ -45,10 +46,21 @@ class CatalogManager implements Catalog
 
     protected $cacheMinutes = 5;
 
-    public function __construct(ImageService $imageService, CurrencyService $currencyService)
+    public function __construct(ImageService $imageService, CurrencyService $currencyService, EngineManager $engineManager)
     {
         $this->imageService = $imageService;
         $this->currencyService = $currencyService;
+        $this->configSearchEngine($engineManager);
+    }
+
+    public function searchProducts($perPage, $keyword = null, $filters = null, $order = null, $except = null)
+    {
+        return $this->makeProductSearchBuilder($keyword, $filters, $except ? ['id' => $except] : null, $order)->get($perPage);
+    }
+
+    public function paginateProducts($perPage, $keyword = null, $filters = null, $order = null, $except = null)
+    {
+        return $this->makeProductSearchBuilder($keyword, $filters, $except ? ['id' => $except] : null, $order)->paginate($perPage);
     }
 
     protected function makeProductSearchBuilder($keyword = null, $filters = null, $except = null, $fields = null, $order = null)
@@ -419,5 +431,30 @@ class CatalogManager implements Catalog
         }
 
         return $this->configurations;
+    }
+
+    public function configSearchEngine($engineManager)
+    {
+        $driver = $engineManager->getDefaultDriver();
+        try {
+            $driver->registerModelResolver(Config::get('catalog.product'), function ($results, $model) {
+                if (count($results['hits']['total']) === 0) {
+                    return Collection::make();
+                }
+                $keys = collect($results['hits']['hits'])->pluck('_id')->values();
+                $models = collect([]);
+                if ($keys->isNotEmpty()) {
+                    $models = $keys->map(function ($key) {
+                        return $this->getProduct($key);
+                    })->keyBy($model->getKeyName());;
+                }
+
+                return collect($results['hits']['hits'])->map(function ($hit) use ($model, $models) {
+                    return $models[$hit['_id']] ?: null;
+                })->filter()->values();
+            });
+        } catch (\Exception $e) {
+            Log::warning($e->getMessage());
+        }
     }
 }
