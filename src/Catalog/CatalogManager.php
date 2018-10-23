@@ -430,9 +430,8 @@ class CatalogManager implements Catalog
 
     public function configSearchEngine($engineManager)
     {
-        $driver = $engineManager->getDefaultDriver();
         try {
-            $driver->registerModelResolver(Config::get('catalog.product'), function ($results, $model) {
+            $engineManager->registerModelResolver(Config::get('catalog.product'), function ($results, $model) {
                 if (count($results['hits']['total']) === 0) {
                     return Collection::make();
                 }
