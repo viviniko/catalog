@@ -55,11 +55,6 @@ class CatalogManager implements Catalog
 
     public function searchProducts($perPage, $keyword = null, $filters = null, $order = null, $except = null)
     {
-        return $this->makeProductSearchBuilder($keyword, $filters, $except ? ['id' => $except] : null, $order)->get($perPage);
-    }
-
-    public function paginateProducts($perPage, $keyword = null, $filters = null, $order = null, $except = null)
-    {
         return $this->makeProductSearchBuilder($keyword, $filters, $except ? ['id' => $except] : null, $order)->paginate($perPage);
     }
 
