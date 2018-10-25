@@ -87,7 +87,7 @@ class CatalogManager implements Catalog
             }
         }
 
-        $builder->where('is_active', 1);
+        $builder->where('is_active', true);
 
         if ($except) {
             $mustNot = [];
