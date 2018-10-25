@@ -151,7 +151,7 @@ class CatalogManager implements Catalog
     {
         $attrGroups = collect([]);
 
-        Cache::remember("catalog.category.product_attrs:{$categoryId}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($id) {
+        Cache::remember("catalog.category.product_attrs:{$categoryId}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($categoryId) {
             return DB::table($this->getAttrRepository()->getTable())->whereIn('id', function ($query) use ($categoryId) {
                 $query
                     ->select('attr_id')
