@@ -297,6 +297,8 @@ class CatalogManager implements Catalog
             }
         }
 
+        $product->url = url($product->url_rewrite);
+
         return $product;
     }
 
@@ -307,6 +309,7 @@ class CatalogManager implements Catalog
             $category->config = $this->getConfigurationRepository()
                 ->findAllBy(['configable_type' => 'catalog.category', 'configable_id' => $id], null, ['key', 'value'])
                 ->pluck('value', 'key');
+            $category->url = url($category->url_rewrite);
             return $category;
         });
     }
