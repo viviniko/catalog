@@ -127,18 +127,18 @@ class CatalogManager implements Catalog
         return $builder;
     }
 
-    public function getCategoryChildrenIdByCategoryId($categoryId)
+    public function getCategoryChildrenIdByCategoryId($categoryId, $recursive = true)
     {
-        return Cache::remember("catalog.category.children:{$categoryId}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($categoryId) {
-            $children = collect([]);
-
-            foreach ($this->getCategoryRepository()->findAllBy('parent_id', $categoryId, ['id']) as $category) {
-                $children->push($category->id);
-                $children = $children->merge($this->getCategoryChildrenIdByCategoryId($category->id));
-            }
-
-            return $children;
+        $children = Cache::remember("catalog.category.children:{$categoryId}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($categoryId) {
+            return $this->getCategoryRepository()->findAllBy('parent_id', $categoryId, ['id'])->pluck('id');
         });
+        if ($recursive) {
+            foreach ($children as $categoryId) {
+                $children = $children->merge($this->getCategoryChildrenIdByCategoryId($categoryId, $recursive));
+            }
+        }
+
+        return $children;
     }
 
     /**
@@ -302,9 +302,9 @@ class CatalogManager implements Catalog
         return $product;
     }
 
-    public function getCategory($id)
+    public function getCategory($id, $withChildren = false)
     {
-        return Cache::remember("catalog.category:{$id}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($id) {
+        $category = Cache::remember("catalog.category:{$id}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($id) {
             $category = $this->getCategoryRepository()->find($id);
             $category->config = $this->getConfigurationRepository()
                 ->findAllBy(['configable_type' => 'catalog.category', 'configable_id' => $id], null, ['key', 'value'])
@@ -312,6 +312,14 @@ class CatalogManager implements Catalog
             $category->url = url($category->url_rewrite);
             return $category;
         });
+
+        if ($withChildren) {
+            $category->children = $this->getCategoryChildrenIdByCategoryId($category->id, false)->map(function ($categoryId) {
+                return $this->getCategory($categoryId, true);
+            });
+        }
+        
+        return $category;
     }
 
     public function getProductRepository()
