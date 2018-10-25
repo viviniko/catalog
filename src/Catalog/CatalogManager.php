@@ -151,18 +151,20 @@ class CatalogManager implements Catalog
     {
         $attrGroups = collect([]);
 
-        DB::table($this->getAttrRepository()->getTable())->whereIn('id', function ($query) use ($categoryId) {
-            $query
-                ->select('attr_id')
-                ->from($this->getProductAttrRepository()->getTable())
-                ->whereIn('product_id', function ($subQuery) use ($categoryId) {
-                    $subQuery
-                        ->select('id')
-                        ->from($this->getProductRepository()->getTable())
-                        ->where('is_active', 1)
-                        ->whereIn('category_id', $this->getCategoryChildrenIdByCategoryId($categoryId)->prepend($categoryId));
-                });
-        })->pluck('id')->map(function ($attrId) use ($attrGroups) {
+        Cache::remember("catalog.category.product_attrs:{$categoryId}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($id) {
+            return DB::table($this->getAttrRepository()->getTable())->whereIn('id', function ($query) use ($categoryId) {
+                $query
+                    ->select('attr_id')
+                    ->from($this->getProductAttrRepository()->getTable())
+                    ->whereIn('product_id', function ($subQuery) use ($categoryId) {
+                        $subQuery
+                            ->select('id')
+                            ->from($this->getProductRepository()->getTable())
+                            ->where('is_active', 1)
+                            ->whereIn('category_id', $this->getCategoryChildrenIdByCategoryId($categoryId)->prepend($categoryId));
+                    });
+            })->pluck('id');
+        })->map(function ($attrId) use ($attrGroups) {
             $attr = $this->getAttr($attrId);
             if (!isset($attrGroups[$attr->group_id])) {
                 $attrGroups[$attr->group_id] = $this->getAttrGroup($attr->group_id);
@@ -318,7 +320,7 @@ class CatalogManager implements Catalog
                 return $this->getCategory($categoryId, true);
             });
         }
-        
+
         return $category;
     }
 
