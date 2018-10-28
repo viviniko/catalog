@@ -10,10 +10,12 @@ class ProductObserver
     public function saving(Model $entity)
     {
         if (!$entity->exists() || empty($entity->created_by)) {
-            $entity->created_by = Auth::user()->name;
+            $entity->created_by = Auth::check() ? Auth::user()->name : '';
         }
 
-        $entity->updated_by = Auth::user()->name;
+        if (empty($entity->updated_by)) {
+            $entity->updated_by = Auth::check() ? Auth::user()->name : '';
+        }
     }
 
     public function saved(Model $entity)
