@@ -338,7 +338,7 @@ class ProductServiceImpl implements ProductService
     /**
      * {@inheritdoc}
      */
-    public function generateProductItems($productId)
+    public function generateProductItems($productId, $data = [])
     {
         $product = $this->productRepository->find($productId);
         $productItems = $product->items->all();
@@ -355,7 +355,7 @@ class ProductServiceImpl implements ProductService
                     continue 2;
                 }
             }
-            $items->push($this->itemService->createBySpecs($product->id, $attributes));
+            $items->push($this->itemService->createBySpecs($product->id, $attributes, $data));
         }
 
         if ($items->filter(function ($item) { return $item->is_master; })->isEmpty()) {
