@@ -141,6 +141,15 @@ class CatalogManager implements Catalog
         return $children;
     }
 
+    public function getProductByItemId($itemId)
+    {
+        try {
+            return $this->getProduct(data_get($this->getItemRepository()->find($itemId, ['product_id']), 'product_id'));
+        } catch (\Exception $e) {}
+
+        return false;
+    }
+
     /**
      * 获取给出分类及子分类所设置的属性
      *

@@ -9,4 +9,6 @@ interface Catalog
     public function getCategory($id);
 
     public function getProduct($id);
+
+    public function getProductByItemId($itemId);
 }
