@@ -251,6 +251,7 @@ class CatalogManager implements Catalog
             $itemSpecs = $this->getItemSpecRepository()->findAllBy('item_id', $items->pluck('id'))->groupBy('item_id');
             foreach ($items as $item) {
                 $item->specs = $itemSpecs->get($item->id)->pluck('spec_id');
+                $item->picture = $this->imageService->getUrl($item->picture_id);
             }
             $product->items = $items;
 
