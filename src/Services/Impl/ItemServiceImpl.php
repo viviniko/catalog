@@ -105,7 +105,7 @@ class ItemServiceImpl implements ItemService
     public function deleteByProductId($productId)
     {
         return DB::transaction(function () use ($productId) {
-            $items = $this->itemRepository->findByProductId($productId);
+            $items = $this->itemRepository->findAllByProductId($productId);
             foreach ($items as $item) {
                 $this->delete($item->id);
             }
