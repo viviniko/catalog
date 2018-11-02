@@ -67,7 +67,7 @@ class CatalogManager implements Catalog
     public function getProductFilterableAttrGroupsByCategoryId($categoryId)
     {
         $attrGroups = collect([]);
-        $attrIds = Cache::remember("catalog.category.exist_product_attr_id:{$categoryId}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($categoryId) {
+        Cache::remember("catalog.category.product_attrs:{$categoryId}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($categoryId) {
             $attrIds = [];
             $builder = $this->makeProductSearchBuilder(null, ['category_id' => $categoryId]);
             $builder->rawBody = ['size' => 1000];
@@ -80,29 +80,13 @@ class CatalogManager implements Catalog
             }
 
             return array_unique($attrIds);
-        });
-        Cache::remember("catalog.category.product_attrs:{$categoryId}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($categoryId) {
-            return DB::table($this->getAttrRepository()->getTable())->whereIn('id', function ($query) use ($categoryId) {
-                $query
-                    ->select('attr_id')
-                    ->from($this->getProductAttrRepository()->getTable())
-                    ->whereIn('product_id', function ($subQuery) use ($categoryId) {
-                        $subQuery
-                            ->select('id')
-                            ->from($this->getProductRepository()->getTable())
-                            ->where('is_active', 1)
-                            ->whereIn('category_id', $this->getCategoryChildrenIdByCategoryId($categoryId)->prepend($categoryId));
-                    });
-            })->pluck('id');
-        })->map(function ($attrId) use ($attrGroups, $attrIds) {
-            if (in_array($attrId, $attrIds)) {
-                $attr = $this->getAttr($attrId);
-                if (!isset($attrGroups[$attr->group_id])) {
-                    $attrGroups[$attr->group_id] = $this->getAttrGroup($attr->group_id);
-                    $attrGroups[$attr->group_id]->attrs = collect([]);
-                }
-                $attrGroups[$attr->group_id]->attrs->push($attr);
+        })->map(function ($attrId) use ($attrGroups) {
+            $attr = $this->getAttr($attrId);
+            if (!isset($attrGroups[$attr->group_id])) {
+                $attrGroups[$attr->group_id] = $this->getAttrGroup($attr->group_id);
+                $attrGroups[$attr->group_id]->attrs = collect([]);
             }
+            $attrGroups[$attr->group_id]->attrs->push($attr);
         });
 
         return $attrGroups->filter(function ($attrGroup) {
