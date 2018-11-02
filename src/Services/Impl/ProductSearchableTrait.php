@@ -56,7 +56,7 @@ trait ProductSearchableTrait
         $attrNames = [];
         $this->getAttrService()->getSearchableAttrsByProductId($productId)->each(function ($attr) use (&$attrIds, &$attrNames) {
             $attrIds[] = $attr->id;
-            $attrNames[$attr->group->title][] = $attr->title;
+            $attrNames[$attr->group->name][] = $attr->name;
         });
 
         $orderService = $this->getOrderService();
