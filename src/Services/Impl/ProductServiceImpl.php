@@ -76,14 +76,8 @@ class ProductServiceImpl implements ProductService
                     'id' => "{$productTable}.id:=",
                     'name' => "{$productTable}.name:like",
                     'spu' => "{$productTable}.spu:like",
-                    'category' => "{$categoryTable}.id:=",
+                    'category' => "{$productTable}.category_id:=",
                     'sku' => 'like',
-                    'manufacturer_id' => "{$manufacturerTable}.id:=",
-                    'manufacturer_product_sku' => "{$productManufacturerTable}.sku:like",
-                    'manufacturer_status' => "{$productManufacturerTable}.status:=",
-                    'price' => "{$productItemsTable}.price:=",
-                    'market_price' => "{$productItemsTable}.market_price:=",
-                    'quantity' => "{$productItemsTable}.quantity:=",
                     'created_at' => "{$productTable}.created_at:betweenDate",
                     'updated_at' => "{$productTable}.updated_at:betweenDate",
                     'created_by' => 'like',
@@ -92,14 +86,23 @@ class ProductServiceImpl implements ProductService
                 ])
                 ->request(request(), 'search')
                 ->filter(function ($builder) use ($productTable, $categoryTable, $productManufacturerTable, $manufacturerTable, $productItemsTable) {
-                    return $builder->select(["{$productTable}.*"])
-                        ->join($categoryTable, "{$productTable}.category_id", '=', "{$categoryTable}.id", 'left')
-                        ->join($productManufacturerTable, "{$productTable}.id", '=', "{$productManufacturerTable}.product_id", 'left')
-                        ->join($manufacturerTable, "{$manufacturerTable}.id", '=', "{$productManufacturerTable}.manufacturer_id", 'left')
-                        ->leftJoin($productItemsTable, function($join) use ($productTable, $productItemsTable) {
-                            $join->on("{$productTable}.id", '=', "{$productItemsTable}.product_id")
-                                ->where("{$productItemsTable}.is_master", '=', '1');
+                    $manufacturerId = request('search.manufacturer_id');
+                    $manufacturerProductSku = request('search.manufacturer_product_sku');
+                    if ($manufacturerId || $manufacturerProductSku) {
+                        $builder->whereIn('id', function ($subQuery) use ($productManufacturerTable, $manufacturerProductSku, $manufacturerId) {
+                            $subQuery = $subQuery
+                                ->select('product_id')
+                                ->from($productManufacturerTable);
+                            if ($manufacturerProductSku) {
+                                $subQuery->where('sku', 'like', "%$manufacturerProductSku%");
+                            }
+                            if ($manufacturerId) {
+                                $subQuery->where('manufacturer_id', $manufacturerId);
+                            }
                         });
+                    }
+
+                    return $builder;
                 })
         );
     }
