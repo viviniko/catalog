@@ -67,7 +67,7 @@ class CatalogManager implements Catalog
     public function getProductFilterableAttrGroupsByCategoryId($categoryId)
     {
         $attrGroups = collect([]);
-        Cache::remember("catalog.category.product_attrs:{$categoryId}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($categoryId) {
+        collect(Cache::remember("catalog.category.product_attrs:{$categoryId}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($categoryId) {
             $attrIds = [];
             $builder = $this->makeProductSearchBuilder(null, ['category_id' => $categoryId]);
             $builder->rawBody = ['size' => 1000];
@@ -80,7 +80,7 @@ class CatalogManager implements Catalog
             }
 
             return array_unique($attrIds);
-        })->map(function ($attrId) use ($attrGroups) {
+        }))->map(function ($attrId) use ($attrGroups) {
             $attr = $this->getAttr($attrId);
             if (!isset($attrGroups[$attr->group_id])) {
                 $attrGroups[$attr->group_id] = $this->getAttrGroup($attr->group_id);
