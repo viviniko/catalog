@@ -454,7 +454,7 @@ class CatalogManager implements Catalog
     {
         try {
             $engineManager->registerModelResolver(Config::get('catalog.product'), function ($results, $model) {
-                if (count($results['hits']['total']) === 0) {
+                if (data_get($results, 'hits.total', 0) === 0) {
                     return Collection::make();
                 }
                 $keys = collect($results['hits']['hits'])->pluck('_id')->values();
