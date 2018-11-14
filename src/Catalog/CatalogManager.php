@@ -2,9 +2,9 @@
 
 namespace Viviniko\Catalog\Catalog;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 use Laravel\Scout\EngineManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Viviniko\Catalog\Contracts\Catalog;
