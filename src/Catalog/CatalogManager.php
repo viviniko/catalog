@@ -313,16 +313,29 @@ class CatalogManager implements Catalog
         return $product;
     }
 
+    public function getConfiguration($type, $id)
+    {
+        return Cache::remember("catalog.category:{$type}:{$id}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($type, $id) {
+            return $this->getConfigurationRepository()
+                ->findAllBy(['configable_type' => $type, 'configable_id' => $id], null, ['key', 'value'])
+                ->pluck('value', 'key');
+        });
+
+    }
+
     public function getCategory($id, $withChildren = false)
     {
         $category = Cache::remember("catalog.category:{$id}", Config::get('cache.ttl', $this->cacheMinutes), function () use ($id) {
             $category = $this->getCategoryRepository()->find($id);
-            $category->config = $this->getConfigurationRepository()
-                ->findAllBy(['configable_type' => 'catalog.category', 'configable_id' => $id], null, ['key', 'value'])
-                ->pluck('value', 'key');
             $category->url = url($category->url_rewrite);
             return $category;
         });
+
+        $category->config = null;
+        foreach (explode('/', $category->path) as $catId) {
+            $config = $this->getConfiguration('catalog.category', $catId);
+            $category->config = $category->config ? $category->config->merge($config) : $config;
+        }
 
         if ($withChildren) {
             $category->children = $this->getCategoryChildrenIdByCategoryId($category->id, false)->map(function ($categoryId) {
