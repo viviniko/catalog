@@ -14,6 +14,7 @@ trait ProductSearchableTrait
                 'price' => ['type' => 'float', 'coerce' => true],
                 'market_price' => ['type' => 'float', 'coerce' => true],
                 'weight' => ['type' => 'float', 'coerce' => true],
+                'discount' => ['type' => 'float', 'coerce' => true],
                 'created_at' => ['type' => 'long', 'coerce' => true],
                 'updated_at' => ['type' => 'long', 'coerce' => true],
                 'hot_score' => ['type' => 'long', 'coerce' => true],
