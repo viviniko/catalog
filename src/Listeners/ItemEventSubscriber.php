@@ -23,13 +23,12 @@ class ItemEventSubscriber extends EventSubscriber
 
     public function onItemUpdated($event)
     {
-        Cache::tags('catalog.items.low')->flush();
-        Cache::forget('catalog.items.item?:'. $event->item->id);
+        Cache::forget("catalog.product:{$event->item->product_id}");
     }
 
     public function onItemDeleted($event)
     {
         Cache::tags('catalog.items.low')->flush();
-        Cache::forget('catalog.items.item?:'. $event->item->id);
+        Cache::forget("catalog.product:{$event->item->product_id}");
     }
 }
