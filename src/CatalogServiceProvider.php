@@ -4,14 +4,14 @@ namespace Viviniko\Catalog;
 
 use Illuminate\Support\Facades\Event;
 use Viviniko\Catalog\Console\Commands\CatalogTableCommand;
+use Viviniko\Catalog\Listeners\FileDeletedListener;
 use Viviniko\Catalog\Models\Category;
 use Viviniko\Catalog\Models\Product;
 use Viviniko\Catalog\Models\Item;
 use Viviniko\Catalog\Observers\CategoryObserver;
-use Viviniko\Catalog\Observers\MediaObserver;
 use Viviniko\Catalog\Observers\ItemObserver;
 use Viviniko\Catalog\Observers\ProductObserver;
-use Viviniko\Media\Models\Media;
+use Viviniko\Media\Events\FileDeleted;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
@@ -39,10 +39,11 @@ class CatalogServiceProvider extends BaseServiceProvider
         // Register commands
         $this->commands('command.catalog.table');
 
-        Media::observe(MediaObserver::class);
         Category::observe(CategoryObserver::class);
         Item::observe(ItemObserver::class);
         Product::observe(ProductObserver::class);
+
+        Event::listen(FileDeleted::class, FileDeletedListener::class);
 
         $config = $this->app['config'];
 

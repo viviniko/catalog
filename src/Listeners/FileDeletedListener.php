@@ -1,11 +1,11 @@
 <?php
 
-namespace Viviniko\Catalog\Observers;
+namespace Viviniko\Catalog\Listeners;
 
 use Viviniko\Catalog\Services\ProductService;
-use Viviniko\Media\Models\Media;
+use Viviniko\Media\Events\FileDeleted;
 
-class MediaObserver
+class FileDeletedListener
 {
     protected $productService;
 
@@ -14,8 +14,8 @@ class MediaObserver
         $this->productService = $productService;
     }
 
-    public function deleted(Media $media)
+    public function handle(FileDeleted $event)
     {
-        $this->productService->detachProductPicture($media->id);
+        $this->productService->detachProductPicture($event->file->id);
     }
 }
