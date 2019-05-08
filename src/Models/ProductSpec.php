@@ -2,28 +2,23 @@
 
 namespace Viviniko\Catalog\Models;
 
-use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Facades\Config;
 
 class ProductSpec extends Pivot
 {
     public $timestamps = false;
 
     protected $fillable = [
-        'product_id', 'spec_id', 'customer_value', 'is_selected', 'picture_id', 'swatch_picture_id', 'sort'
+        'product_id', 'spec_id', 'control_type', 'text_prompt', 'is_required', 'sort',
     ];
 
     protected $casts = [
-        'is_selected' => 'boolean',
+        'is_required' => 'boolean',
     ];
 
-    public function picture()
+    public function spec()
     {
-        return $this->belongsTo(Config::get('media.media'), 'picture_id');
-    }
-
-    public function swatchPicture()
-    {
-        return $this->belongsTo(Config::get('media.media'), 'swatch_picture_id');
+        return $this->belongsTo(Config::get('catalog.spec'), 'spec_id');
     }
 }

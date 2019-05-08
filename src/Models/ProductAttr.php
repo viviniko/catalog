@@ -11,6 +11,6 @@ class ProductAttr extends Model
     protected $tableConfigKey = 'catalog.product_attr_table';
 
     protected $fillable = [
-        'product_id', 'attr_id', 'customer_value'
+        'product_id', 'attr_id', 'attr_value_id', 'custom_value'
     ];
 }

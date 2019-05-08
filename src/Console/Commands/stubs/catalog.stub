@@ -10,32 +10,37 @@ class CreateCatalogTable extends Migration
     /**
      * @var string
      */
-    protected $categoriesTable;
-
-    /**
-     * @var string
-     */
-    protected $manufacturersTable;
-
-    /**
-     * @var string
-     */
-    protected $attrGroupsTable;
-
-    /**
-     * @var string
-     */
     protected $attrsTable;
 
     /**
      * @var string
      */
-    protected $specGroupsTable;
+    protected $attrValuesTable;
+
+    /**
+     * @var string
+     */
+    protected $categoriesTable;
+
+    /**
+     * @var string
+     */
+    protected $categoryAttrTable;
 
     /**
      * @var string
      */
     protected $specsTable;
+
+    /**
+     * @var string
+     */
+    protected $specValuesTable;
+
+    /**
+     * @var string
+     */
+    protected $manufacturersTable;
 
     /**
      * @var string
@@ -60,17 +65,7 @@ class CreateCatalogTable extends Migration
     /**
      * @var string
      */
-    protected $productSpecGroupTable;
-
-    /**
-     * @var string
-     */
-    protected $itemSpecTable;
-
-    /**
-     * @var string
-     */
-    protected $productPictureTable;
+    protected $productSpecValueTable;
 
     /**
      * @var string
@@ -82,20 +77,19 @@ class CreateCatalogTable extends Migration
      */
     public function __construct()
     {
-        $this->categoriesTable = Config::get('catalog.categories_table');
-        $this->manufacturersTable = Config::get('catalog.manufacturers_table');
-        $this->attrGroupsTable = Config::get('catalog.attr_groups_table');
-        $this->attrsTable = Config::get('catalog.attrs_table');
-        $this->specsTable = Config::get('catalog.specs_table');
-        $this->specGroupsTable = Config::get('catalog.spec_groups_table');
-        $this->productsTable = Config::get('catalog.products_table');
-        $this->itemsTable = Config::get('catalog.items_table');
-        $this->productSpecGroupTable = Config::get('catalog.product_spec_group_table');
-        $this->productSpecTable = Config::get('catalog.product_spec_table');
-        $this->itemSpecTable = Config::get('catalog.item_spec_table');
-        $this->productAttrTable = Config::get('catalog.product_attr_table');
-        $this->productPictureTable = Config::get('catalog.product_picture_table');
-        $this->manufacturerProductsTable = Config::get('catalog.manufacturer_products_table');
+        $this->attrsTable = self::getConfigModelTable('attr');
+        $this->attrValuesTable = self::getConfigModelTable('attr_value');
+        $this->categoriesTable = self::getConfigModelTable('category');
+        $this->categoryAttrTable = self::getConfigModelTable('category_attr');
+        $this->specsTable = self::getConfigModelTable('spec');
+        $this->specValuesTable = self::getConfigModelTable('spec_value');
+        $this->productsTable = self::getConfigModelTable('product');
+        $this->productSpecTable = self::getConfigModelTable('product_spec');
+        $this->productSpecValueTable = self::getConfigModelTable('product_spec_value');
+        $this->productAttrTable = self::getConfigModelTable('product_attr');
+        $this->itemsTable = self::getConfigModelTable('item');
+        $this->manufacturersTable = self::getConfigModelTable('manufacturer');
+        $this->manufacturerProductsTable = self::getConfigModelTable('manufacturer_product');
     }
 
     /**
@@ -105,27 +99,9 @@ class CreateCatalogTable extends Migration
      */
     public function up()
     {
-        // Create table for storing categories
-        Schema::create($this->categoriesTable, function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('parent_id')->default(0);
-            $table->string('name', 32);
-            $table->string('path')->default('');
-            $table->text('description')->nullable();
-            $table->unsignedInteger('picture_id')->nullable();
-            $table->integer('sort')->default(0);
-            $table->boolean('is_active')->default(true);
-            $table->string('url_rewrite')->nullable();
-            $table->string('meta_title')->nullable();
-            $table->string('meta_keywords')->nullable();
-            $table->string('meta_description')->nullable();
-            $table->timestamps();
-        });
-
         // Create table for storing attribute names
-        Schema::create($this->attrGroupsTable, function (Blueprint $table) {
+        Schema::create($this->attrsTable, function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('category_id');
             $table->string('name', 32);
             $table->string('slug', 32)->unique();
             $table->string('description')->nullable();
@@ -138,9 +114,9 @@ class CreateCatalogTable extends Migration
         });
 
         // Create table for storing attribute values
-        Schema::create($this->attrsTable, function (Blueprint $table) {
+        Schema::create($this->attrValuesTable, function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('group_id');
+            $table->unsignedInteger('attr_id');
             $table->string('name', 32);
             $table->string('slug', 32)->unique();
             $table->string('description')->nullable();
@@ -148,8 +124,36 @@ class CreateCatalogTable extends Migration
             $table->timestamps();
         });
 
+        // Create table for storing categories
+        Schema::create($this->categoriesTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('parent_id')->default(0);
+            $table->string('name', 32);
+            $table->string('path')->default('');
+            $table->text('description')->nullable();
+            $table->text('banner')->nullable();
+            $table->unsignedInteger('picture_id')->nullable();
+            $table->integer('sort')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->string('url_rewrite')->nullable();
+            $table->string('meta_title')->nullable();
+            $table->string('meta_keywords')->nullable();
+            $table->string('meta_description')->nullable();
+            $table->timestamps();
+        });
+
+        // Create table for storing attribute names
+        Schema::create($this->categoryAttrTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('category_id');
+            $table->unsignedInteger('attr_id');
+            $table->integer('sort')->default(0);
+
+            $table->unique(['category_id', 'attr_id']);
+        });
+
         // Create table for storing specification names
-        Schema::create($this->specGroupsTable, function (Blueprint $table) {
+        Schema::create($this->specsTable, function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 32);
             $table->string('slug', 32)->unique();
@@ -159,9 +163,9 @@ class CreateCatalogTable extends Migration
         });
 
         // Create table for storing specification values
-        Schema::create($this->specsTable, function (Blueprint $table) {
+        Schema::create($this->specValuesTable, function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('group_id');
+            $table->unsignedInteger('spec_id');
             $table->string('name', 32);
             $table->string('slug', 32)->unique();
             $table->string('description')->nullable();
@@ -195,7 +199,10 @@ class CreateCatalogTable extends Migration
             $table->string('name');
             $table->string('spu', 32)->unique();
             $table->string('description', 500);
-            $table->longText('content')->nullable();
+            $table->decimal('amount', 16, 4);
+            $table->text('picture_ids');
+            $table->longText('detail')->nullable();
+            $table->text('size_chart')->nullable();
             $table->boolean('is_active')->default(true);
             $table->integer('sort')->default(0);
             $table->string('url_rewrite')->nullable();
@@ -211,14 +218,18 @@ class CreateCatalogTable extends Migration
         Schema::create($this->itemsTable, function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('product_id');
+            $table->string('spec_key', 128);
             $table->string('sku', 32)->default('')->index();
             $table->decimal('amount', 16, 4);
             $table->unsignedTinyInteger('discount')->default(0);
             $table->decimal('weight', 16, 4)->default(0);
             $table->unsignedInteger('quantity')->default(0);
             $table->unsignedInteger('picture_id');
+            $table->string('specs');
+            $table->boolean('is_primary')->default(false);
             $table->boolean('is_active')->default(true);
-            $table->boolean('is_master')->default(false);
+
+            $table->unique(['product_id', 'spec_key']);
         });
 
         // Create table for storing product attribute
@@ -226,44 +237,31 @@ class CreateCatalogTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('attr_id');
-            $table->string('customer_value')->nullable();
+            $table->unsignedInteger('attr_value_id');
+            $table->string('custom_value')->nullable();
         });
 
-        // Create table for storing product specification group attribute
-        Schema::create($this->productSpecGroupTable, function (Blueprint $table) {
+        // Create table for storing product specification attribute
+        Schema::create($this->productSpecTable, function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('product_id');
-            $table->unsignedInteger('spec_group_id');
+            $table->unsignedInteger('spec_id');
             $table->unsignedTinyInteger('control_type')->default(0);
             $table->string('text_prompt')->nullable();
             $table->boolean('is_required')->default(false);
             $table->integer('sort')->default(0);
         });
 
-        // Create table for storing product attribute
-        Schema::create($this->productSpecTable, function (Blueprint $table) {
+        // Create table for storing product specification value attribute
+        Schema::create($this->productSpecValueTable, function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('spec_id');
-            $table->string('customer_value')->nullable();
+            $table->unsignedInteger('spec_value_id');
+            $table->string('custom_value')->nullable();
             $table->boolean('is_selected')->default(false);
             $table->unsignedInteger('picture_id')->nullable();
             $table->unsignedInteger('swatch_picture_id')->nullable();
-            $table->integer('sort')->default(0);
-        });
-
-        // Create table for storing product specification
-        Schema::create($this->itemSpecTable, function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('item_id');
-            $table->unsignedInteger('spec_id');
-        });
-
-        // Create table for storing product picture
-        Schema::create($this->productPictureTable, function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('product_id');
-            $table->unsignedInteger('picture_id');
             $table->integer('sort')->default(0);
         });
 
@@ -287,19 +285,22 @@ class CreateCatalogTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists($this->categoriesTable);
         Schema::dropIfExists($this->attrsTable);
-        Schema::dropIfExists($this->attrGroupsTable);
-        Schema::dropIfExists($this->specGroupsTable);
+        Schema::dropIfExists($this->attrValuesTable);
+        Schema::dropIfExists($this->categoriesTable);
+        Schema::dropIfExists($this->categoryAttrTable);
         Schema::dropIfExists($this->specsTable);
+        Schema::dropIfExists($this->specValuesTable);
         Schema::dropIfExists($this->manufacturersTable);
         Schema::dropIfExists($this->productsTable);
         Schema::dropIfExists($this->itemsTable);
         Schema::dropIfExists($this->productSpecTable);
-        Schema::dropIfExists($this->productSpecGroupTable);
+        Schema::dropIfExists($this->productSpecValueTable);
         Schema::dropIfExists($this->productAttrTable);
-        Schema::dropIfExists($this->itemSpecTable);
-        Schema::dropIfExists($this->productPictureTable);
         Schema::dropIfExists($this->manufacturerProductsTable);
+    }
+
+    private static function getConfigModelTable($key) {
+        return (new (Config::get('catalog.' . $key)))->getTable();
     }
 }

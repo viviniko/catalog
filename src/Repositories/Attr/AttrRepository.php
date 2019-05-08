@@ -5,38 +5,23 @@ namespace Viviniko\Catalog\Repositories\Attr;
 interface AttrRepository
 {
     /**
-     * Get filterable attributes by given categories.
+     * Find data by field and value
      *
-     * @param mixed $categoryId
-     * @return mixed
+     * @param $column
+     * @param null $value
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getFilterableAttrsByCategoryId($categoryId);
-
-    /**
-     * Get searchable attributes by given product id.
-     *
-     * @param $productId
-     * @return mixed
-     */
-    public function getSearchableAttrsByProductId($productId);
-
-    /**
-     * Get viewable attributes by given product id.
-     *
-     * @param $productId
-     * @return mixed
-     */
-    public function getViewableAttrsByProductId($productId);
+    public function findAllBy($column, $value = null, $columns = ['*']);
 
     /**
      * Find data by id
      *
      * @param       $id
-     * @param       $columns
      *
      * @return mixed
      */
-    public function find($id, $columns = ['*']);
+    public function find($id);
 
     /**
      * Save a new entity in repository

@@ -19,14 +19,15 @@ class Product extends Model
     protected $tableConfigKey = 'catalog.products_table';
 
     protected $fillable = [
-        'category_id', 'name', 'spu', 'description', 'content', 'is_active', 'sort',
+        'category_id', 'name', 'spu', 'description', 'amount', 'picture_ids', 'detail', 'size_chart', 'is_active', 'sort',
         'url_rewrite', 'meta_title', 'meta_keywords', 'meta_description',
         'created_by', 'updated_by'
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
-        'content' => 'array',
+        'size_chart' => 'array',
+        'picture_ids' => 'array',
     ];
 
     protected $appends = [

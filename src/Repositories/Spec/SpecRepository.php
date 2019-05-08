@@ -4,17 +4,16 @@ namespace Viviniko\Catalog\Repositories\Spec;
 
 interface SpecRepository
 {
-    public function findAllBy($column, $value = null, $columns = ['*']);
+    public function all($columns = ['*']);
 
     /**
      * Find data by id
      *
      * @param       $id
-     * @param       $columns
      *
      * @return mixed
      */
-    public function find($id, $columns = ['*']);
+    public function find($id);
 
     /**
      * Save a new entity in repository
@@ -43,6 +42,4 @@ interface SpecRepository
      * @return int
      */
     public function delete($id);
-
-    public function guessByName($name, $groupId = null);
 }

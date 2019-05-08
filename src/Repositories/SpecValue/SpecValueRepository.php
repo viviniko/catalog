@@ -1,27 +1,20 @@
 <?php
 
-namespace Viviniko\Catalog\Repositories\AttrGroup;
+namespace Viviniko\Catalog\Repositories\SpecValue;
 
-interface AttrGroupRepository
+interface SpecValueRepository
 {
-    /**
-     * Find data by field and value
-     *
-     * @param $column
-     * @param null $value
-     * @param array $columns
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
     public function findAllBy($column, $value = null, $columns = ['*']);
 
     /**
      * Find data by id
      *
      * @param       $id
+     * @param       $columns
      *
      * @return mixed
      */
-    public function find($id);
+    public function find($id, $columns = ['*']);
 
     /**
      * Save a new entity in repository
@@ -50,4 +43,6 @@ interface AttrGroupRepository
      * @return int
      */
     public function delete($id);
+
+    public function guessByName($name, $groupId = null);
 }

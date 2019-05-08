@@ -9,10 +9,12 @@ class Spec extends Model
 {
     protected $tableConfigKey = 'catalog.specs_table';
 
-    protected $fillable = ['group_id', 'name', 'slug', 'description', 'sort'];
+    protected $fillable = [
+        'name', 'slug', 'description', 'sort'
+    ];
 
-    public function group()
+    public function values()
     {
-        return $this->belongsTo(Config::get('catalog.spec_group'), 'group_id');
+        return $this->hasMany(Config::get('catalog.spec_value'), 'spec_id');
     }
 }

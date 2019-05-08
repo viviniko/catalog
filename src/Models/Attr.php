@@ -9,10 +9,18 @@ class Attr extends Model
 {
     protected $tableConfigKey = 'catalog.attrs_table';
 
-    protected $fillable = ['group_id', 'name', 'slug', 'description', 'sort'];
+    protected $fillable = [
+        'name', 'slug', 'description', 'type', 'is_filterable', 'is_searchable', 'is_viewable', 'sort'
+    ];
 
-    public function group()
+    protected $casts = [
+        'is_filterable' => 'boolean',
+        'is_required' => 'boolean',
+        'is_viewable' => 'boolean',
+    ];
+
+    public function values()
     {
-        return $this->belongsTo(Config::get('catalog.attr_group'), 'group_id');
+        return $this->hasMany(Config::get('catalog.attr_value'), 'attr_id');
     }
 }

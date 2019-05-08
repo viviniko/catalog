@@ -15,7 +15,7 @@ class Category extends Model
     protected $tableConfigKey = 'catalog.categories_table';
 
     protected $fillable = [
-        'name', 'description', 'is_active', 'parent_id', 'path', 'picture_id', 'sort',
+        'name', 'description', 'banner', 'is_active', 'parent_id', 'path', 'picture_id', 'sort',
         'url_rewrite', 'meta_title', 'meta_keywords', 'meta_description',
     ];
 
@@ -23,9 +23,11 @@ class Category extends Model
         'is_active' => 'boolean',
     ];
 
-    public function attrGroups()
+    public function attrs()
     {
-        return $this->hasMany(Config::get('catalog.attr_group'), 'category_id');
+        return $this->belongsToMany(Config::get('catalog.attr'), Config::get('catalog.category_attr_table'))
+            ->withPivot(['sort'])
+            ->orderBy('pivot_sort');
     }
 
     public function parent()

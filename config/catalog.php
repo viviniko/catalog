@@ -1,25 +1,6 @@
 <?php
 
 return [
-    /*
-    |--------------------------------------------------------------------------
-    | Catalog Category Model
-    |--------------------------------------------------------------------------
-    |
-    | This is the Category model.
-    |
-    */
-    'category' => 'Viviniko\Catalog\Models\Category',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Catalog Attribute Group Model
-    |--------------------------------------------------------------------------
-    |
-    | This is the Attribute Group model.
-    |
-    */
-    'attr_group' => 'Viviniko\Catalog\Models\AttrGroup',
 
     /*
     |--------------------------------------------------------------------------
@@ -33,13 +14,53 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Catalog Specification Value Model
+    | Catalog Attribute Group Model
     |--------------------------------------------------------------------------
     |
-    | This is the Specification Value model.
+    | This is the Attribute Group model.
     |
     */
-    'spec_group' => 'Viviniko\Catalog\Models\SpecGroup',
+    'attr_value' => 'Viviniko\Catalog\Models\AttrValue',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Catalog Attributes Table
+    |--------------------------------------------------------------------------
+    |
+    | This is the attributes table.
+    |
+    */
+    'attrs_table' => 'catalog_attrs',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Catalog Attribute Values Table
+    |--------------------------------------------------------------------------
+    |
+    | This is the attribute options table.
+    |
+    */
+    'attr_values_table' => 'catalog_attr_values',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Catalog Category Model
+    |--------------------------------------------------------------------------
+    |
+    | This is the Category model.
+    |
+    */
+    'category' => 'Viviniko\Catalog\Models\Category',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Catalog Category Attribute Model
+    |--------------------------------------------------------------------------
+    |
+    | This is the Category model.
+    |
+    */
+    'category_attr' => 'Viviniko\Catalog\Models\CategoryAttr',
 
     /*
     |--------------------------------------------------------------------------
@@ -53,6 +74,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Catalog Specification Value Model
+    |--------------------------------------------------------------------------
+    |
+    | This is the Specification Value model.
+    |
+    */
+    'spec_value' => 'Viviniko\Catalog\Models\SpecValue',
+
+    /*
+    |--------------------------------------------------------------------------
     | Catalog Product Model
     |--------------------------------------------------------------------------
     |
@@ -60,6 +91,36 @@ return [
     |
     */
     'product' => 'Viviniko\Catalog\Models\Product',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Catalog Product Attr Model
+    |--------------------------------------------------------------------------
+    |
+    | This is the Product model.
+    |
+    */
+    'product_attr' => 'Viviniko\Catalog\Models\ProductAttr',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Catalog Product Spec Group Model
+    |--------------------------------------------------------------------------
+    |
+    | This is the Product model.
+    |
+    */
+    'product_spec_group' => 'Viviniko\Catalog\Models\ProductSpecGroup',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Catalog Product Spec Model
+    |--------------------------------------------------------------------------
+    |
+    | This is the Product model.
+    |
+    */
+    'product_spec' => 'Viviniko\Catalog\Models\ProductSpec',
 
     /*
     |--------------------------------------------------------------------------
@@ -103,23 +164,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Catalog Attributes Table
+    | Catalog Category Attribute Table
     |--------------------------------------------------------------------------
     |
-    | This is the attributes table.
+    | This is the categories table.
     |
     */
-    'attrs_table' => 'catalog_attrs',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Catalog Attribute Values Table
-    |--------------------------------------------------------------------------
-    |
-    | This is the attribute options table.
-    |
-    */
-    'attr_groups_table' => 'catalog_attr_groups',
+    'category_attr_table' => 'catalog_category_attr',
 
     /*
     |--------------------------------------------------------------------------
@@ -133,13 +184,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Catalog Specification Groups Table
+    | Catalog Specification Values Table
     |--------------------------------------------------------------------------
     |
     | This is the specification options table.
     |
     */
-    'spec_groups_table' => 'catalog_spec_groups',
+    'spec_values_table' => 'catalog_spec_values',
 
     /*
     |--------------------------------------------------------------------------
@@ -163,33 +214,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Catalog Product Items Table
+    | Catalog Product Specification Group Mapping Table
     |--------------------------------------------------------------------------
     |
-    | This is the product items table.
-    |
-    */
-    'items_table' => 'catalog_product_items',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Catalog Product specification Mapping Table
-    |--------------------------------------------------------------------------
-    |
-    | This is the product_specification table.
+    | This is the product_spec_table table.
     |
     */
     'product_spec_table' => 'catalog_product_spec',
 
     /*
     |--------------------------------------------------------------------------
-    | Catalog Product Specification Group Mapping Table
+    | Catalog Product specification Table
     |--------------------------------------------------------------------------
     |
-    | This is the product_attribute_group_table table.
+    | This is the product_specification table.
     |
     */
-    'product_spec_group_table' => 'catalog_product_spec_group',
+    'product_spec_value_table' => 'catalog_product_spec_value',
 
     /*
     |--------------------------------------------------------------------------
@@ -203,23 +244,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Catalog Product Item Specification Mapping Table
+    | Catalog Product Items Table
     |--------------------------------------------------------------------------
     |
-    | This is the item_specification_table table.
+    | This is the product items table.
     |
     */
-    'item_spec_table' => 'catalog_product_item_spec',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Catalog Product Picture Table
-    |--------------------------------------------------------------------------
-    |
-    | This is the product_picture table.
-    |
-    */
-    'product_picture_table' => 'catalog_product_picture',
+    'items_table' => 'catalog_items',
 
     /*
     |--------------------------------------------------------------------------

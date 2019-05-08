@@ -13,7 +13,8 @@ class Item extends Model
     protected $tableConfigKey = 'catalog.items_table';
 
     protected $fillable = [
-        'product_id', 'sku', 'amount', 'discount', 'weight', 'quantity', 'picture_id', 'is_active', 'is_master'
+        'product_id', 'spec_key', 'sku', 'amount', 'discount', 'weight', 'quantity', 'picture_id', 'specs',
+        'is_active', 'is_master'
     ];
 
     protected $casts = [
@@ -33,21 +34,6 @@ class Item extends Model
     public function picture()
     {
         return $this->belongsTo(Config::get('media.media'), 'picture_id');
-    }
-
-    public function specs()
-    {
-        return $this->belongsToMany(Config::get('catalog.spec'), Config::get('catalog.item_spec_table'))->select(Config::get('catalog.specs_table'). '.*');
-    }
-
-    public function getDescSpecsAttribute()
-    {
-        return $this->specs->pluck('value', 'group.text_prompt')->toArray();
-    }
-
-    public function getSkuKeyAttribute()
-    {
-        return $this->specs()->pluck('id')->sort()->implode(':');
     }
 
     public function getCoverAttribute()
