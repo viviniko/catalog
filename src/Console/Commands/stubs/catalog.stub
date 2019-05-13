@@ -25,11 +25,6 @@ class CreateCatalogTable extends Migration
     /**
      * @var string
      */
-    protected $categoryAttrTable;
-
-    /**
-     * @var string
-     */
     protected $specsTable;
 
     /**
@@ -80,7 +75,6 @@ class CreateCatalogTable extends Migration
         $this->attrsTable = self::getConfigModelTable('attr');
         $this->attrValuesTable = self::getConfigModelTable('attr_value');
         $this->categoriesTable = self::getConfigModelTable('category');
-        $this->categoryAttrTable = self::getConfigModelTable('category_attr');
         $this->specsTable = self::getConfigModelTable('spec');
         $this->specValuesTable = self::getConfigModelTable('spec_value');
         $this->productsTable = self::getConfigModelTable('product');
@@ -136,20 +130,11 @@ class CreateCatalogTable extends Migration
             $table->integer('sort')->default(0);
             $table->boolean('is_active')->default(true);
             $table->string('url_rewrite')->nullable();
+            $table->text('attr_ids')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_keywords')->nullable();
             $table->string('meta_description')->nullable();
             $table->timestamps();
-        });
-
-        // Create table for storing attribute names
-        Schema::create($this->categoryAttrTable, function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('category_id');
-            $table->unsignedInteger('attr_id');
-            $table->integer('sort')->default(0);
-
-            $table->unique(['category_id', 'attr_id']);
         });
 
         // Create table for storing specification names
@@ -288,7 +273,6 @@ class CreateCatalogTable extends Migration
         Schema::dropIfExists($this->attrsTable);
         Schema::dropIfExists($this->attrValuesTable);
         Schema::dropIfExists($this->categoriesTable);
-        Schema::dropIfExists($this->categoryAttrTable);
         Schema::dropIfExists($this->specsTable);
         Schema::dropIfExists($this->specValuesTable);
         Schema::dropIfExists($this->manufacturersTable);

@@ -12,6 +12,7 @@
     ],
     "require": {
         "php": ">=7.0",
+        "viviniko/cart": "dev-master",
         "viviniko/configuration": "dev-master",
         "viviniko/currency": "dev-master",
         "viviniko/favorite": "dev-master",

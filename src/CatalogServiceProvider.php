@@ -105,8 +105,8 @@ class CatalogServiceProvider extends BaseServiceProvider
 
         // Specification Group Repository
         $this->app->singleton(
-            \Viviniko\Catalog\Repositories\SpecGroup\SpecGroupRepository::class,
-            \Viviniko\Catalog\Repositories\SpecGroup\EloquentSpecGroup::class
+            \Viviniko\Catalog\Repositories\SpecValue\SpecValueRepository::class,
+            \Viviniko\Catalog\Repositories\SpecValue\EloquentSpecValue::class
         );
 
         // Specification Repository
@@ -117,8 +117,8 @@ class CatalogServiceProvider extends BaseServiceProvider
 
         // Attribute Group Repository
         $this->app->singleton(
-            \Viviniko\Catalog\Repositories\AttrGroup\AttrGroupRepository::class,
-            \Viviniko\Catalog\Repositories\AttrGroup\EloquentAttrGroup::class
+            \Viviniko\Catalog\Repositories\AttrValue\AttrValueRepository::class,
+            \Viviniko\Catalog\Repositories\AttrValue\EloquentAttrValue::class
         );
 
         // Attribute Repository

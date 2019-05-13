@@ -15,20 +15,14 @@ class Category extends Model
     protected $tableConfigKey = 'catalog.categories_table';
 
     protected $fillable = [
-        'name', 'description', 'banner', 'is_active', 'parent_id', 'path', 'picture_id', 'sort',
+        'name', 'description', 'banner', 'is_active', 'parent_id', 'path', 'picture_id', 'sort', 'attr_ids',
         'url_rewrite', 'meta_title', 'meta_keywords', 'meta_description',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'attr_ids' => 'array',
     ];
-
-    public function attrs()
-    {
-        return $this->belongsToMany(Config::get('catalog.attr'), Config::get('catalog.category_attr_table'))
-            ->withPivot(['sort'])
-            ->orderBy('pivot_sort');
-    }
 
     public function parent()
     {
