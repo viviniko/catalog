@@ -2,23 +2,23 @@
 
 namespace Viviniko\Catalog\Services\Impl;
 
+use Viviniko\Catalog\Repositories\SpecValue\SpecValueRepository;
 use Viviniko\Catalog\Services\SpecService as SpecificationServiceInterface;
 use Viviniko\Catalog\Repositories\Spec\SpecRepository;
-use Viviniko\Catalog\Repositories\SpecGroup\SpecGroupRepository;
 
 class SpecServiceImpl implements SpecificationServiceInterface
 {
     protected $specificationRepository;
 
-    protected $specificationGroupRepository;
+    protected $specValueRepository;
 
     public function __construct(
         SpecRepository $specificationRepository,
-        SpecGroupRepository $specificationGroupRepository
+        SpecValueRepository $specValueRepository
     )
     {
         $this->specificationRepository = $specificationRepository;
-        $this->specificationGroupRepository = $specificationGroupRepository;
+        $this->specValueRepository = $specValueRepository;
     }
 
     /**

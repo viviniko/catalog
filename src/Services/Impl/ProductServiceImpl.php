@@ -34,9 +34,9 @@ class ProductServiceImpl implements ProductService
     protected $categoryService;
 
     /**
-     * @var \Viviniko\Catalog\Services\SpecService
+     * @var \Viviniko\Catalog\Repositories\SpecValue\SpecValueRepository
      */
-    protected $specService;
+    protected $specValueRepository;
 
     /**
      * @var \Viviniko\Media\Services\ImageService
@@ -47,7 +47,6 @@ class ProductServiceImpl implements ProductService
         ProductRepository $productRepository,
         ItemService $itemService,
         CategoryService $categoryService,
-        SpecService $specService,
         ImageService $imageService
     )
     {
@@ -55,7 +54,6 @@ class ProductServiceImpl implements ProductService
         $this->itemService = $itemService;
         $this->imageService = $imageService;
         $this->categoryService = $categoryService;
-        $this->specService = $specService;
     }
 
     /**
