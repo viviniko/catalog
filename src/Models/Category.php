@@ -24,13 +24,18 @@ class Category extends Model
         'attr_ids' => 'array',
     ];
 
+    public function getParentIdsAttribute()
+    {
+        return explode('/', $this->path);
+    }
+
     public function parent()
     {
-        return $this->belongsTo(static::class, 'parent_id');
+        return $this->belongsTo(Config::get('catalog.category'), 'parent_id');
     }
 
     public function children()
     {
-        return $this->hasMany(static::class, 'parent_id');
+        return $this->hasMany(Config::get('catalog.category'), 'parent_id');
     }
 }

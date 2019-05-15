@@ -4,13 +4,7 @@ namespace Viviniko\Catalog\Services;
 
 interface CategoryService
 {
-    public function categories();
-
-    public function createCategory(array $data);
-
-    public function updateCategory($id, array $data);
-
-    public function deleteCategory($id);
+    public function all();
 
     /**
      * Find data by id
@@ -19,7 +13,13 @@ interface CategoryService
      *
      * @return mixed
      */
-    public function getCategory($id);
+    public function getOne($id);
+
+    public function create(array $data);
+
+    public function update($id, array $data);
+
+    public function delete($id);
 
     /**
      * @param array $id

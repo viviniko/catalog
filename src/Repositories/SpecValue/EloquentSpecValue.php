@@ -11,24 +11,4 @@ class EloquentSpecValue extends EloquentRepository implements SpecValueRepositor
     {
         parent::__construct(Config::get('catalog.spec_value'));
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findIn($ids)
-    {
-        return $this->createQuery()->whereIn('id', (array)$ids)->with('group')->get();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function guessByName($name, $groupId = null)
-    {
-        $query = $this->createQuery();
-        if ($groupId) {
-            $query->where('group_id', $groupId);
-        }
-        return $query->where('name', 'like', "%{$name}%")->first();
-    }
 }
