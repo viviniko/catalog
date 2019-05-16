@@ -24,4 +24,9 @@ class ItemObserver
             $this->manufacturers->update($mId, ['product_update_time' => $item->product->updated_at]);
         }
     }
+
+    public function deleted(Item $item)
+    {
+
+    }
 }

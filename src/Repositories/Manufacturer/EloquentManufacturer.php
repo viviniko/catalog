@@ -19,12 +19,4 @@ class EloquentManufacturer extends EloquentRepository implements ManufacturerRep
     {
         return $this->createQuery()->where('name', $name)->first();
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function lists($column = 'name', $key = null)
-    {
-        return $this->pluck($column, $key);
-    }
 }

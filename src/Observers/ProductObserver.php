@@ -2,31 +2,37 @@
 
 namespace Viviniko\Catalog\Observers;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Viviniko\Catalog\Models\Product;
 
 class ProductObserver
 {
-    public function saving(Model $entity)
+    public function saving(Product $product)
     {
-        if (!$entity->exists() || empty($entity->created_by)) {
-            $entity->created_by = Auth::check() ? Auth::user()->name : '';
+        if (!$product->exists() || empty($product->created_by)) {
+            $product->created_by = Auth::check() ? Auth::user()->name : '';
         }
 
-        if (empty($entity->updated_by)) {
-            $entity->updated_by = Auth::check() ? Auth::user()->name : '';
-        }
-    }
-
-    public function saved(Model $entity)
-    {
-        if (!$entity->is_active) {
-            $entity->unsearchable();
+        if (empty($product->updated_by)) {
+            $product->updated_by = Auth::check() ? Auth::user()->name : '';
         }
     }
 
-    public function deleted(Model $entity)
+    public function saved(Product $product)
     {
-        $entity->unsearchable();
+        if (!$product->is_active) {
+            $product->unsearchable();
+        }
+    }
+
+    public function deleting(Product $product)
+    {
+        $product->items()->delete();
+        $product->pictures()->sync([]);
+        $product->specs()->sync([]);
+        $product->specGroups()->sync([]);
+        $product->attrs()->sync([]);
+        $product->manufacturerProduct()->delete();
+        $product->unsearchable();
     }
 }

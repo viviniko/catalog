@@ -2,6 +2,7 @@
 
 namespace Viviniko\Catalog\Models;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Viviniko\Configuration\Configable;
 use Viviniko\Support\Database\Eloquent\Model;
@@ -24,7 +25,15 @@ class Category extends Model
         'attr_ids' => 'array',
     ];
 
-    public function getParentIdsAttribute()
+    public function getPathAttrIdsAttribute()
+    {
+        return Collection::make($this->path_ids)
+            ->reduce(function (Collection $collect, $categoryId) {
+                return $collect->merge($this->newQuery()->find($categoryId)->attr_ids);
+            }, new Collection())->unique();
+    }
+
+    public function getPathIdsAttribute()
     {
         return explode('/', $this->path);
     }
