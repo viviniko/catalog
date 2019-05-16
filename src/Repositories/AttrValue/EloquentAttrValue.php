@@ -41,17 +41,6 @@ class EloquentAttrValue extends EloquentRepository implements AttrValueRepositor
         return $this->getAttrsByProductId($productId, 'is_viewable');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function delete($id)
-    {
-        return DB::transaction(function () use ($id) {
-            DB::table(Config::get('catalog.product_attr_table'))->where('attr_id', $id)->delete();
-            return parent::delete($id);
-        });
-    }
-
     private function getAttrsByProductId($productId, $which)
     {
         $attributeGroupTableName = Config::get('catalog.attr_groups_table');

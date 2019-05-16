@@ -5,9 +5,13 @@ namespace Viviniko\Catalog;
 use Illuminate\Support\Facades\Event;
 use Viviniko\Catalog\Console\Commands\CatalogTableCommand;
 use Viviniko\Catalog\Listeners\FileDeletedListener;
+use Viviniko\Catalog\Models\Attr;
+use Viviniko\Catalog\Models\AttrValue;
 use Viviniko\Catalog\Models\Category;
 use Viviniko\Catalog\Models\Product;
 use Viviniko\Catalog\Models\Item;
+use Viviniko\Catalog\Observers\AttrObserver;
+use Viviniko\Catalog\Observers\AttrValueObserver;
 use Viviniko\Catalog\Observers\CategoryObserver;
 use Viviniko\Catalog\Observers\ItemObserver;
 use Viviniko\Catalog\Observers\ProductObserver;
@@ -42,6 +46,8 @@ class CatalogServiceProvider extends BaseServiceProvider
         Category::observe(CategoryObserver::class);
         Item::observe(ItemObserver::class);
         Product::observe(ProductObserver::class);
+        Attr::observe(AttrObserver::class);
+        AttrValue::observe(AttrValueObserver::class);
 
         Event::listen(FileDeleted::class, FileDeletedListener::class);
 
@@ -66,19 +72,19 @@ class CatalogServiceProvider extends BaseServiceProvider
 
         $this->registerSKUGenerater();
 
-        $this->registerCategoryService();
-
-        $this->registerAttributeService();
-
-        $this->registerSpecificationService();
-
-        $this->registerProductService();
-
-        $this->registerItemService();
-
-        $this->registerManufacturerService();
-
-        $this->registerCatalogService();
+//        $this->registerCategoryService();
+//
+//        $this->registerAttributeService();
+//
+//        $this->registerSpecificationService();
+//
+//        $this->registerProductService();
+//
+//        $this->registerItemService();
+//
+//        $this->registerManufacturerService();
+//
+//        $this->registerCatalogService();
 
         $this->registerCommands();
     }
@@ -241,14 +247,7 @@ class CatalogServiceProvider extends BaseServiceProvider
     public function provides()
     {
         return [
-            'catalog',
-            \Viviniko\Catalog\Contracts\Catalog::class,
-            \Viviniko\Catalog\Services\CategoryService::class,
-            \Viviniko\Catalog\Services\AttrService::class,
-            \Viviniko\Catalog\Services\SpecService::class,
-            \Viviniko\Catalog\Services\ProductService::class,
-            \Viviniko\Catalog\Services\ItemService::class,
-            \Viviniko\Catalog\Services\ManufacturerService::class,
+            
         ];
     }
 }

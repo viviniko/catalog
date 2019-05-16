@@ -53,23 +53,23 @@ class Product extends Model
         return $this->hasOne(Config::get('catalog.manufacturer_product'), 'product_id');
     }
 
-    public function attrs()
+    public function attrValues()
     {
-        return $this->belongsToMany(Config::get('catalog.attr'), Config::get('catalog.product_attr_table'));
-    }
-
-    public function specGroups()
-    {
-        return $this->belongsToMany(Config::get('catalog.spec_group'), Config::get('catalog.product_spec_group_table'))
-            ->using(ProductSpecGroup::class)
-            ->withPivot(['control_type', 'text_prompt', 'is_required', 'sort'])
-            ->orderBy('pivot_sort');
+        return $this->belongsToMany(Config::get('catalog.attr_value'), Config::get('catalog.product_attr_table'));
     }
 
     public function specs()
     {
         return $this->belongsToMany(Config::get('catalog.spec'), Config::get('catalog.product_spec_table'))
             ->using(ProductSpec::class)
+            ->withPivot(['control_type', 'text_prompt', 'is_required', 'sort'])
+            ->orderBy('pivot_sort');
+    }
+
+    public function specValues()
+    {
+        return $this->belongsToMany(Config::get('catalog.spec_value'), Config::get('catalog.product_spec_value_table'))
+            ->using(ProductSpecValue::class)
             ->withPivot(['customer_value', 'is_selected', 'picture_id', 'swatch_picture_id', 'sort'])
             ->orderBy('pivot_sort');
     }
