@@ -4,7 +4,9 @@ namespace Viviniko\Catalog\Models;
 
 use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Config;
-use Viviniko\Favorite\Favoritable;
+use Viviniko\Catalog\ProductCover;
+use Viviniko\Favorite\Facades\Favorites;
+use Viviniko\Media\Facades\Files;
 use Viviniko\Review\Reviewable;
 use Viviniko\Support\Database\Eloquent\Model;
 use Viviniko\Tag\Taggable;
@@ -37,11 +39,6 @@ class Product extends Model
     protected $hidden = [
         'created_by', 'updated_by', 'pictures', 'master',
     ];
-
-    /**
-     * @var \Viviniko\Catalog\Services\ProductService
-     */
-    protected static $productService;
 
     public function category()
     {
@@ -84,11 +81,9 @@ class Product extends Model
         return $this->hasMany(Config::get('catalog.item'), 'product_id');
     }
 
-    public function pictures()
+    public function getPicturesAttribute()
     {
-        return $this->belongsToMany(Config::get('media.media'), Config::get('catalog.product_picture_table'), 'product_id', 'picture_id')
-            ->withPivot(['sort'])
-            ->orderBy('pivot_sort');
+        return Files::findAllBy('id', $this->picture_ids)->map(function ($media) { return $media->url; });
     }
 
     public function getUrlAttribute()
@@ -141,9 +136,7 @@ class Product extends Model
      */
     public function searchable()
     {
-        if (static::getProductService()->isProductCanSearchable($this->id)) {
-            $this->makeSearchable();
-        }
+        $this->makeSearchable();
     }
 
     /**
@@ -163,7 +156,51 @@ class Product extends Model
      */
     public function toSearchableArray()
     {
-        return static::getProductService()->getProductSearchableArray($this->id);
+        $searchArray = $this->toArray();
+
+        unset(
+            $searchArray['master'],
+            $searchArray['manufacturerProduct'],
+            $searchArray['pictures'],
+            $searchArray['cover'],
+            $searchArray['url'],
+            $searchArray['category']
+        );
+
+        if ($this->category) {
+            $searchArray['category_name'] = $this->category->name;
+            $searchArray['categories'] = $this->categoryService->getCategoriesByIdIn(array_filter(explode('/', $product->category->path)))->pluck('name')->implode(',');
+        }
+
+        $attrValueIds = [];
+        $attrNames = [];
+        $this->attrValues->each(function ($attrValue) use (&$attrValueIds, &$attrNames) {
+            $attrValueIds[] = $attrValue->id;
+            $attrNames[$attrValue->attr->name][] = $attrValue->name;
+        });
+
+        $orderService = $this->getOrderService();
+        $latestQuarterSold = $orderService ? $orderService->countOrderProductQtyByLatestMonth($product->id, 3) : 1;
+        $searchArray['quarter_sold_count'] = (int) $latestQuarterSold;
+        $searchArray['hot_score'] = (isset($searchArray['is_hot']) && $searchArray['is_hot'] ? 1 : 0) * 5 + $latestQuarterSold;
+        $searchArray['new_score'] = (isset($searchArray['is_new']) && $searchArray['is_new'] ? 1 : 0) * 5 + $latestQuarterSold;
+        $searchArray['promote_score'] = (isset($searchArray['is_promote']) && $searchArray['is_promote'] ? 1 : 0) * 5 + $latestQuarterSold;
+        $searchArray['recommend_score'] = $searchArray['hot_score'] * 3 + $searchArray['new_score'] * 2 + $searchArray['promote_score'] * 2;
+        $searchArray['favorite_count'] = Favorites::count(['favoritable_type' => $this->getMorphClass(), 'favoritable_id' => $this->id]);
+
+        $searchArray['amount'] = empty($searchArray['amount']) ? 0 : (float)$searchArray['amount']->value;
+        $searchArray['sort'] = (int)$searchArray['sort'];
+
+        $searchArray['attrs'] = $attrValueIds;
+        foreach ($attrNames as $groupTitle => $specName) {
+            $groupTitle = str_slug($groupTitle, '_');
+            $searchArray["attr_{$groupTitle}"] = implode(',', $specName);
+        }
+
+        $searchArray['created_at'] = (int) strtotime($product->created_at);
+        $searchArray['updated_at'] = (int) strtotime($product->updated_at);
+
+        return $searchArray;
     }
 
     /**
@@ -173,20 +210,23 @@ class Product extends Model
      */
     public function searchableMapping()
     {
-        return static::getProductService()->getProductSearchableMapping();
-    }
-
-    public static function setProductService($productService)
-    {
-        static::$productService = $productService;
-    }
-
-    public static function getProductService()
-    {
-        if (!static::$productService) {
-            static::$productService = app(\Viviniko\Catalog\Services\ProductService::class);
-        }
-
-        return static::$productService;
+        return [
+            'properties' => [
+                'price' => ['type' => 'float', 'coerce' => true],
+                'market_price' => ['type' => 'float', 'coerce' => true],
+                'weight' => ['type' => 'float', 'coerce' => true],
+                'discount' => ['type' => 'float', 'coerce' => true],
+                'created_at' => ['type' => 'long', 'coerce' => true],
+                'updated_at' => ['type' => 'long', 'coerce' => true],
+                'hot_score' => ['type' => 'long', 'coerce' => true],
+                'new_score' => ['type' => 'long', 'coerce' => true],
+                'promote_score' => ['type' => 'long', 'coerce' => true],
+                'recommend_score' => ['type' => 'long', 'coerce' => true],
+                'quarter_sold_count' => ['type' => 'long', 'coerce' => true],
+                'favorite_count' => ['type' => 'long', 'coerce' => true],
+                'sort' => ['type' => 'long', 'coerce' => true],
+                'sku' => ['type' => 'keyword']
+            ]
+        ];
     }
 }

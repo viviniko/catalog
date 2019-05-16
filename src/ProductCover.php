@@ -1,6 +1,6 @@
 <?php
 
-namespace Viviniko\Catalog\Models;
+namespace Viviniko\Catalog;
 
 use Illuminate\Support\Collection;
 
