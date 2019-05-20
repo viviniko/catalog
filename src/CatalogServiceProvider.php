@@ -247,7 +247,7 @@ class CatalogServiceProvider extends BaseServiceProvider
     public function provides()
     {
         return [
-            
+
         ];
     }
 }

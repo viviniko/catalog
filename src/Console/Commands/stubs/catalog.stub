@@ -190,6 +190,9 @@ class CreateCatalogTable extends Migration
             $table->text('size_chart')->nullable();
             $table->boolean('is_active')->default(true);
             $table->integer('sort')->default(0);
+            $table->unsignedInteger('total_sold')->default(0);
+            $table->unsignedInteger('month_sold')->default(0);
+            $table->unsignedInteger('season_sold')->default(0);
             $table->string('url_rewrite')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_keywords')->nullable();

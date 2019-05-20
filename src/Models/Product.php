@@ -6,6 +6,7 @@ use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Config;
 use Viviniko\Catalog\ProductCover;
 use Viviniko\Favorite\Facades\Favorites;
+use Viviniko\Favorite\Favoritable;
 use Viviniko\Media\Facades\Files;
 use Viviniko\Review\Reviewable;
 use Viviniko\Support\Database\Eloquent\Model;
@@ -23,6 +24,7 @@ class Product extends Model
     protected $fillable = [
         'category_id', 'name', 'spu', 'description', 'amount', 'picture_ids', 'detail', 'size_chart', 'is_active', 'sort',
         'url_rewrite', 'meta_title', 'meta_keywords', 'meta_description',
+        'total_sold', 'month_sold', 'season_sold',
         'created_by', 'updated_by'
     ];
 
@@ -37,7 +39,7 @@ class Product extends Model
     ];
 
     protected $hidden = [
-        'created_by', 'updated_by', 'pictures', 'master',
+        'created_by', 'updated_by', 'master'
     ];
 
     public function category()
@@ -179,12 +181,11 @@ class Product extends Model
             $attrNames[$attrValue->attr->name][] = $attrValue->name;
         });
 
-        $orderService = $this->getOrderService();
-        $latestQuarterSold = $orderService ? $orderService->countOrderProductQtyByLatestMonth($product->id, 3) : 1;
-        $searchArray['quarter_sold_count'] = (int) $latestQuarterSold;
-        $searchArray['hot_score'] = (isset($searchArray['is_hot']) && $searchArray['is_hot'] ? 1 : 0) * 5 + $latestQuarterSold;
-        $searchArray['new_score'] = (isset($searchArray['is_new']) && $searchArray['is_new'] ? 1 : 0) * 5 + $latestQuarterSold;
-        $searchArray['promote_score'] = (isset($searchArray['is_promote']) && $searchArray['is_promote'] ? 1 : 0) * 5 + $latestQuarterSold;
+        $latestMonthSold = max(1, $this->month_sold);
+        $searchArray['month_sold'] = (int) $latestMonthSold;
+        $searchArray['hot_score'] = (isset($searchArray['is_hot']) && $searchArray['is_hot'] ? 1 : 0) * 5 + $latestMonthSold;
+        $searchArray['new_score'] = (isset($searchArray['is_new']) && $searchArray['is_new'] ? 1 : 0) * 5 + $latestMonthSold;
+        $searchArray['promote_score'] = (isset($searchArray['is_promote']) && $searchArray['is_promote'] ? 1 : 0) * 5 + $latestMonthSold;
         $searchArray['recommend_score'] = $searchArray['hot_score'] * 3 + $searchArray['new_score'] * 2 + $searchArray['promote_score'] * 2;
         $searchArray['favorite_count'] = Favorites::count(['favoritable_type' => $this->getMorphClass(), 'favoritable_id' => $this->id]);
 
@@ -222,7 +223,7 @@ class Product extends Model
                 'new_score' => ['type' => 'long', 'coerce' => true],
                 'promote_score' => ['type' => 'long', 'coerce' => true],
                 'recommend_score' => ['type' => 'long', 'coerce' => true],
-                'quarter_sold_count' => ['type' => 'long', 'coerce' => true],
+                'month_sold' => ['type' => 'long', 'coerce' => true],
                 'favorite_count' => ['type' => 'long', 'coerce' => true],
                 'sort' => ['type' => 'long', 'coerce' => true],
                 'sku' => ['type' => 'keyword']
