@@ -4,6 +4,7 @@ namespace Viviniko\Catalog\Models;
 
 use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 use Viviniko\Catalog\ProductCover;
 use Viviniko\Favorite\Facades\Favorites;
 use Viviniko\Favorite\Favoritable;
@@ -194,7 +195,7 @@ class Product extends Model
 
         $searchArray['attrs'] = $attrValueIds;
         foreach ($attrNames as $groupTitle => $specName) {
-            $groupTitle = str_slug($groupTitle, '_');
+            $groupTitle = Str::slug($groupTitle, '_');
             $searchArray["attr_{$groupTitle}"] = implode(',', $specName);
         }
 
