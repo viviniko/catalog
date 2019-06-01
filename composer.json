@@ -35,6 +35,7 @@
                 "Viviniko\\Catalog\\CatalogServiceProvider"
             ],
             "aliases": {
+                "Attrs": "Viviniko\\Catalog\\Facades\\Attrs",
                 "Catalog": "Viviniko\\Catalog\\Facades\\Catalog"
             }
         }

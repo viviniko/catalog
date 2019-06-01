@@ -4,6 +4,7 @@ namespace Viviniko\Catalog\Models;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
+use Viviniko\Catalog\Facades\Attrs;
 use Viviniko\Configuration\Configable;
 use Viviniko\Support\Database\Eloquent\Model;
 use Viviniko\Tag\CategoryTagTrait;
@@ -46,5 +47,10 @@ class Category extends Model
     public function children()
     {
         return $this->hasMany(Config::get('catalog.category'), 'parent_id');
+    }
+
+    public function getAttrsAttribute()
+    {
+        return Attrs::findAllBy('id', $this->attr_ids);
     }
 }
