@@ -184,9 +184,9 @@ class CreateCatalogTable extends Migration
             $table->string('name');
             $table->string('spu', 32)->unique();
             $table->string('description', 500);
-            $table->decimal('amount', 16, 4);
-            $table->text('picture_ids');
             $table->longText('detail')->nullable();
+            $table->decimal('amount', 16, 4);
+            $table->text('picture_ids')->nullable();
             $table->text('size_chart')->nullable();
             $table->boolean('is_active')->default(true);
             $table->integer('sort')->default(0);
