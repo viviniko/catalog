@@ -64,36 +64,6 @@ interface ProductService
     public function deleteProduct($id);
 
     /**
-     * Attach attribute groups.
-     *
-     * @param $productId
-     * @param array $data
-     *
-     * @return mixed
-     */
-    public function attachProductSpecGroups($productId, array $data);
-
-    /**
-     * Update attribute group.
-     *
-     * @param $productId
-     * @param array $data
-     *
-     * @return mixed
-     */
-    public function updateProductSpecGroups($productId, array $data);
-
-    /**
-     * Detach attribute group.
-     *
-     * @param $productId
-     * @param $specificationGroupId
-     *
-     * @return mixed
-     */
-    public function detachProductSpecGroup($productId, $specificationGroupId);
-
-    /**
      * Attach attribute.
      *
      * @param $productId
