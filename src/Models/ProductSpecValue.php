@@ -10,7 +10,8 @@ class ProductSpecValue extends Pivot
     public $timestamps = false;
 
     protected $fillable = [
-        'product_id', 'spec_id', 'spec_value_id', 'custom_value', 'is_selected', 'picture_id', 'swatch_picture_id', 'sort'
+        'product_id', 'spec_id', 'spec_value_id', 'custom_value', 'is_selected',
+        'picture_id', 'swatch_picture_id', 'sort'
     ];
 
     protected $casts = [
