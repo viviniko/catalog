@@ -20,11 +20,11 @@ class ProductSpecValue extends Pivot
 
     public function picture()
     {
-        return $this->belongsTo(Config::get('media.media'), 'picture_id');
+        return $this->belongsTo(Config::get('media.file'), 'picture_id');
     }
 
     public function swatchPicture()
     {
-        return $this->belongsTo(Config::get('media.media'), 'swatch_picture_id');
+        return $this->belongsTo(Config::get('media.file'), 'swatch_picture_id');
     }
 }

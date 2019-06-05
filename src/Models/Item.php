@@ -34,7 +34,7 @@ class Item extends Model
 
     public function picture()
     {
-        return $this->belongsTo(Config::get('media.media'), 'picture_id');
+        return $this->belongsTo(Config::get('media.file'), 'picture_id');
     }
 
     public function getCoverAttribute()
