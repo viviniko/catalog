@@ -206,18 +206,18 @@ class CreateCatalogTable extends Migration
         Schema::create($this->itemsTable, function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('product_id');
-            $table->string('spec_key', 128);
+            $table->string('vs');
+            $table->string('values');
             $table->string('sku', 32)->default('')->index();
             $table->decimal('amount', 16, 4);
             $table->unsignedTinyInteger('discount')->default(0);
             $table->decimal('weight', 16, 4)->default(0);
             $table->unsignedInteger('quantity')->default(0);
             $table->unsignedInteger('picture_id');
-            $table->string('specs');
             $table->boolean('is_primary')->default(false);
             $table->boolean('is_active')->default(true);
 
-            $table->unique(['product_id', 'spec_key']);
+            $table->unique(['product_id', 'vs']);
         });
 
         // Create table for storing product attribute
