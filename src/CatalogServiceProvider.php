@@ -233,12 +233,6 @@ class CatalogServiceProvider extends BaseServiceProvider
         );
     }
 
-    protected function registerCatalogService()
-    {
-        $this->app->singleton('catalog', \Viviniko\Catalog\Catalog\CatalogManager::class);
-        $this->app->alias('catalog',\Viviniko\Catalog\Contracts\Catalog::class);
-    }
-
     /**
      * Get the services provided by the provider.
      *
