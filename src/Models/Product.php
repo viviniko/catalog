@@ -84,22 +84,27 @@ class Product extends Model
         return $this->hasMany(Config::get('catalog.item'), 'product_id');
     }
 
-    public function getPicturesAttribute()
+    public function getFilesAttribute()
     {
-        return Files::findAllBy('id', $this->picture_ids)->map(function ($media) { return $media->url; });
+        return Files::findAllBy('id', $this->picture_ids);
     }
 
-    public function getUrlAttribute()
+    public function getPicturesAttribute()
     {
-        return url($this->url_rewrite);
+        return $this->files->map(function ($file) { return $file->url; });
     }
 
     public function getCoverAttribute()
     {
         if (!$this->product_cover) {
-            $this->product_cover = new ProductCover($this->pictures->slice(0, 2)->map(function ($pic) { return $pic->url; }));
+            $this->product_cover = new ProductCover($this->pictures->slice(0, 2));
         }
         return $this->product_cover;
+    }
+
+    public function getUrlAttribute()
+    {
+        return url($this->url_rewrite);
     }
 
     public function getSkuAttribute()

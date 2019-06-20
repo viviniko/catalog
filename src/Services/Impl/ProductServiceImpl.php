@@ -206,34 +206,6 @@ class ProductServiceImpl implements ProductService
     /**
      * {@inheritdoc}
      */
-    public function attachProductSpecGroups($productId, array $data)
-    {
-        foreach ($data as $groupId => $attributes) {
-            $this->productRepository->attachProductSpecGroup($productId, $groupId, $attributes);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateProductSpecGroups($productId, array $data)
-    {
-        foreach ($data as $groupId => $attributes) {
-            $this->productRepository->updateProductSpecGroup($productId, $groupId, $attributes);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function detachProductSpecGroup($productId, $groupId)
-    {
-        $this->productRepository->detachProductSpecGroup($productId, $groupId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attachProductSpec($productId, array $data)
     {
         $product = $this->productRepository->find($productId);

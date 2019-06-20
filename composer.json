@@ -33,7 +33,10 @@
         "laravel": {
             "providers": [
                 "Viviniko\\Catalog\\CatalogServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Attrs": "Viviniko\\Catalog\\Facades\\Attrs"
+            }
         }
     },
     "minimum-stability": "dev",
