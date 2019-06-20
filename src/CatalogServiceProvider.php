@@ -72,20 +72,6 @@ class CatalogServiceProvider extends BaseServiceProvider
 
         $this->registerSKUGenerater();
 
-//        $this->registerCategoryService();
-//
-//        $this->registerAttributeService();
-//
-//        $this->registerSpecificationService();
-//
-//        $this->registerProductService();
-//
-//        $this->registerItemService();
-//
-//        $this->registerManufacturerService();
-//
-//        $this->registerCatalogService();
-
         $this->registerCommands();
     }
 
@@ -149,79 +135,6 @@ class CatalogServiceProvider extends BaseServiceProvider
         $this->app->singleton(
             \Viviniko\Catalog\Repositories\Item\ItemRepository::class,
             \Viviniko\Catalog\Repositories\Item\EloquentItem::class
-        );
-    }
-
-    /**
-     * Register the category service provider.
-     *
-     * @return void
-     */
-    protected function registerCategoryService()
-    {
-        $this->app->singleton(
-            \Viviniko\Catalog\Services\CategoryService::class,
-            \Viviniko\Catalog\Services\Impl\CategoryServiceImpl::class
-        );
-    }
-
-    /**
-     * Register the attribute service provider.
-     *
-     * @return void
-     */
-    protected function registerAttributeService()
-    {
-        $this->app->singleton(
-            \Viviniko\Catalog\Services\AttrService::class,
-            \Viviniko\Catalog\Services\Impl\AttrServiceImpl::class
-        );
-    }
-
-    /**
-     * Register the specification attribute service provider.
-     *
-     * @return void
-     */
-    protected function registerSpecificationService()
-    {
-        $this->app->singleton(
-            \Viviniko\Catalog\Services\SpecService::class,
-            \Viviniko\Catalog\Services\Impl\SpecServiceImpl::class
-        );
-    }
-
-    /**
-     * Register the product service provider.
-     *
-     * @return void
-     */
-    protected function registerProductService()
-    {
-        $this->app->singleton(
-            \Viviniko\Catalog\Services\ProductService::class,
-            \Viviniko\Catalog\Services\Impl\ProductServiceImpl::class
-        );
-    }
-
-    /**
-     * Register the product item service provider.
-     *
-     * @return void
-     */
-    protected function registerItemService()
-    {
-        $this->app->singleton(
-            \Viviniko\Catalog\Services\ItemService::class,
-            \Viviniko\Catalog\Services\Impl\ItemServiceImpl::class
-        );
-    }
-
-    protected function registerManufacturerService()
-    {
-        $this->app->singleton(
-            \Viviniko\Catalog\Services\ManufacturerService::class,
-            \Viviniko\Catalog\Services\Impl\ManufacturerServiceImpl::class
         );
     }
 

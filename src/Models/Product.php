@@ -94,12 +94,9 @@ class Product extends Model
         return $this->files->map(function ($file) { return $file->url; });
     }
 
-    public function getCoverAttribute()
+    public function getImageAttribute()
     {
-        if (!$this->product_cover) {
-            $this->product_cover = new ProductCover($this->pictures->slice(0, 2));
-        }
-        return $this->product_cover;
+        return data_get($this->files->first(), 'url');
     }
 
     public function getUrlAttribute()
