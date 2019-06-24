@@ -10,7 +10,7 @@ class ProductSpec extends Pivot
     public $timestamps = false;
 
     protected $fillable = [
-        'product_id', 'spec_id', 'control_type', 'text_prompt', 'is_required', 'sort',
+        'product_id', 'spec_id', 'control_type', 'name', 'is_required', 'sort',
     ];
 
     protected $casts = [
@@ -20,5 +20,15 @@ class ProductSpec extends Pivot
     public function spec()
     {
         return $this->belongsTo(Config::get('catalog.spec'), 'spec_id');
+    }
+
+    public function values()
+    {
+        return $this->hasMany(Config::get('catalog.product_spec_value'), 'product_spec_id');
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->name ?? $this->spec->name;
     }
 }

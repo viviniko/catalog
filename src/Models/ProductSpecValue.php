@@ -10,13 +10,23 @@ class ProductSpecValue extends Pivot
     public $timestamps = false;
 
     protected $fillable = [
-        'product_id', 'spec_id', 'spec_value_id', 'custom_value', 'is_selected',
+        'product_spec_id', 'spec_value_id', 'name', 'is_selected',
         'picture_id', 'swatch_picture_id', 'sort'
     ];
 
     protected $casts = [
         'is_selected' => 'boolean',
     ];
+
+    public function getNameAttribute()
+    {
+        return $this->name ?? $this->specValue->name;
+    }
+
+    public function specValue()
+    {
+        return $this->belongsTo(Config::get('catalog.spec_value'), 'spec_value_id');
+    }
 
     public function picture()
     {

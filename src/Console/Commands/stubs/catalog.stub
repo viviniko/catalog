@@ -55,6 +55,11 @@ class CreateCatalogTable extends Migration
     /**
      * @var string
      */
+    protected $productAttrValueTable;
+
+    /**
+     * @var string
+     */
     protected $productSpecTable;
 
     /**
@@ -81,6 +86,7 @@ class CreateCatalogTable extends Migration
         $this->productSpecTable = self::getConfigModelTable('product_spec');
         $this->productSpecValueTable = self::getConfigModelTable('product_spec_value');
         $this->productAttrTable = self::getConfigModelTable('product_attr');
+        $this->productAttrValueTable = self::getConfigModelTable('product_attr_value');
         $this->itemsTable = self::getConfigModelTable('item');
         $this->manufacturersTable = self::getConfigModelTable('manufacturer');
         $this->manufacturerProductsTable = self::getConfigModelTable('manufacturer_product');
@@ -225,8 +231,15 @@ class CreateCatalogTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('attr_id');
+            $table->string('name')->nullable();
+        });
+
+        // Create table for storing product attribute
+        Schema::create($this->productAttrValueTable, function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('product_attr_id');
             $table->unsignedInteger('attr_value_id');
-            $table->string('custom_value')->nullable();
+            $table->string('name')->nullable();
         });
 
         // Create table for storing product specification attribute
@@ -235,7 +248,7 @@ class CreateCatalogTable extends Migration
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('spec_id');
             $table->unsignedTinyInteger('control_type')->default(0);
-            $table->string('text_prompt')->nullable();
+            $table->string('name')->nullable();
             $table->boolean('is_required')->default(false);
             $table->integer('sort')->default(0);
         });
@@ -243,10 +256,9 @@ class CreateCatalogTable extends Migration
         // Create table for storing product specification value attribute
         Schema::create($this->productSpecValueTable, function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('product_id');
-            $table->unsignedInteger('spec_id');
+            $table->unsignedInteger('product_spec_id');
             $table->unsignedInteger('spec_value_id');
-            $table->string('custom_value')->nullable();
+            $table->string('name')->nullable();
             $table->boolean('is_selected')->default(false);
             $table->unsignedInteger('picture_id')->nullable();
             $table->unsignedInteger('swatch_picture_id')->nullable();
@@ -281,8 +293,9 @@ class CreateCatalogTable extends Migration
         Schema::dropIfExists($this->manufacturersTable);
         Schema::dropIfExists($this->productsTable);
         Schema::dropIfExists($this->itemsTable);
-        Schema::dropIfExists($this->productSpecTable);
         Schema::dropIfExists($this->productSpecValueTable);
+        Schema::dropIfExists($this->productSpecTable);
+        Schema::dropIfExists($this->productAttrValueTable);
         Schema::dropIfExists($this->productAttrTable);
         Schema::dropIfExists($this->manufacturerProductsTable);
     }

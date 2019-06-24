@@ -94,6 +94,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Catalog Product Attr Model
+    |--------------------------------------------------------------------------
+    |
+    | This is the Product model.
+    |
+    */
+    'product_attr_value' => 'Viviniko\Catalog\Models\ProductAttrValue',
+
+    /*
+    |--------------------------------------------------------------------------
     | Catalog Product Spec Group Model
     |--------------------------------------------------------------------------
     |
@@ -221,6 +231,16 @@ return [
     |
     */
     'product_attr_table' => 'catalog_product_attr',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Catalog Product Attribute Mapping Table
+    |--------------------------------------------------------------------------
+    |
+    | This is the product_attribute table.
+    |
+    */
+    'product_attr_value_table' => 'catalog_product_attr_value',
 
     /*
     |--------------------------------------------------------------------------
