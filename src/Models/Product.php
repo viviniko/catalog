@@ -62,9 +62,9 @@ class Product extends Model
         return $this->hasMany(Config::get('catalog.product_spec'), 'product_id');
     }
 
-    public function master()
+    public function primary()
     {
-        return $this->hasOne(Config::get('catalog.item'), 'product_id')->where('is_master', true);
+        return $this->hasOne(Config::get('catalog.item'), 'product_id')->where('is_primary', true);
     }
 
     public function items()
@@ -89,27 +89,27 @@ class Product extends Model
 
     public function getImageAttribute()
     {
-        return data_get($this->master, 'image');
+        return data_get($this->primary, 'image');
     }
 
     public function getSkuAttribute()
     {
-        return data_get($this->master, 'sku');
+        return data_get($this->primary, 'sku');
     }
 
     public function getAmountAttribute()
     {
-        return data_get($this->master, 'amount');
+        return data_get($this->primary, 'amount');
     }
 
     public function getDiscountAttribute()
     {
-        return data_get($this->master, 'discount');
+        return data_get($this->primary, 'discount');
     }
 
     public function getWeightAttribute()
     {
-        return data_get($this->master, 'weight');
+        return data_get($this->primary, 'weight');
     }
 
     public function getQuantityAttribute()
