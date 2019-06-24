@@ -3,11 +3,13 @@
 namespace Viviniko\Catalog\Models;
 
 use Illuminate\Support\Facades\Config;
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Viviniko\Support\Database\Eloquent\Model;
 
-class ProductSpecValue extends Pivot
+class ProductSpecValue extends Model
 {
     public $timestamps = false;
+
+    protected $tableConfigKey = 'catalog.product_spec_value_table';
 
     protected $fillable = [
         'product_spec_id', 'spec_value_id', 'name', 'is_selected',

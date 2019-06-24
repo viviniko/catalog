@@ -5,7 +5,6 @@ namespace Viviniko\Catalog\Models;
 use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
-use Viviniko\Catalog\ProductCover;
 use Viviniko\Favorite\Facades\Favorites;
 use Viviniko\Favorite\Favoritable;
 use Viviniko\Media\Facades\Files;
@@ -86,6 +85,11 @@ class Product extends Model
     public function getUrlAttribute()
     {
         return url($this->url_rewrite);
+    }
+
+    public function getImageAttribute()
+    {
+        return data_get($this->master, 'image');
     }
 
     public function getSkuAttribute()
