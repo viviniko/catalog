@@ -167,9 +167,12 @@ class Product extends Model
 
         $attrValueIds = [];
         $attrNames = [];
-        $this->attrValues->each(function ($attrValue) use (&$attrValueIds, &$attrNames) {
-            $attrValueIds[] = $attrValue->id;
-            $attrNames[$attrValue->attr->name][] = $attrValue->name;
+        $this->attrs->each(function ($attr) use (&$attrValueIds, &$attrNames) {
+            foreach ($attr->values as $value) {
+                $attrValueIds[] = $value->attr_value_id;
+                $attrNames[$attr->name][] = $value->name;
+            }
+
         });
 
         $latestMonthSold = max(1, $this->month_sold);
