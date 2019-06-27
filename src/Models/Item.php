@@ -13,14 +13,14 @@ class Item extends Model
     protected $tableConfigKey = 'catalog.items_table';
 
     protected $fillable = [
-        'product_id', 'vs', 'values', 'sku', 'amount', 'discount', 'weight', 'quantity', 'picture_id',
+        'product_id', 'product_specs', 'sku', 'amount', 'discount', 'weight', 'quantity', 'picture_id',
         'is_active', 'is_primary'
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'is_primary' => 'boolean',
-        'values' => 'array',
+        'product_specs' => 'array',
     ];
 
     protected $hidden = [
