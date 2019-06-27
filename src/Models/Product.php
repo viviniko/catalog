@@ -35,7 +35,7 @@ class Product extends Model
     ];
 
     protected $appends = [
-        'cover', 'sku', 'amount', 'discount', 'quantity', 'weight'
+        'image', 'sku', 'amount', 'discount', 'quantity', 'weight'
     ];
 
     protected $hidden = [
@@ -155,7 +155,7 @@ class Product extends Model
             $searchArray['master'],
             $searchArray['manufacturerProduct'],
             $searchArray['pictures'],
-            $searchArray['cover'],
+            $searchArray['image'],
             $searchArray['url'],
             $searchArray['category']
         );
