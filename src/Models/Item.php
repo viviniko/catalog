@@ -2,6 +2,8 @@
 
 namespace Viviniko\Catalog\Models;
 
+use Viviniko\Catalog\Facades\ProductSpecs;
+use Viviniko\Catalog\Facades\ProductSpecValues;
 use Viviniko\Currency\Amount;
 use Viviniko\Support\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
@@ -30,6 +32,16 @@ class Item extends Model
     public function product()
     {
         return $this->belongsTo(Config::get('catalog.product'), 'product_id');
+    }
+
+    public function getSpecValuesAttribute()
+    {
+        return ProductSpecValues::findAllBy('id', array_values($this->product_specs));
+    }
+
+    public function getSpecsAttribute()
+    {
+        return ProductSpecs::findAllBy('id', array_keys($this->product_specs));
     }
 
     public function picture()

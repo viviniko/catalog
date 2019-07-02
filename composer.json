@@ -35,7 +35,9 @@
                 "Viviniko\\Catalog\\CatalogServiceProvider"
             ],
             "aliases": {
-                "Attrs": "Viviniko\\Catalog\\Facades\\Attrs"
+                "Attrs": "Viviniko\\Catalog\\Facades\\Attrs",
+                "ProductSpecs": "Viviniko\\Catalog\\Facades\\ProductSpecs",
+                "ProductSpecValues": "Viviniko\\Catalog\\Facades\\ProductSpecValues"
             }
         }
     },

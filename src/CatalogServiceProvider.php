@@ -136,6 +136,18 @@ class CatalogServiceProvider extends BaseServiceProvider
             \Viviniko\Catalog\Repositories\Item\ItemRepository::class,
             \Viviniko\Catalog\Repositories\Item\EloquentItem::class
         );
+
+        // Product spec Repository
+        $this->app->singleton(
+            \Viviniko\Catalog\Repositories\ProductSpec\ProductSpecRepository::class,
+            \Viviniko\Catalog\Repositories\ProductSpec\EloquentProductSpec::class
+        );
+
+        // Product spec value Repository
+        $this->app->singleton(
+            \Viviniko\Catalog\Repositories\ProductSpecValue\ProductSpecValueRepository::class,
+            \Viviniko\Catalog\Repositories\ProductSpecValue\EloquentProductSpecValue::class
+        );
     }
 
     protected function registerSKUGenerater()
