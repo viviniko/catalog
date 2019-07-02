@@ -13,6 +13,6 @@ class ProductSpecValues extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \Viviniko\Catalog\Repositories\ProductSpecValue\ProductSpecRepository::class;
+        return \Viviniko\Catalog\Repositories\ProductSpecValue\ProductSpecValueRepository::class;
     }
 }
