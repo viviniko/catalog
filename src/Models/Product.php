@@ -206,22 +206,24 @@ class Product extends Model
     public function searchableMapping()
     {
         return [
-            'properties' => [
-                'price' => ['type' => 'float', 'coerce' => true],
-                'market_price' => ['type' => 'float', 'coerce' => true],
-                'weight' => ['type' => 'float', 'coerce' => true],
-                'discount' => ['type' => 'float', 'coerce' => true],
-                'created_at' => ['type' => 'long', 'coerce' => true],
-                'updated_at' => ['type' => 'long', 'coerce' => true],
-                'hot_score' => ['type' => 'long', 'coerce' => true],
-                'new_score' => ['type' => 'long', 'coerce' => true],
-                'promote_score' => ['type' => 'long', 'coerce' => true],
-                'recommend_score' => ['type' => 'long', 'coerce' => true],
-                'month_sold' => ['type' => 'long', 'coerce' => true],
-                'favorite_count' => ['type' => 'long', 'coerce' => true],
-                'sort' => ['type' => 'long', 'coerce' => true],
-                'sku' => ['type' => 'keyword']
-            ]
+            'mappings' => ['_doc' => [
+                'properties' => [
+                    'price' => ['type' => 'float', 'coerce' => true],
+                    'market_price' => ['type' => 'float', 'coerce' => true],
+                    'weight' => ['type' => 'float', 'coerce' => true],
+                    'discount' => ['type' => 'float', 'coerce' => true],
+                    'created_at' => ['type' => 'long', 'coerce' => true],
+                    'updated_at' => ['type' => 'long', 'coerce' => true],
+                    'hot_score' => ['type' => 'long', 'coerce' => true],
+                    'new_score' => ['type' => 'long', 'coerce' => true],
+                    'promote_score' => ['type' => 'long', 'coerce' => true],
+                    'recommend_score' => ['type' => 'long', 'coerce' => true],
+                    'month_sold' => ['type' => 'long', 'coerce' => true],
+                    'favorite_count' => ['type' => 'long', 'coerce' => true],
+                    'sort' => ['type' => 'long', 'coerce' => true],
+                    'sku' => ['type' => 'keyword']
+                ]
+            ]]
         ];
     }
 }
