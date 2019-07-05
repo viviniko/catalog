@@ -163,7 +163,7 @@ class Product extends Model
         );
 
         if ($this->category) {
-            $searchArray['category_name'] = $this->category->name;
+            // $searchArray['category_name'] = $this->category->name;
             $searchArray['categories'] = $this->category->path_categories->pluck('name')->implode(',');
         }
 
