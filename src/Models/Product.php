@@ -149,7 +149,8 @@ class Product extends Model
             $searchArray['url'],
             $searchArray['url_rewrite'],
             $searchArray['picture_ids'],
-            $searchArray['category']
+            $searchArray['category'],
+            $searchArray['size_chart']
         );
 
         if ($this->category) {
