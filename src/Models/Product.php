@@ -133,16 +133,6 @@ class Product extends Model
     }
 
     /**
-     * Get the index name for the model.
-     *
-     * @return string
-     */
-    public function searchableAs()
-    {
-        return 'product';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
