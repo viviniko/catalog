@@ -152,11 +152,13 @@ class Product extends Model
         $searchArray = $this->toArray();
 
         unset(
-            $searchArray['master'],
+            $searchArray['primary'],
             $searchArray['manufacturerProduct'],
             $searchArray['pictures'],
             $searchArray['image'],
             $searchArray['url'],
+            $searchArray['url_rewrite'],
+            $searchArray['picture_ids'],
             $searchArray['category']
         );
 
@@ -186,7 +188,6 @@ class Product extends Model
         $searchArray['amount'] = empty($searchArray['amount']) ? 0 : (float)$searchArray['amount']->value;
         $searchArray['sort'] = (int)$searchArray['sort'];
 
-        $searchArray['attrs'] = $attrValueIds;
         foreach ($attrNames as $groupTitle => $specName) {
             $groupTitle = Str::slug($groupTitle, '_');
             $searchArray["attr_{$groupTitle}"] = implode(',', $specName);
@@ -207,19 +208,18 @@ class Product extends Model
     {
         return [
             'properties' => [
-                'price' => ['type' => 'float', 'coerce' => true],
-                'market_price' => ['type' => 'float', 'coerce' => true],
-                'weight' => ['type' => 'float', 'coerce' => true],
-                'discount' => ['type' => 'float', 'coerce' => true],
-                'created_at' => ['type' => 'long', 'coerce' => true],
-                'updated_at' => ['type' => 'long', 'coerce' => true],
-                'hot_score' => ['type' => 'long', 'coerce' => true],
-                'new_score' => ['type' => 'long', 'coerce' => true],
-                'promote_score' => ['type' => 'long', 'coerce' => true],
-                'recommend_score' => ['type' => 'long', 'coerce' => true],
-                'month_sold' => ['type' => 'long', 'coerce' => true],
-                'favorite_count' => ['type' => 'long', 'coerce' => true],
-                'sort' => ['type' => 'long', 'coerce' => true],
+                'amount' => ['type' => 'float'],
+                'weight' => ['type' => 'float'],
+                'discount' => ['type' => 'float'],
+                'created_at' => ['type' => 'long'],
+                'updated_at' => ['type' => 'long'],
+                'hot_score' => ['type' => 'long'],
+                'new_score' => ['type' => 'long'],
+                'promote_score' => ['type' => 'long'],
+                'recommend_score' => ['type' => 'long'],
+                'month_sold' => ['type' => 'long'],
+                'favorite_count' => ['type' => 'long'],
+                'sort' => ['type' => 'long'],
                 'sku' => ['type' => 'keyword']
             ]
         ];
