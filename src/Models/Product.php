@@ -162,7 +162,7 @@ class Product extends Model
 
         if ($this->category) {
             $searchArray['category_name'] = $this->category->name;
-            $searchArray['categories'] = $this->categoryService->getCategoriesByIdIn(array_filter(explode('/', $product->category->path)))->pluck('name')->implode(',');
+            $searchArray['categories'] = $this->category->path_categories->pluck('name')->implode(',');
         }
 
         $attrValueIds = [];
@@ -192,8 +192,8 @@ class Product extends Model
             $searchArray["attr_{$groupTitle}"] = implode(',', $specName);
         }
 
-        $searchArray['created_at'] = (int) strtotime($product->created_at);
-        $searchArray['updated_at'] = (int) strtotime($product->updated_at);
+        $searchArray['created_at'] = (int) strtotime($this->created_at);
+        $searchArray['updated_at'] = (int) strtotime($this->updated_at);
 
         return $searchArray;
     }

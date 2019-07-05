@@ -38,6 +38,11 @@ class Category extends Model
     {
         return explode('/', $this->path);
     }
+    
+    public function getPathCategoriesAttribute()
+    {
+        return $this->newQuery()->whereIn('id', $this->path_ids)->get();
+    }
 
     public function parent()
     {
