@@ -39,7 +39,7 @@ class ProductSpecValue extends Model
         return $this->belongsTo(Config::get('media.file'), 'picture_id');
     }
 
-    public function picture()
+    public function getPictureAttribute()
     {
         return data_get($this->file, 'url');
     }
@@ -49,7 +49,7 @@ class ProductSpecValue extends Model
         return $this->belongsTo(Config::get('media.file'), 'swatch_picture_id');
     }
 
-    public function swatchPicture()
+    public function getSwatchPictureAttribute()
     {
         return data_get($this->swatch_file, 'url');
     }
