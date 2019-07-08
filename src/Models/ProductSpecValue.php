@@ -20,6 +20,10 @@ class ProductSpecValue extends Model
         'is_selected' => 'boolean',
     ];
 
+    protected $hidden = [
+        'specValue'
+    ];
+
     public function getNameAttribute()
     {
         return $this->name ?? $this->specValue->name;

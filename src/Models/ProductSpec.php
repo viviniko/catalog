@@ -19,6 +19,10 @@ class ProductSpec extends Model
         'is_required' => 'boolean',
     ];
 
+    protected $hidden = [
+        'spec'
+    ];
+
     public function spec()
     {
         return $this->belongsTo(Config::get('catalog.spec'), 'spec_id');
