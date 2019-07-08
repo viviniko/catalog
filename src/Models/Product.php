@@ -79,7 +79,7 @@ class Product extends Model
 
     public function getPicturesAttribute()
     {
-        return $this->files->map(function ($file) { return $file->url; });
+        return $this->files->mapWithKeys(function ($file) { return [$file->id => $file->url]; });
     }
 
     public function getUrlAttribute()
