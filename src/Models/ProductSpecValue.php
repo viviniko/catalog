@@ -21,7 +21,7 @@ class ProductSpecValue extends Model
     ];
 
     protected $hidden = [
-        'specValue'
+        'specValue', 'file', 'swatchFile'
     ];
 
     public function getNameAttribute()
