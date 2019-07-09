@@ -29,6 +29,11 @@ class ProductSpecValue extends Model
         return $this->name ?? $this->specValue->name;
     }
 
+    public function productSpec()
+    {
+        return $this->belongsTo(Config::get('catalog.product_spec'), 'product_spec_id');
+    }
+
     public function specValue()
     {
         return $this->belongsTo(Config::get('catalog.spec_value'), 'spec_value_id');
