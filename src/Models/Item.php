@@ -2,20 +2,21 @@
 
 namespace Viviniko\Catalog\Models;
 
+use Viviniko\Cart\Contracts\CartItem;
 use Viviniko\Catalog\Facades\ProductSpecs;
 use Viviniko\Catalog\Facades\ProductSpecValues;
 use Viviniko\Currency\Amount;
 use Viviniko\Support\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 
-class Item extends Model
+class Item extends Model implements CartItem
 {
     public $timestamps = false;
 
     protected $tableConfigKey = 'catalog.items_table';
 
     protected $fillable = [
-        'product_id', 'product_specs', 'sku', 'amount', 'discount', 'weight', 'quantity', 'picture_id',
+        'product_id', 'product_specs', 'product_spec_names', 'sku', 'amount', 'discount', 'weight', 'quantity', 'picture_id',
         'is_active', 'is_primary'
     ];
 
@@ -23,6 +24,7 @@ class Item extends Model
         'is_active' => 'boolean',
         'is_primary' => 'boolean',
         'product_specs' => 'array',
+        'product_spec_names' => 'array',
     ];
 
     protected $hidden = [
@@ -57,5 +59,42 @@ class Item extends Model
     public function getAmountAttribute($amount)
     {
         return Amount::createBaseAmount($amount);
+    }
+
+    public function getSkuId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return \Viviniko\Currency\Amount
+     */
+    public function getPrice()
+    {
+        return Amount::createBaseAmount($this->amount);
+    }
+
+    /**
+     * @return float
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->product_spec_names;
     }
 }
