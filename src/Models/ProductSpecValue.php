@@ -44,18 +44,8 @@ class ProductSpecValue extends Model
         return $this->belongsTo(Config::get('media.file'), 'picture_id');
     }
 
-    public function getImageAttribute()
-    {
-        return data_get($this->picture, 'url');
-    }
-
     public function swatchPicture()
     {
         return $this->belongsTo(Config::get('media.file'), 'swatch_picture_id');
-    }
-
-    public function getSwatchImageAttribute()
-    {
-        return data_get($this->swatch_picture, 'url');
     }
 }

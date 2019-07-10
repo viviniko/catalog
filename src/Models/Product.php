@@ -77,19 +77,14 @@ class Product extends Model
         return Files::findAllBy('id', $this->picture_ids);
     }
 
-    public function getImagesAttribute()
-    {
-        return $this->pictures->mapWithKeys(function ($file) { return [$file->id => $file->url]; });
-    }
-
     public function getUrlAttribute()
     {
         return url($this->url_rewrite);
     }
 
-    public function getImageAttribute()
+    public function getPictureAttribute()
     {
-        return data_get($this->primary, 'image');
+        return data_get($this->primary, 'picture');
     }
 
     public function getSkuAttribute()
@@ -145,7 +140,7 @@ class Product extends Model
             $searchArray['primary'],
             $searchArray['manufacturerProduct'],
             $searchArray['pictures'],
-            $searchArray['image'],
+            $searchArray['picture'],
             $searchArray['url'],
             $searchArray['url_rewrite'],
             $searchArray['picture_ids'],

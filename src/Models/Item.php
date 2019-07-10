@@ -51,11 +51,6 @@ class Item extends Model implements CartItem
         return $this->belongsTo(Config::get('media.file'), 'picture_id');
     }
 
-    public function getImageAttribute()
-    {
-        return data_get($this->picture, 'url');
-    }
-
     public function getAmountAttribute($amount)
     {
         return Amount::createBaseAmount($amount);
