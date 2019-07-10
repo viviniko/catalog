@@ -72,14 +72,14 @@ class Product extends Model
         return $this->hasMany(Config::get('catalog.item'), 'product_id');
     }
 
-    public function getFilesAttribute()
+    public function getPicturesAttribute()
     {
         return Files::findAllBy('id', $this->picture_ids);
     }
 
-    public function getPicturesAttribute()
+    public function getImagesAttribute()
     {
-        return $this->files->mapWithKeys(function ($file) { return [$file->id => $file->url]; });
+        return $this->pictures->mapWithKeys(function ($file) { return [$file->id => $file->url]; });
     }
 
     public function getUrlAttribute()

@@ -61,6 +61,16 @@ class Item extends Model implements CartItem
         return Amount::createBaseAmount($amount);
     }
 
+    public function getNameAttribute()
+    {
+        return $this->product->name;
+    }
+
+    public function getUrlAttribute()
+    {
+        return $this->product->url;
+    }
+
     public function getSkuId()
     {
         return $this->id;
