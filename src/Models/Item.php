@@ -71,7 +71,7 @@ class Item extends Model implements CartItem
      */
     public function getPrice()
     {
-        return Amount::createBaseAmount($this->amount);
+        return $this->amount;
     }
 
     /**
