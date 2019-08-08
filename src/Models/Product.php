@@ -173,22 +173,8 @@ class Product extends Model
         $searchArray['position'] = (int)$searchArray['position'];
 
 
-        $searchArray['attrs'] = $this->attrs->map(function($attr) {
-
-        });
-        $attrValueIds = [];
-        $attrNames = [];
-        $this->attrs->each(function ($attr) use (&$attrValueIds, &$attrNames) {
-            foreach ($attr->values as $value) {
-                $attrValueIds[] = $value->attr_value_id;
-                $attrNames[$attr->name][] = $value->name;
-            }
-
-        });
-        foreach ($attrNames as $groupTitle => $specName) {
-            $groupTitle = Str::slug($groupTitle, '_');
-            $searchArray["attr_{$groupTitle}"] = implode(',', $specName);
-        }
+        $searchableAttrs = $this->attrs->filter(function ($attr) { return $attr->is_searchable; });
+        $searchArray['attrs'] = $this->attrValues->whereIn('attr_id', $searchableAttrs->pluck('id'))->pluck('name')->all();
 
         $searchArray['created_at'] = (int) strtotime($this->created_at);
         $searchArray['updated_at'] = (int) strtotime($this->updated_at);
