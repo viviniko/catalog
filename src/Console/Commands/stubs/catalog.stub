@@ -216,7 +216,7 @@ class CreateCatalogTable extends Migration
             $table->string('sku', 32)->default('')->index();
             $table->decimal('price', 16, 2);
             $table->unsignedTinyInteger('discount')->default(0);
-            $table->decimal('weight', 16, 4)->default(0);
+            $table->unsignedInteger('weight')->default(0);
             $table->unsignedInteger('inventory_quantity')->default(0);
             $table->unsignedInteger('image_id');
             $table->boolean('is_primary')->default(false);
