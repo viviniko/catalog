@@ -31,7 +31,7 @@ class Product extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'size_chart' => 'array',
-        'picture_ids' => 'array',
+        'image_ids' => 'array',
     ];
 
     protected $appends = [
