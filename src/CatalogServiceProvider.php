@@ -137,6 +137,12 @@ class CatalogServiceProvider extends BaseServiceProvider
             \Viviniko\Catalog\Repositories\Item\EloquentItem::class
         );
 
+        // Product attr Repository
+        $this->app->singleton(
+            \Viviniko\Catalog\Repositories\ProductAttr\ProductAttrRepository::class,
+            \Viviniko\Catalog\Repositories\ProductAttr\EloquentProductAttr::class
+        );
+
         // Product spec Repository
         $this->app->singleton(
             \Viviniko\Catalog\Repositories\ProductSpec\ProductSpecRepository::class,
