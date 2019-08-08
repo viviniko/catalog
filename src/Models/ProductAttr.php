@@ -20,6 +20,11 @@ class ProductAttr extends Model
         return $this->belongsTo(Config::get('catalog.category'), 'category_id');
     }
 
+    public function product()
+    {
+        return $this->belongsTo(Config::get('catalog.product'), 'product_id');
+    }
+
     public function attr()
     {
         return $this->belongsTo(Config::get('catalog.attr'), 'attr_id');
