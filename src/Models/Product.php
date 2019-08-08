@@ -5,6 +5,8 @@ namespace Viviniko\Catalog\Models;
 use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
+use Viviniko\Catalog\Facades\Attrs;
+use Viviniko\Catalog\Facades\AttrValues;
 use Viviniko\Favorite\Facades\Favorites;
 use Viviniko\Favorite\Favoritable;
 use Viviniko\Media\Facades\Files;
@@ -22,7 +24,7 @@ class Product extends Model
     protected $tableConfigKey = 'catalog.products_table';
 
     protected $fillable = [
-        'category_id', 'name', 'spu', 'description', 'image_ids', 'detail', 'size_chart', 'is_active', 'position',
+        'category_id', 'name', 'spu', 'description', 'image_ids', 'attr_ids', 'detail', 'size_chart', 'is_active', 'position',
         'url_rewrite', 'meta_title', 'meta_keywords', 'meta_description',
         'total_sold', 'month_sold', 'season_sold',
         'created_by', 'updated_by', 'published_at'
@@ -32,14 +34,15 @@ class Product extends Model
         'is_active' => 'boolean',
         'size_chart' => 'array',
         'image_ids' => 'array',
+        'attr_ids' => 'array',
     ];
 
     protected $appends = [
-        'sku', 'amount', 'discount', 'quantity', 'weight'
+        'sku', 'price', 'discount', 'inventory_quantity', 'weight'
     ];
 
     protected $hidden = [
-        'created_by', 'updated_by', 'master'
+        'created_by', 'updated_by', 'primary'
     ];
 
     public function category()
@@ -52,9 +55,14 @@ class Product extends Model
         return $this->hasOne(Config::get('catalog.manufacturer_product'), 'product_id');
     }
 
-    public function attrs()
+    public function getAttrValuesAttribute()
     {
-        return $this->hasMany(Config::get('catalog.product_attr'), 'product_id');
+        return AttrValues::findAllBy('id', array_values($this->attr_ids));
+    }
+
+    public function getAttrsAttribute()
+    {
+        return Attrs::findAllBy('id', array_keys($this->attr_ids));
     }
 
     public function specs()
@@ -109,7 +117,7 @@ class Product extends Model
 
     public function getInventoryQuantityAttribute()
     {
-        return data_get($this->master, 'inventory_quantity');
+        return data_get($this->primary, 'inventory_quantity');
     }
 
     public function getReviewableNameAttribute()
@@ -153,6 +161,21 @@ class Product extends Model
             $searchArray['categories'] = $this->category->path_categories->pluck('name')->implode(',');
         }
 
+        $latestMonthSold = max(1, $this->month_sold);
+        $searchArray['month_sold'] = (int) $latestMonthSold;
+        $searchArray['hot_score'] = (isset($searchArray['is_hot']) && $searchArray['is_hot'] ? 1 : 0) * 5 + $latestMonthSold;
+        $searchArray['new_score'] = (isset($searchArray['is_new']) && $searchArray['is_new'] ? 1 : 0) * 5 + $latestMonthSold;
+        $searchArray['promote_score'] = (isset($searchArray['is_promote']) && $searchArray['is_promote'] ? 1 : 0) * 5 + $latestMonthSold;
+        $searchArray['recommend_score'] = $searchArray['hot_score'] * 3 + $searchArray['new_score'] * 2 + $searchArray['promote_score'] * 2;
+        $searchArray['favorite_count'] = Favorites::count(['favoritable_type' => $this->getMorphClass(), 'favoritable_id' => $this->id]);
+
+        $searchArray['price'] = empty($searchArray['price']) ? 0 : (float)$searchArray['price']->value;
+        $searchArray['position'] = (int)$searchArray['position'];
+
+
+        $searchArray['attrs'] = $this->attrs->map(function($attr) {
+
+        });
         $attrValueIds = [];
         $attrNames = [];
         $this->attrs->each(function ($attr) use (&$attrValueIds, &$attrNames) {
@@ -162,18 +185,6 @@ class Product extends Model
             }
 
         });
-
-        $latestMonthSold = max(1, $this->month_sold);
-        $searchArray['month_sold'] = (int) $latestMonthSold;
-        $searchArray['hot_score'] = (isset($searchArray['is_hot']) && $searchArray['is_hot'] ? 1 : 0) * 5 + $latestMonthSold;
-        $searchArray['new_score'] = (isset($searchArray['is_new']) && $searchArray['is_new'] ? 1 : 0) * 5 + $latestMonthSold;
-        $searchArray['promote_score'] = (isset($searchArray['is_promote']) && $searchArray['is_promote'] ? 1 : 0) * 5 + $latestMonthSold;
-        $searchArray['recommend_score'] = $searchArray['hot_score'] * 3 + $searchArray['new_score'] * 2 + $searchArray['promote_score'] * 2;
-        $searchArray['favorite_count'] = Favorites::count(['favoritable_type' => $this->getMorphClass(), 'favoritable_id' => $this->id]);
-
-        $searchArray['amount'] = empty($searchArray['amount']) ? 0 : (float)$searchArray['amount']->value;
-        $searchArray['position'] = (int)$searchArray['position'];
-
         foreach ($attrNames as $groupTitle => $specName) {
             $groupTitle = Str::slug($groupTitle, '_');
             $searchArray["attr_{$groupTitle}"] = implode(',', $specName);

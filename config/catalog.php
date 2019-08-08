@@ -234,26 +234,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Catalog Product Attribute Mapping Table
-    |--------------------------------------------------------------------------
-    |
-    | This is the product_attribute table.
-    |
-    */
-    'product_attr_table' => 'catalog_product_attr',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Catalog Product Attribute Mapping Table
-    |--------------------------------------------------------------------------
-    |
-    | This is the product_attribute table.
-    |
-    */
-    'product_attr_value_table' => 'catalog_product_attr_value',
-
-    /*
-    |--------------------------------------------------------------------------
     | Catalog Product Items Table
     |--------------------------------------------------------------------------
     |

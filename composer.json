@@ -36,6 +36,7 @@
             ],
             "aliases": {
                 "Attrs": "Viviniko\\Catalog\\Facades\\Attrs",
+                "AttrValues": "Viviniko\\Catalog\\Facades\\AttrValues",
                 "ProductSpecs": "Viviniko\\Catalog\\Facades\\ProductSpecs",
                 "ProductSpecValues": "Viviniko\\Catalog\\Facades\\ProductSpecValues"
             }

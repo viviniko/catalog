@@ -50,16 +50,6 @@ class CreateCatalogTable extends Migration
     /**
      * @var string
      */
-    protected $productAttrTable;
-
-    /**
-     * @var string
-     */
-    protected $productAttrValueTable;
-
-    /**
-     * @var string
-     */
     protected $productSpecTable;
 
     /**
@@ -85,8 +75,6 @@ class CreateCatalogTable extends Migration
         $this->productsTable = self::getConfigModelTable('product');
         $this->productSpecTable = self::getConfigModelTable('product_spec');
         $this->productSpecValueTable = self::getConfigModelTable('product_spec_value');
-        $this->productAttrTable = self::getConfigModelTable('product_attr');
-        $this->productAttrValueTable = self::getConfigModelTable('product_attr_value');
         $this->itemsTable = self::getConfigModelTable('item');
         $this->manufacturersTable = self::getConfigModelTable('manufacturer');
         $this->manufacturerProductsTable = self::getConfigModelTable('manufacturer_product');
@@ -191,6 +179,7 @@ class CreateCatalogTable extends Migration
             $table->string('description', 500);
             $table->longText('detail')->nullable();
             $table->text('image_ids')->nullable();
+            $table->text('attr_ids')->nullable();
             $table->text('size_chart')->nullable();
             $table->timestamp('published_at')->nullable();
             $table->boolean('is_active')->default(true);
@@ -223,23 +212,6 @@ class CreateCatalogTable extends Migration
 
             $table->index(['sku']);
             $table->unique(['product_id', 'product_specs']);
-        });
-
-        // Create table for storing product attribute
-        Schema::create($this->productAttrTable, function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('category_id');
-            $table->unsignedInteger('product_id');
-            $table->unsignedInteger('attr_id');
-            $table->string('name')->nullable();
-        });
-
-        // Create table for storing product attribute
-        Schema::create($this->productAttrValueTable, function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('product_attr_id');
-            $table->unsignedInteger('attr_value_id');
-            $table->string('name')->nullable();
         });
 
         // Create table for storing product specification attribute
@@ -295,8 +267,6 @@ class CreateCatalogTable extends Migration
         Schema::dropIfExists($this->itemsTable);
         Schema::dropIfExists($this->productSpecValueTable);
         Schema::dropIfExists($this->productSpecTable);
-        Schema::dropIfExists($this->productAttrValueTable);
-        Schema::dropIfExists($this->productAttrTable);
         Schema::dropIfExists($this->manufacturerProductsTable);
     }
 
