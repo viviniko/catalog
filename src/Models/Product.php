@@ -55,9 +55,14 @@ class Product extends Model
         return $this->hasOne(Config::get('catalog.manufacturer_product'), 'product_id');
     }
 
+    public function getAttrValueIdsAttribute()
+    {
+        return array_reduce($this->attr_ids, function ($carry, $item) { return array_merge($carry, $item); }, []);
+    }
+
     public function getAttrValuesAttribute()
     {
-        return AttrValues::findAllBy('id', array_values($this->attr_ids));
+        return AttrValues::findAllBy('id', array_values($this->attr_value_ids));
     }
 
     public function getAttrsAttribute()
