@@ -228,6 +228,7 @@ class CreateCatalogTable extends Migration
         // Create table for storing product attribute
         Schema::create($this->productAttrTable, function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('category_id');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('attr_id');
             $table->string('name')->nullable();

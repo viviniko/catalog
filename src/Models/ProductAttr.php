@@ -12,8 +12,13 @@ class ProductAttr extends Model
     protected $tableConfigKey = 'catalog.product_attr_table';
 
     protected $fillable = [
-        'product_id', 'attr_id', 'name'
+        'category_id', 'product_id', 'attr_id', 'name'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Config::get('catalog.category'), 'category_id');
+    }
 
     public function attr()
     {
