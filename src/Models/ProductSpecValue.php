@@ -13,7 +13,7 @@ class ProductSpecValue extends Model
 
     protected $fillable = [
         'product_spec_id', 'spec_value_id', 'name', 'is_selected',
-        'picture_id', 'swatch_picture_id', 'sort'
+        'image_id', 'swatch_image_id', 'position'
     ];
 
     protected $casts = [
@@ -21,7 +21,7 @@ class ProductSpecValue extends Model
     ];
 
     protected $hidden = [
-        'specValue', 'file', 'swatchFile'
+        'specValue',
     ];
 
     public function getNameAttribute()
@@ -39,13 +39,13 @@ class ProductSpecValue extends Model
         return $this->belongsTo(Config::get('catalog.spec_value'), 'spec_value_id');
     }
 
-    public function picture()
+    public function image()
     {
-        return $this->belongsTo(Config::get('media.file'), 'picture_id');
+        return $this->belongsTo(Config::get('media.file'), 'image_id');
     }
 
-    public function swatchPicture()
+    public function swatchImage()
     {
-        return $this->belongsTo(Config::get('media.file'), 'swatch_picture_id');
+        return $this->belongsTo(Config::get('media.file'), 'swatch_image_id');
     }
 }

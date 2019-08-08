@@ -9,7 +9,7 @@ class SpecValue extends Model
 {
     protected $tableConfigKey = 'catalog.spec_values_table';
 
-    protected $fillable = ['spec_id', 'name', 'slug', 'description', 'sort'];
+    protected $fillable = ['spec_id', 'name', 'slug', 'description', 'position'];
 
     public function spec()
     {

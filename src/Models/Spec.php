@@ -10,7 +10,7 @@ class Spec extends Model
     protected $tableConfigKey = 'catalog.specs_table';
 
     protected $fillable = [
-        'name', 'slug', 'description', 'sort'
+        'name', 'slug', 'description', 'position'
     ];
 
     public function values()

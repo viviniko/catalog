@@ -10,7 +10,7 @@ class Attr extends Model
     protected $tableConfigKey = 'catalog.attrs_table';
 
     protected $fillable = [
-        'name', 'slug', 'description', 'type', 'is_filterable', 'is_searchable', 'is_viewable', 'sort'
+        'name', 'slug', 'description', 'type', 'is_filterable', 'is_searchable', 'is_viewable', 'position'
     ];
 
     protected $casts = [

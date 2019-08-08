@@ -12,7 +12,7 @@ class ProductSpec extends Model
     protected $tableConfigKey = 'catalog.product_spec_table';
 
     protected $fillable = [
-        'product_id', 'spec_id', 'control_type', 'name', 'is_required', 'sort',
+        'product_id', 'spec_id', 'control_type', 'name', 'is_required', 'position',
     ];
 
     protected $casts = [

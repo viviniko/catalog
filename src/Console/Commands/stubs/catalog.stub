@@ -109,7 +109,7 @@ class CreateCatalogTable extends Migration
             $table->boolean('is_filterable')->default(false);
             $table->boolean('is_searchable')->default(false);
             $table->boolean('is_viewable')->default(false);
-            $table->integer('sort')->default(0);
+            $table->integer('position')->default(0);
             $table->timestamps();
         });
 
@@ -120,7 +120,7 @@ class CreateCatalogTable extends Migration
             $table->string('name', 32);
             $table->string('slug', 32)->unique();
             $table->string('description')->nullable();
-            $table->integer('sort')->default(0);
+            $table->integer('position')->default(0);
             $table->timestamps();
         });
 
@@ -132,8 +132,7 @@ class CreateCatalogTable extends Migration
             $table->string('path')->default('');
             $table->text('description')->nullable();
             $table->text('banner')->nullable();
-            $table->unsignedInteger('picture_id')->nullable();
-            $table->integer('sort')->default(0);
+            $table->integer('position')->default(0);
             $table->boolean('is_active')->default(true);
             $table->string('url_rewrite')->nullable();
             $table->text('attr_ids')->nullable();
@@ -149,7 +148,7 @@ class CreateCatalogTable extends Migration
             $table->string('name', 32);
             $table->string('slug', 32)->unique();
             $table->string('description')->nullable();
-            $table->integer('sort')->default(0);
+            $table->integer('position')->default(0);
             $table->timestamps();
         });
 
@@ -160,7 +159,7 @@ class CreateCatalogTable extends Migration
             $table->string('name', 32);
             $table->string('slug', 32)->unique();
             $table->string('description')->nullable();
-            $table->integer('sort')->default(0);
+            $table->integer('position')->default(0);
             $table->timestamps();
         });
 
@@ -172,7 +171,7 @@ class CreateCatalogTable extends Migration
             $table->string('homepage');
             $table->string('im');
             $table->string('phone')->nullable();
-            $table->integer('sort')->default(0);
+            $table->integer('position')->default(0);
             $table->unsignedTinyInteger('purchasing_discount')->default(0);
             $table->unsignedInteger('product_count')->default(0);
             $table->string('product_type')->default('');
@@ -191,11 +190,11 @@ class CreateCatalogTable extends Migration
             $table->string('spu', 32)->unique();
             $table->string('description', 500);
             $table->longText('detail')->nullable();
-            $table->decimal('amount', 16, 4);
-            $table->text('picture_ids')->nullable();
+            $table->text('image_ids')->nullable();
             $table->text('size_chart')->nullable();
+            $table->timestamp('published_at')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->integer('sort')->default(0);
+            $table->integer('position')->default(0);
             $table->unsignedInteger('total_sold')->default(0);
             $table->unsignedInteger('month_sold')->default(0);
             $table->unsignedInteger('season_sold')->default(0);
@@ -215,15 +214,15 @@ class CreateCatalogTable extends Migration
             $table->string('product_specs');
             $table->string('product_spec_names');
             $table->string('sku', 32)->default('')->index();
-            $table->decimal('amount', 16, 4);
+            $table->decimal('price', 16, 2);
             $table->unsignedTinyInteger('discount')->default(0);
             $table->decimal('weight', 16, 4)->default(0);
-            $table->unsignedInteger('quantity')->default(0);
-            $table->unsignedInteger('picture_id');
+            $table->unsignedInteger('inventory_quantity')->default(0);
+            $table->unsignedInteger('image_id');
             $table->boolean('is_primary')->default(false);
-            $table->boolean('is_active')->default(true);
 
-            $table->unique(['product_id', 'vs']);
+            $table->index(['sku']);
+            $table->unique(['product_id', 'product_specs']);
         });
 
         // Create table for storing product attribute
@@ -250,7 +249,7 @@ class CreateCatalogTable extends Migration
             $table->unsignedTinyInteger('control_type')->default(0);
             $table->string('name')->nullable();
             $table->boolean('is_required')->default(false);
-            $table->integer('sort')->default(0);
+            $table->integer('position')->default(0);
         });
 
         // Create table for storing product specification value attribute
@@ -260,9 +259,9 @@ class CreateCatalogTable extends Migration
             $table->unsignedInteger('spec_value_id');
             $table->string('name')->nullable();
             $table->boolean('is_selected')->default(false);
-            $table->unsignedInteger('picture_id')->nullable();
-            $table->unsignedInteger('swatch_picture_id')->nullable();
-            $table->integer('sort')->default(0);
+            $table->unsignedInteger('image_id')->nullable();
+            $table->unsignedInteger('swatch_image_id')->nullable();
+            $table->integer('position')->default(0);
         });
 
         // Create table for storing product manufacturer

@@ -16,19 +16,18 @@ class Item extends Model implements CartItem
     protected $tableConfigKey = 'catalog.items_table';
 
     protected $fillable = [
-        'product_id', 'product_specs', 'product_spec_names', 'sku', 'amount', 'discount', 'weight', 'quantity', 'picture_id',
-        'is_active', 'is_primary'
+        'product_id', 'product_specs', 'product_spec_names', 'sku', 'price', 'discount', 'weight', 'image_id',
+        'inventory_quantity', 'is_primary'
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
         'is_primary' => 'boolean',
         'product_specs' => 'array',
         'product_spec_names' => 'array',
     ];
 
     protected $hidden = [
-        'is_master', 'weight', 'picture_id', 'is_active'
+        'is_primary', 'weight', 'image_id',
     ];
 
     public function product()
@@ -46,14 +45,14 @@ class Item extends Model implements CartItem
         return ProductSpecs::findAllBy('id', array_keys($this->product_specs));
     }
 
-    public function picture()
+    public function image()
     {
-        return $this->belongsTo(Config::get('media.file'), 'picture_id');
+        return $this->belongsTo(Config::get('media.file'), 'image_id');
     }
 
-    public function getAmountAttribute($amount)
+    public function getPriceAttribute($price)
     {
-        return Amount::createBaseAmount($amount);
+        return Amount::createBaseAmount($price);
     }
 
     public function getNameAttribute()
@@ -76,7 +75,7 @@ class Item extends Model implements CartItem
      */
     public function getPrice()
     {
-        return $this->amount;
+        return $this->price;
     }
 
     /**

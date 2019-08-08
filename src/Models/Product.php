@@ -22,10 +22,10 @@ class Product extends Model
     protected $tableConfigKey = 'catalog.products_table';
 
     protected $fillable = [
-        'category_id', 'name', 'spu', 'description', 'amount', 'picture_ids', 'detail', 'size_chart', 'is_active', 'sort',
+        'category_id', 'name', 'spu', 'description', 'image_ids', 'detail', 'size_chart', 'is_active', 'position',
         'url_rewrite', 'meta_title', 'meta_keywords', 'meta_description',
         'total_sold', 'month_sold', 'season_sold',
-        'created_by', 'updated_by'
+        'created_by', 'updated_by', 'published_at'
     ];
 
     protected $casts = [
@@ -72,9 +72,9 @@ class Product extends Model
         return $this->hasMany(Config::get('catalog.item'), 'product_id');
     }
 
-    public function getPicturesAttribute()
+    public function getImagesAttribute()
     {
-        return Files::findAllBy('id', $this->picture_ids);
+        return Files::findAllBy('id', $this->image_ids);
     }
 
     public function getUrlAttribute()
@@ -82,9 +82,9 @@ class Product extends Model
         return url($this->url_rewrite);
     }
 
-    public function getPictureAttribute()
+    public function getImageAttribute()
     {
-        return data_get($this->primary, 'picture');
+        return data_get($this->primary, 'image');
     }
 
     public function getSkuAttribute()
@@ -92,9 +92,9 @@ class Product extends Model
         return data_get($this->primary, 'sku');
     }
 
-    public function getAmountAttribute()
+    public function getPriceAttribute()
     {
-        return data_get($this->primary, 'amount');
+        return data_get($this->primary, 'price');
     }
 
     public function getDiscountAttribute()
@@ -107,9 +107,9 @@ class Product extends Model
         return data_get($this->primary, 'weight');
     }
 
-    public function getQuantityAttribute()
+    public function getInventoryQuantityAttribute()
     {
-        return data_get($this->master, 'quantity');
+        return data_get($this->master, 'inventory_quantity');
     }
 
     public function getReviewableNameAttribute()
@@ -139,11 +139,11 @@ class Product extends Model
         unset(
             $searchArray['primary'],
             $searchArray['manufacturerProduct'],
-            $searchArray['pictures'],
-            $searchArray['picture'],
+            $searchArray['images'],
+            $searchArray['image'],
             $searchArray['url'],
             $searchArray['url_rewrite'],
-            $searchArray['picture_ids'],
+            $searchArray['image_ids'],
             $searchArray['category'],
             $searchArray['size_chart']
         );
@@ -172,7 +172,7 @@ class Product extends Model
         $searchArray['favorite_count'] = Favorites::count(['favoritable_type' => $this->getMorphClass(), 'favoritable_id' => $this->id]);
 
         $searchArray['amount'] = empty($searchArray['amount']) ? 0 : (float)$searchArray['amount']->value;
-        $searchArray['sort'] = (int)$searchArray['sort'];
+        $searchArray['position'] = (int)$searchArray['position'];
 
         foreach ($attrNames as $groupTitle => $specName) {
             $groupTitle = Str::slug($groupTitle, '_');
@@ -205,7 +205,7 @@ class Product extends Model
                 'recommend_score' => ['type' => 'long'],
                 'month_sold' => ['type' => 'long'],
                 'favorite_count' => ['type' => 'long'],
-                'sort' => ['type' => 'long'],
+                'position' => ['type' => 'long'],
                 'sku' => ['type' => 'keyword']
             ]
         ];

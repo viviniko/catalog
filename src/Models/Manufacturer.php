@@ -3,7 +3,6 @@
 namespace Viviniko\Catalog\Models;
 
 use Illuminate\Support\Facades\Config;
-use Viviniko\Catalog\Contracts\ProductService;
 use Viviniko\Support\Database\Eloquent\Model;
 
 class Manufacturer extends Model
@@ -11,7 +10,7 @@ class Manufacturer extends Model
     protected $tableConfigKey = 'catalog.manufacturers_table';
 
     protected $fillable = [
-        'name', 'description', 'homepage', 'im', 'sort', 'is_active', 'purchasing_discount', 'product_count',
+        'name', 'description', 'homepage', 'im', 'position', 'is_active', 'purchasing_discount', 'product_count',
         'product_update_period', 'product_update_time', 'admin', 'product_type'
     ];
 

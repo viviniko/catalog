@@ -9,7 +9,7 @@ class AttrValue extends Model
 {
     protected $tableConfigKey = 'catalog.attr_values_table';
 
-    protected $fillable = ['attr_id', 'name', 'slug', 'description', 'sort'];
+    protected $fillable = ['attr_id', 'name', 'slug', 'description', 'position'];
 
     public function attr()
     {
