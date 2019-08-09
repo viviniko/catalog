@@ -57,17 +57,17 @@ class Product extends Model
 
     public function getAttrValueIdsAttribute()
     {
-        return array_reduce($this->attr_ids, function ($carry, $item) { return array_merge($carry, $item); }, []);
+        return array_reduce($this->attr_ids ?? [], function ($carry, $item) { return array_merge($carry, $item); }, []);
     }
 
     public function getAttrValuesAttribute()
     {
-        return AttrValues::findAllBy('id', array_values($this->attr_value_ids));
+        return empty($this->attr_value_ids) ? collect([]) : AttrValues::findAllBy('id', array_values($this->attr_value_ids));
     }
 
     public function getAttrsAttribute()
     {
-        return Attrs::findAllBy('id', array_keys($this->attr_ids));
+        return empty($this->attr_ids) ? collect([]) : Attrs::findAllBy('id', array_keys($this->attr_ids));
     }
 
     public function specs()
