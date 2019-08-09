@@ -16,7 +16,13 @@ class ItemObserver
 
     public function saved(Item $item)
     {
-        if ($item->is_master) {
+        if ($item->is_primary) {
+            $item->product->items
+                ->where('is_primary', true)
+                ->where('id', '!=', $item->id)
+                ->each(function ($other) {
+                    $other->update(['is_primary' => false]);
+                });
             $item->product->searchable();
         }
 
