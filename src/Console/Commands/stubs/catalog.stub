@@ -271,6 +271,7 @@ class CreateCatalogTable extends Migration
     }
 
     private static function getConfigModelTable($key) {
-        return (new (Config::get('catalog.' . $key)))->getTable();
+        $model = new (Config::get('catalog.' . $key));
+        return $model->getTable();
     }
 }
