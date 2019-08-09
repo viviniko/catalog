@@ -178,8 +178,12 @@ class Product extends Model
         $searchArray['position'] = (int)$searchArray['position'];
 
 
-        $searchableAttrs = $this->attrs->filter(function ($attr) { return $attr->is_searchable; });
-        $searchArray['attrs'] = $this->attrValues->whereIn('attr_id', $searchableAttrs->pluck('id'))->pluck('name')->all();
+        $attrs = $this->attrs;
+        $attrValues = $this->attrValues;
+        $searchableAttrs = $attrs->filter(function ($attr) { return $attr->is_searchable; });
+        $filterableAttrs = $attrs->filter(function ($attr) { return $attr->is_filterable; });
+        $searchArray['attr_ids'] = $attrValues->whereIn('attr_id', $filterableAttrs->pluck('id'))->pluck('id')->all();
+        $searchArray['attrs'] = $attrValues->whereIn('attr_id', $searchableAttrs->pluck('id'))->pluck('name')->all();
 
         $searchArray['created_at'] = (int) strtotime($this->created_at);
         $searchArray['updated_at'] = (int) strtotime($this->updated_at);
