@@ -174,7 +174,7 @@ class Product extends Model
         $searchArray['recommend_score'] = $searchArray['hot_score'] * 3 + $searchArray['new_score'] * 2 + $searchArray['promote_score'] * 2;
         $searchArray['favorite_count'] = Favorites::count(['favoritable_type' => $this->getMorphClass(), 'favoritable_id' => $this->id]);
 
-        $searchArray['price'] = empty($searchArray['price']) ? 0 : (float)$searchArray['price']->value;
+        $searchArray['price'] = empty($searchArray['price']) ? 0 : (float)$searchArray['price']->amount;
         $searchArray['position'] = (int)$searchArray['position'];
 
 
@@ -200,7 +200,7 @@ class Product extends Model
     {
         return [
             'properties' => [
-                'amount' => ['type' => 'float'],
+                'price' => ['type' => 'float'],
                 'weight' => ['type' => 'float'],
                 'discount' => ['type' => 'float'],
                 'created_at' => ['type' => 'long'],

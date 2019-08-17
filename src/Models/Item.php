@@ -5,7 +5,7 @@ namespace Viviniko\Catalog\Models;
 use Viviniko\Cart\Contracts\CartItem;
 use Viviniko\Catalog\Facades\ProductSpecs;
 use Viviniko\Catalog\Facades\ProductSpecValues;
-use Viviniko\Currency\Amount;
+use Viviniko\Currency\Money;
 use Viviniko\Support\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 
@@ -52,7 +52,7 @@ class Item extends Model implements CartItem
 
     public function getPriceAttribute($price)
     {
-        return Amount::createBaseAmount($price);
+        return Money::create($price);
     }
 
     public function getNameAttribute()
@@ -71,7 +71,7 @@ class Item extends Model implements CartItem
     }
 
     /**
-     * @return \Viviniko\Currency\Amount
+     * @return \Viviniko\Currency\Money
      */
     public function getPrice()
     {
