@@ -4,7 +4,6 @@ namespace Viviniko\Catalog\Models;
 
 use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Str;
 use Viviniko\Catalog\Facades\Attrs;
 use Viviniko\Catalog\Facades\AttrValues;
 use Viviniko\Favorite\Facades\Favorites;
@@ -95,31 +94,6 @@ class Product extends Model
         return url($this->url_rewrite);
     }
 
-    public function getImageAttribute()
-    {
-        return data_get($this->primary, 'image');
-    }
-
-    public function getSkuAttribute()
-    {
-        return data_get($this->primary, 'sku');
-    }
-
-    public function getPriceAttribute()
-    {
-        return data_get($this->primary, 'price');
-    }
-
-    public function getDiscountAttribute()
-    {
-        return data_get($this->primary, 'discount');
-    }
-
-    public function getWeightAttribute()
-    {
-        return data_get($this->primary, 'weight');
-    }
-
     public function getInventoryQuantityAttribute()
     {
         return data_get($this->primary, 'inventory_quantity');
@@ -153,7 +127,6 @@ class Product extends Model
             $searchArray['primary'],
             $searchArray['manufacturerProduct'],
             $searchArray['images'],
-            $searchArray['image'],
             $searchArray['url'],
             $searchArray['url_rewrite'],
             $searchArray['image_ids'],
@@ -174,7 +147,9 @@ class Product extends Model
         $searchArray['recommend_score'] = $searchArray['hot_score'] * 3 + $searchArray['new_score'] * 2 + $searchArray['promote_score'] * 2;
         $searchArray['favorite_count'] = Favorites::count(['favoritable_type' => $this->getMorphClass(), 'favoritable_id' => $this->id]);
 
-        $searchArray['price'] = empty($searchArray['price']) ? 0 : (float)$searchArray['price']->amount;
+        $searchArray['price'] = (float)$this->primary->price->amount;
+        $searchArray['sku'] = $this->primary->sku;
+        $searchArray['discount'] = $this->primary->discount;
         $searchArray['position'] = (int)$searchArray['position'];
 
 
