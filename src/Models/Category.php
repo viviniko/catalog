@@ -34,6 +34,11 @@ class Category extends Model
             }, new Collection())->unique();
     }
 
+    public function getUrlAttribute()
+    {
+        return url($this->url_rewrite);
+    }
+
     public function getPathIdsAttribute()
     {
         return explode('/', $this->path);
