@@ -2,12 +2,12 @@
 
 namespace Viviniko\Catalog\Services;
 
-interface ProductSkuGenerater
+interface ItemSkuGenerator
 {
     /**
      * @param $productId
      * @param array $options
      * @return string
      */
-    public function generate($productId, array $options = []);
+    public function generate($itemId, array $options = []);
 }
