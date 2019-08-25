@@ -4,9 +4,9 @@ namespace Viviniko\Catalog\Models;
 
 use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Str;
 use Viviniko\Catalog\Facades\Attrs;
 use Viviniko\Catalog\Facades\AttrValues;
+use Viviniko\Currency\Money;
 use Viviniko\Favorite\Facades\Favorites;
 use Viviniko\Favorite\Favoritable;
 use Viviniko\Media\Facades\Files;
@@ -174,7 +174,7 @@ class Product extends Model
         $searchArray['recommend_score'] = $searchArray['hot_score'] * 3 + $searchArray['new_score'] * 2 + $searchArray['promote_score'] * 2;
         $searchArray['favorite_count'] = Favorites::count(['favoritable_type' => $this->getMorphClass(), 'favoritable_id' => $this->id]);
 
-        $searchArray['price'] = empty($searchArray['price']) ? 0 : (float)$searchArray['price']->amount;
+        $searchArray['price'] = (float)($this->price instanceof Money ?  $this->price->amount : $this->price);
         $searchArray['position'] = (int)$searchArray['position'];
 
 
