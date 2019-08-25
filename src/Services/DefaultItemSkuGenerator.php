@@ -22,7 +22,7 @@ class DefaultItemSkuGenerator implements ItemSkuGenerator
         $item = $this->items->find($itemId);
         $category = $item->product->category;
 
-        $cids = array_filter(explode('/', $category->path_ids));
+        $cids = $category->path_ids;
         $prefix = '';
         if (count($cids) == 1) {
             $category = $this->categories->find($cids[0]);
