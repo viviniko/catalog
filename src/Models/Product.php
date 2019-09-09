@@ -176,7 +176,9 @@ class Product extends Model
 
         $searchArray['price'] = (float)($this->price instanceof Money ?  $this->price->amount : $this->price);
         $searchArray['position'] = (int)$searchArray['position'];
-
+        $tags = $this->tags->pluck('name', 'id');
+        $searchArray['tags'] = $tags->values()->all();
+        $searchArray['tag_ids'] = $tags->keys()->all();
 
         $attrs = $this->attrs;
         $attrValues = $this->attrValues;
