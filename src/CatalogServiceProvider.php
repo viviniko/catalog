@@ -153,8 +153,8 @@ class CatalogServiceProvider extends BaseServiceProvider
     protected function registerSKUGenerater()
     {
         $this->app->singleton(
-            \Viviniko\Catalog\Services\ProductSkuGenerater::class,
-            \Viviniko\Catalog\Services\DefaultProductSkuGenerater::class
+            \Viviniko\Catalog\Services\ItemSkuGenerator::class,
+            \Viviniko\Catalog\Services\DefaultItemSkuGenerator::class
         );
     }
 
