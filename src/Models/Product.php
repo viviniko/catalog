@@ -89,11 +89,6 @@ class Product extends Model
         return Files::findAllBy('id', $this->image_ids);
     }
 
-    public function getUrlAttribute()
-    {
-        return url($this->url_rewrite);
-    }
-
     public function getImageAttribute()
     {
         return data_get($this->primary, 'image');
