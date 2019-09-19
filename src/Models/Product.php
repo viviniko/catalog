@@ -176,6 +176,16 @@ class Product extends Model
         $searchArray['attr_ids'] = $attrValues->whereIn('attr_id', $filterableAttrs->pluck('id'))->pluck('id')->all();
         $searchArray['attrs'] = $attrValues->whereIn('attr_id', $searchableAttrs->pluck('id'))->pluck('name')->all();
 
+        $productSpecs = $this->specs()->get()->reduce(function ($carry, $productSpec) {
+            return [
+                'spec_names' => array_merge($carry['spec_names'] ?: [], $productSpec->values->pluck('name')->all()),
+                'spec_ids' => array_merge($carry['spec_ids'] ?: [], $productSpec->values->pluck('id')->all()),
+            ];
+        });
+
+        $searchArray['spec_names'] = $productSpecs['spec_names'];
+        $searchArray['spec_ids'] = $productSpecs['spec_ids'];
+
         $searchArray['created_at'] = (int) strtotime($this->created_at);
         $searchArray['updated_at'] = (int) strtotime($this->updated_at);
 
