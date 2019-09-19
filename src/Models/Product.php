@@ -2,6 +2,7 @@
 
 namespace Viviniko\Catalog\Models;
 
+use Carbon\Carbon;
 use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Config;
 use Viviniko\Catalog\Facades\Attrs;
@@ -17,9 +18,7 @@ use Viviniko\Urlrewrite\UrlrewriteTrait;
 
 class Product extends Model
 {
-    use Reviewable, Favoritable, UrlrewriteTrait, Taggable, Searchable {
-        Searchable::searchable as makeSearchable;
-    }
+    use Reviewable, Favoritable, UrlrewriteTrait, Taggable, Searchable;
 
     protected $tableConfigKey = 'catalog.products_table';
 
@@ -130,14 +129,9 @@ class Product extends Model
         return $this->name;
     }
 
-    /**
-     * Make the given model instance searchable.
-     *
-     * @return void
-     */
-    public function searchable()
+    public function shouldBeSearchable()
     {
-        $this->makeSearchable();
+        return $this->published_at && Carbon::now()->diffInSeconds(Carbon::parse($this->published_at)) > 0;
     }
 
     /**
