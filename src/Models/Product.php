@@ -11,14 +11,14 @@ use Viviniko\Currency\Money;
 use Viviniko\Favorite\Facades\Favorites;
 use Viviniko\Favorite\Favoritable;
 use Viviniko\Media\Facades\Files;
+use Viviniko\Rewrite\RewriteTrait;
 use Viviniko\Review\Reviewable;
 use Viviniko\Support\Database\Eloquent\Model;
 use Viviniko\Tag\Taggable;
-use Viviniko\Urlrewrite\UrlrewriteTrait;
 
 class Product extends Model
 {
-    use Reviewable, Favoritable, UrlrewriteTrait, Taggable, Searchable;
+    use Reviewable, Favoritable, RewriteTrait, Taggable, Searchable;
 
     protected $tableConfigKey = 'catalog.products_table';
 
