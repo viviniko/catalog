@@ -143,7 +143,6 @@ class Product extends Model
             $searchArray['manufacturerProduct'],
             $searchArray['images'],
             $searchArray['image'],
-            $searchArray['url'],
             $searchArray['image_ids'],
             $searchArray['category'],
             $searchArray['size_chart']
