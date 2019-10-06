@@ -17,7 +17,7 @@ class Category extends Model
 
     protected $fillable = [
         'name', 'description', 'banner', 'is_active', 'parent_id', 'path', 'position', 'attr_ids',
-        'url_rewrite', 'meta_title', 'meta_keywords', 'meta_description',
+        'slug', 'meta_title', 'meta_keywords', 'meta_description',
     ];
 
     protected $casts = [
@@ -31,11 +31,6 @@ class Category extends Model
             ->reduce(function (Collection $collect, $categoryId) {
                 return $collect->merge($this->newQuery()->find($categoryId)->attr_ids);
             }, new Collection())->unique();
-    }
-
-    public function getUrlAttribute()
-    {
-        return url($this->url_rewrite);
     }
 
     public function getPathIdsAttribute()

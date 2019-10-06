@@ -24,7 +24,7 @@ class Product extends Model
 
     protected $fillable = [
         'category_id', 'name', 'spu', 'description', 'image_ids', 'attr_ids', 'detail', 'size_chart', 'is_active', 'position',
-        'url_rewrite', 'meta_title', 'meta_keywords', 'meta_description',
+        'slug', 'meta_title', 'meta_keywords', 'meta_description',
         'total_sold', 'month_sold', 'season_sold',
         'created_by', 'updated_by', 'published_at'
     ];
@@ -144,7 +144,6 @@ class Product extends Model
             $searchArray['images'],
             $searchArray['image'],
             $searchArray['url'],
-            $searchArray['url_rewrite'],
             $searchArray['image_ids'],
             $searchArray['category'],
             $searchArray['size_chart']
