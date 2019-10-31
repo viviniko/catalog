@@ -10,11 +10,15 @@ use Viviniko\Catalog\Models\AttrValue;
 use Viviniko\Catalog\Models\Category;
 use Viviniko\Catalog\Models\Product;
 use Viviniko\Catalog\Models\Item;
+use Viviniko\Catalog\Models\ProductSpec;
+use Viviniko\Catalog\Models\ProductSpecValue;
 use Viviniko\Catalog\Observers\AttrObserver;
 use Viviniko\Catalog\Observers\AttrValueObserver;
 use Viviniko\Catalog\Observers\CategoryObserver;
 use Viviniko\Catalog\Observers\ItemObserver;
 use Viviniko\Catalog\Observers\ProductObserver;
+use Viviniko\Catalog\Observers\ProductSpecObserver;
+use Viviniko\Catalog\Observers\ProductSpecValueObserver;
 use Viviniko\Media\Events\FileDeleted;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
@@ -48,6 +52,8 @@ class CatalogServiceProvider extends BaseServiceProvider
         Product::observe(ProductObserver::class);
         Attr::observe(AttrObserver::class);
         AttrValue::observe(AttrValueObserver::class);
+        ProductSpec::observe(ProductSpecObserver::class);
+        ProductSpecValue::observe(ProductSpecValueObserver::class);
 
         Event::listen(FileDeleted::class, FileDeletedListener::class);
 

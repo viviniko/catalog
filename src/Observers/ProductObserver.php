@@ -3,6 +3,7 @@
 namespace Viviniko\Catalog\Observers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Viviniko\Catalog\Models\Product;
 
 class ProductObserver
@@ -27,12 +28,12 @@ class ProductObserver
 
     public function deleting(Product $product)
     {
-        $product->items()->delete();
-        $product->pictures()->sync([]);
-        $product->specs()->sync([]);
-        $product->specGroups()->sync([]);
-        $product->attrs()->sync([]);
-        $product->manufacturerProduct()->delete();
-        $product->unsearchable();
+        DB::transaction(function () use ($product) {
+            $product->unsearchable();
+            $product->items()->delete();
+            $product->manufacturerProduct()->delete();
+            $product->specs()->delete();
+            $product->tags()->delete();
+        });
     }
 }
