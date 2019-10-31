@@ -34,6 +34,7 @@ class ProductObserver
             $product->manufacturerProduct()->delete();
             $product->specs()->delete();
             $product->tags()->delete();
+            $product->favorites()->delete();
         });
     }
 }
