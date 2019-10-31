@@ -11,20 +11,20 @@ use Viviniko\Currency\Money;
 use Viviniko\Favorite\Facades\Favorites;
 use Viviniko\Favorite\Favoritable;
 use Viviniko\Media\Facades\Files;
+use Viviniko\Rewrite\RewriteTrait;
 use Viviniko\Review\Reviewable;
 use Viviniko\Support\Database\Eloquent\Model;
 use Viviniko\Tag\Taggable;
-use Viviniko\Urlrewrite\UrlrewriteTrait;
 
 class Product extends Model
 {
-    use Reviewable, Favoritable, UrlrewriteTrait, Taggable, Searchable;
+    use Reviewable, Favoritable, RewriteTrait, Taggable, Searchable;
 
     protected $tableConfigKey = 'catalog.products_table';
 
     protected $fillable = [
         'category_id', 'name', 'spu', 'description', 'image_ids', 'attr_ids', 'detail', 'size_chart', 'is_active', 'position',
-        'url_rewrite', 'meta_title', 'meta_keywords', 'meta_description',
+        'slug', 'meta_title', 'meta_keywords', 'meta_description',
         'total_sold', 'month_sold', 'season_sold',
         'created_by', 'updated_by', 'published_at'
     ];
@@ -143,8 +143,6 @@ class Product extends Model
             $searchArray['manufacturerProduct'],
             $searchArray['images'],
             $searchArray['image'],
-            $searchArray['url'],
-            $searchArray['url_rewrite'],
             $searchArray['image_ids'],
             $searchArray['category'],
             $searchArray['size_chart']

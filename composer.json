@@ -17,12 +17,12 @@
         "viviniko/currency": "dev-master",
         "viviniko/favorite": "dev-master",
         "viviniko/media": "dev-master",
+        "viviniko/rewrite": "dev-master",
         "viviniko/review": "dev-master",
         "viviniko/repository": "dev-master",
         "viviniko/scoutelasticsearch": "dev-master",
         "viviniko/tag": "dev-master",
-        "viviniko/support": "dev-master",
-        "viviniko/urlrewrite": "dev-master"
+        "viviniko/support": "dev-master"
     },
     "autoload": {
         "psr-0": {
