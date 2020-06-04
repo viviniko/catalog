@@ -23,8 +23,8 @@ class Product extends Model
     protected $tableConfigKey = 'catalog.products_table';
 
     protected $fillable = [
-        'category_id', 'name', 'spu', 'description', 'image_ids', 'attr_ids', 'detail', 'size_chart', 'is_active', 'position',
-        'slug', 'meta_title', 'meta_keywords', 'meta_description',
+        'category_id', 'name', 'spu', 'description', 'image_ids', 'attr_ids', 'detail', 'size_chart', 'is_active',
+        'position', 'slug', 'meta_title', 'meta_keywords', 'meta_description',
         'total_sold', 'month_sold', 'season_sold',
         'created_by', 'updated_by', 'published_at'
     ];
