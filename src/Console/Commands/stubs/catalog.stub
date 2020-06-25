@@ -202,7 +202,7 @@ class CreateCatalogTable extends Migration
             $table->unsignedInteger('product_id');
             $table->string('product_specs');
             $table->string('product_spec_names');
-            $table->string('sku', 32)->default('')->index();
+            $table->string('sku', 32)->default('');
             $table->decimal('price', 16, 2);
             $table->unsignedTinyInteger('discount')->default(0);
             $table->unsignedInteger('weight')->default(0);
